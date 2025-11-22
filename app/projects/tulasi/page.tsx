@@ -97,7 +97,7 @@ export default function TulasiPage() {
                 <p className="mb-4">
                   We designed a natural language interface that allows users to ask questions in plain language, similar to how they would ask a railway employee:
                 </p>
-                <div className="bg-gray-50 p-6 rounded-lg space-y-3">
+                <div className="bg-gray-50 p-6 rounded-lg space-y-3 mb-6">
                   <div className="flex items-start gap-3">
                     <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm flex-shrink-0">U</div>
                     <div>
@@ -114,9 +114,9 @@ export default function TulasiPage() {
                   </div>
                 </div>
                 <ProjectImage
-                  src="/images/tulasi/conversational-workflow-diagram.png"
-                  alt="Conversational workflow diagram showing user-agent interaction"
-                  placeholder="Image will appear here once conversational-workflow-diagram.png is added (Page 10 from PDF)"
+                  src="/images/tulasi/1.png"
+                  alt="Tulasi image 1"
+                  placeholder="Image will appear here once 1.png is added to public/images/tulasi/ (Full conversational workflow diagram from Page 10)"
                 />
               </div>
 
@@ -156,9 +156,9 @@ export default function TulasiPage() {
                   The interface combines conversational elements with traditional dashboard components for users who prefer visual navigation:
                 </p>
                 <ProjectImage
-                  src="/images/tulasi/saas-dashboard-wireframe.png"
-                  alt="SaaS dashboard wireframe with data visualization and filters"
-                  placeholder="Image will appear here once saas-dashboard-wireframe.png is added (Page 15 from PDF)"
+                  src="/images/tulasi/2.png"
+                  alt="Tulasi image 2"
+                  placeholder="Image will appear here once 2.png is added to public/images/tulasi/ (SaaS dashboard wireframe from Page 15)"
                 />
               </div>
 
@@ -168,9 +168,9 @@ export default function TulasiPage() {
                   The system uses AI to automate common queries and provide intelligent responses:
                 </p>
                 <ProjectImage
-                  src="/images/tulasi/ai-automation-flow-diagram.png"
-                  alt="AI automation flow diagram"
-                  placeholder="Image will appear here once ai-automation-flow-diagram.png is added (Page 18 from PDF)"
+                  src="/images/tulasi/3.png"
+                  alt="Tulasi image 3"
+                  placeholder="Image will appear here once 3.png is added to public/images/tulasi/ (AI automation flow diagram from Page 18)"
                 />
               </div>
             </div>
@@ -197,9 +197,9 @@ export default function TulasiPage() {
                   User testing revealed key insights about conversational design for railway services:
                 </p>
                 <ProjectImage
-                  src="/images/tulasi/ux-research-insights.png"
-                  alt="UX research insights infographic"
-                  placeholder="Image will appear here once ux-research-insights.png is added (Page 22 from PDF)"
+                  src="/images/tulasi/4.png"
+                  alt="Tulasi image 4"
+                  placeholder="Image will appear here once 4.png is added to public/images/tulasi/ (UX research insights infographic from Page 22)"
                 />
               </div>
 
@@ -209,9 +209,9 @@ export default function TulasiPage() {
                   This project established key principles for designing conversational interfaces:
                 </p>
                 <ProjectImage
-                  src="/images/tulasi/conversational-design-principles.png"
-                  alt="Conversational design principles diagram"
-                  placeholder="Image will appear here once conversational-design-principles.png is added (Page 25 from PDF)"
+                  src="/images/tulasi/5.png"
+                  alt="Tulasi image 5"
+                  placeholder="Image will appear here once 5.png is added to public/images/tulasi/ (Conversational design principles diagram from Page 25)"
                 />
               </div>
             </div>
@@ -223,6 +223,26 @@ export default function TulasiPage() {
               <h3 className="text-xl font-light mb-4">Reflection</h3>
               <p className="text-base leading-relaxed text-gray-700">
                 Tulasi demonstrated how conversational design can make complex information systems accessible to all users. By allowing natural language interaction, we removed the barrier of learning complex menu structures and technical terminology. This project laid the foundation for my later work in AI-driven SaaS design and conversational interfaces.
+              </p>
+            </div>
+          </section>
+
+          {/* Image Update Instructions */}
+          <section className="pt-8 border-t border-gray-200">
+            <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
+              <h3 className="text-lg font-light mb-3">📸 Image Assets</h3>
+              <p className="text-sm text-gray-700 mb-3">
+                To complete this case study, please add the following images to <code className="bg-blue-100 px-2 py-1 rounded text-xs">public/images/tulasi/</code>:
+              </p>
+              <ul className="text-sm text-gray-700 space-y-2 ml-4 list-disc">
+                <li><strong>1.png</strong> - Full conversational workflow diagram (Page 10 from PDF)</li>
+                <li><strong>2.png</strong> - SaaS dashboard wireframe section (Page 15 from PDF)</li>
+                <li><strong>3.png</strong> - AI automation flow diagram (Page 18 from PDF)</li>
+                <li><strong>4.png</strong> - UX research insights infographic (Page 22 from PDF)</li>
+                <li><strong>5.png</strong> - Conversational design principles diagram (Page 25 from PDF)</li>
+              </ul>
+              <p className="text-xs text-gray-600 mt-4 italic">
+                Images will automatically appear once placed in the directory. Use high-resolution PNG or JPEG format optimized for web.
               </p>
             </div>
           </section>
