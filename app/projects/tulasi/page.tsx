@@ -118,8 +118,15 @@ export default function TulasiPage() {
                     alt="Conversational workflow diagram showing user-agent interaction"
                     fill
                     className="object-contain rounded-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/images/tulasi.png';
+                    }}
                   />
                 </div>
+                <p className="text-xs text-gray-400 mt-2 italic">
+                  Image will appear here once conversational-workflow-diagram.png is added to /public/images/tulasi/
+                </p>
               </div>
 
               <div>
@@ -163,8 +170,15 @@ export default function TulasiPage() {
                     alt="SaaS dashboard wireframe with data visualization and filters"
                     fill
                     className="object-contain rounded-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/images/tulasi.png';
+                    }}
                   />
                 </div>
+                <p className="text-xs text-gray-400 mt-2 italic">
+                  Image will appear here once saas-dashboard-wireframe.png is added to /public/images/tulasi/
+                </p>
               </div>
 
               <div>
@@ -178,8 +192,15 @@ export default function TulasiPage() {
                     alt="AI automation flow diagram"
                     fill
                     className="object-contain rounded-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/images/tulasi.png';
+                    }}
                   />
                 </div>
+                <p className="text-xs text-gray-400 mt-2 italic">
+                  Image will appear here once ai-automation-flow-diagram.png is added to /public/images/tulasi/
+                </p>
               </div>
             </div>
           </section>
@@ -210,8 +231,15 @@ export default function TulasiPage() {
                     alt="UX research insights infographic"
                     fill
                     className="object-contain rounded-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/images/tulasi.png';
+                    }}
                   />
                 </div>
+                <p className="text-xs text-gray-400 mt-2 italic">
+                  Image will appear here once ux-research-insights.png is added to /public/images/tulasi/
+                </p>
               </div>
 
               <div>
@@ -225,8 +253,15 @@ export default function TulasiPage() {
                     alt="Conversational design principles diagram"
                     fill
                     className="object-contain rounded-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/images/tulasi.png';
+                    }}
                   />
                 </div>
+                <p className="text-xs text-gray-400 mt-2 italic">
+                  Image will appear here once conversational-design-principles.png is added to /public/images/tulasi/
+                </p>
               </div>
             </div>
           </section>
