@@ -56,16 +56,19 @@ export function Banner() {
   return (
     <>
       <section
-        className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden"
+        className="relative min-h-screen w-full overflow-hidden bg-gradient-to-r from-lime-200 via-yellow-200 to-sky-300"
         style={{
-          background: "radial-gradient(circle at 60% 40%, #F9F871 0%, #B2F2B6 100%)",
           opacity,
           filter: `blur(${blur}px)`,
           transition: "opacity 0.3s ease-out, filter 0.3s ease-out",
         }}
       >
+        {/* background blobs */}
+        <div className="pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-tr from-lime-300 via-emerald-200 to-white opacity-60 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 right-0 h-96 w-96 rounded-full bg-gradient-to-tl from-sky-300 via-blue-200 to-white opacity-70 blur-3xl" />
+
         {/* Resume Link - Top Right */}
-        <div className="absolute top-6 right-6 z-20">
+        <div className="absolute top-6 right-6 z-50">
           <Link
             href="/resume"
             className="px-4 py-2 bg-white/80 backdrop-blur-sm text-gray-900 border border-white/50 rounded-full hover:bg-white transition-all duration-300 text-sm md:text-base"
@@ -74,115 +77,133 @@ export function Banner() {
           </Link>
         </div>
 
-        {/* Content Container */}
-        <div className="relative z-10 flex flex-col items-center text-center max-w-6xl mx-auto">
-          {/* Portrait and Name Section */}
-          <div className="mb-8 flex flex-col items-center">
-            {/* Portrait */}
-            <div className="relative w-48 h-48 md:w-64 md:h-64 mb-6">
+        <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-4 py-16">
+          {/* === PORTRAIT + CIRCLES + FLOATING CARDS === */}
+          <div className="relative z-20 mx-auto max-w-md">
+            {/* portrait */}
+            <div className="relative w-full">
               <Image
                 src="/images/potrait_cutout.png"
-                alt="Sai Anjan"
-                fill
-                className="object-contain drop-shadow-2xl"
+                alt="Sai Anjan portrait"
+                width={400}
+                height={400}
+                className="w-full h-auto"
                 priority
               />
+
+              {/* blurred circles over portrait */}
+              <div className="pointer-events-none absolute -top-6 -left-4 h-20 w-20 rounded-full bg-gradient-to-tr from-white/80 via-lime-100 to-emerald-100 opacity-90 blur-xl md:h-28 md:w-28 md:blur-2xl" />
+              <div className="pointer-events-none absolute -top-4 right-0 h-16 w-16 rounded-full bg-gradient-to-tr from-sky-100 via-white/80 to-sky-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl" />
+              <div className="pointer-events-none absolute bottom-10 -right-6 h-16 w-16 rounded-full bg-gradient-to-tr from-yellow-100 via-white/70 to-lime-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl" />
             </div>
 
-            {/* Name */}
-            <h1 className="text-4xl md:text-6xl font-light mb-6 text-gray-900">
-              Sai Anjan
-            </h1>
-          </div>
-
-          {/* Headline */}
-          <h2 className="text-xl md:text-3xl font-light mb-4 text-gray-800 max-w-3xl leading-tight mb-2">
-            UX Designer Exploring AI, SaaS, and Conversational Interfaces
-          </h2>
-
-          {/* Tagline */}
-          <p className="text-base md:text-lg text-gray-700 mb-8 max-w-2xl">
-            Driven by curiosity and collaboration to craft meaningful, data-driven enterprise experiences.
-          </p>
-
-          {/* About Button */}
-          <button
-            onClick={scrollToAbout}
-            className="px-6 py-2 bg-white/80 backdrop-blur-sm text-gray-900 border border-white/50 rounded-full hover:bg-white transition-all duration-300 hover:scale-105 mb-12 text-sm md:text-base"
-            aria-label="Scroll to About section"
-          >
-            About
-          </button>
-
-          {/* Floating Project Cards */}
-          <div className="relative w-full max-w-5xl mt-8">
-            {/* Tulasi Card - Top Left */}
+            {/* floating cards (desktop) */}
             <div
-              className="absolute top-0 left-0 md:left-4 w-64 md:w-72 bg-white rounded-xl shadow-lg p-4 md:p-6 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:-translate-y-2"
-              style={{
-                top: "-20px",
-                left: "10%",
-              }}
+              className="absolute -bottom-6 -left-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
               onClick={() => handleCardClick("/projects/tulasi", false)}
             >
-              <h3 className="text-lg md:text-xl font-light mb-2 text-gray-900">Tulasi</h3>
-              <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                Conversational AI agent for railway enquiry, simplifying complex information access.
-              </p>
-            </div>
-
-            {/* Chargeit Card - Top Right */}
-            <div
-              className="absolute top-0 right-0 md:right-4 w-64 md:w-72 bg-white rounded-xl shadow-lg p-4 md:p-6 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:-translate-y-2"
-              style={{
-                top: "-20px",
-                right: "10%",
-              }}
-              onClick={() => handleCardClick("/projects/chargeit", true)}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-lg md:text-xl font-light text-gray-900">Chargeit</h3>
-                <svg
-                  className="w-4 h-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Tulasi</p>
+                <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
               </div>
-              <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                Enterprise payment solution with advanced security and workflow management.
-              </p>
             </div>
 
-            {/* Teaching Strategies Card - Bottom Center */}
             <div
-              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-64 md:w-72 bg-white rounded-xl shadow-lg p-4 md:p-6 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:-translate-y-2"
-              style={{
-                bottom: "-40px",
-              }}
+              className="absolute -bottom-14 left-1/2 z-40 hidden w-52 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
               onClick={() => handleCardClick("/projects/teaching-strategies", false)}
             >
-              <h3 className="text-lg md:text-xl font-light mb-2 text-gray-900">Teaching Strategies</h3>
-              <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                Educational platform dashboard with data visualization and analytics.
-              </p>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
+                TS
+              </span>
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Teaching Strategies</p>
+                <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
+              </div>
             </div>
+
+            <div
+              className="absolute top-6 -right-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
+              onClick={() => handleCardClick("/projects/chargeit", true)}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-700">
+                🔒
+              </span>
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Chargeit</p>
+                <p className="text-[11px] text-slate-500">Enterprise · Payment · NDA</p>
+              </div>
+            </div>
+          </div>
+
+          {/* mobile cards (stacked) */}
+          <div className="mt-6 flex w-full max-w-md flex-col gap-3 md:hidden">
+            <div
+              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
+              onClick={() => handleCardClick("/projects/tulasi", false)}
+            >
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Tulasi</p>
+                <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
+              </div>
+            </div>
+            <div
+              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
+              onClick={() => handleCardClick("/projects/teaching-strategies", false)}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
+                TS
+              </span>
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Teaching Strategies</p>
+                <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
+              </div>
+            </div>
+            <div
+              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
+              onClick={() => handleCardClick("/projects/chargeit", true)}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-700">
+                🔒
+              </span>
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Chargeit</p>
+                <p className="text-[11px] text-slate-500">Enterprise · Payment · NDA</p>
+              </div>
+            </div>
+          </div>
+
+          {/* text content */}
+          <div className="relative z-30 mt-10 max-w-2xl text-center md:mt-16">
+            <h1 className="text-4xl font-semibold tracking-tight text-slate-900 md:text-5xl">
+              Sai Anjan
+            </h1>
+            <h2 className="mt-4 text-lg font-medium text-slate-800 md:text-xl">
+              UX Designer Exploring AI, SaaS, and Conversational Interfaces
+            </h2>
+            <p className="mt-3 text-sm text-slate-700 md:text-base max-w-xl mx-auto">
+              Driven by curiosity and collaboration to craft meaningful, data-driven
+              enterprise experiences.
+            </p>
+            
+            {/* About Button */}
+            <button
+              onClick={scrollToAbout}
+              className="mt-8 px-6 py-2 bg-white/80 backdrop-blur-sm text-gray-900 border border-white/50 rounded-full hover:bg-white transition-all duration-300 hover:scale-105 text-sm md:text-base"
+              aria-label="Scroll to About section"
+            >
+              About
+            </button>
           </div>
         </div>
 
         {/* Scroll Down Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center animate-float">
-          <p className="text-gray-800 text-sm mb-3 font-medium">Scroll Down</p>
+          <p className="text-slate-800 text-sm mb-3 font-medium">Scroll Down</p>
           <div className="flex flex-col items-center space-y-1">
             <svg
-              className="w-5 h-5 text-gray-700 animate-bounce"
+              className="w-5 h-5 text-slate-700 animate-bounce"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -196,7 +217,7 @@ export function Banner() {
               />
             </svg>
             <svg
-              className="w-5 h-5 text-gray-700 animate-bounce"
+              className="w-5 h-5 text-slate-700 animate-bounce"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -211,7 +232,7 @@ export function Banner() {
               />
             </svg>
             <svg
-              className="w-5 h-5 text-gray-700 animate-bounce"
+              className="w-5 h-5 text-slate-700 animate-bounce"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
