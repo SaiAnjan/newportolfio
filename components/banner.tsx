@@ -67,6 +67,16 @@ export function Banner() {
         <div className="pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-tr from-lime-300 via-emerald-200 to-white opacity-60 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 right-0 h-96 w-96 rounded-full bg-gradient-to-tl from-sky-300 via-blue-200 to-white opacity-70 blur-3xl" />
 
+        {/* bottom hills behind portrait */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center">
+          {/* back hill */}
+          <div className="h-40 w-[130%] max-w-5xl rounded-[999px] bg-gradient-to-t from-slate-900/25 via-slate-900/5 to-transparent blur-sm" />
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-10px] z-10 flex justify-center">
+          {/* front lighter hill */}
+          <div className="h-32 w-[110%] max-w-4xl rounded-[999px] bg-gradient-to-t from-white/80 via-white/60 to-transparent shadow-[0_-40px_80px_rgba(0,0,0,0.1)]" />
+        </div>
+
         {/* Resume Link - Top Right */}
         <div className="absolute top-6 right-6 z-50">
           <Link
@@ -101,7 +111,7 @@ export function Banner() {
             </button>
           </div>
 
-          {/* === PORTRAIT + CIRCLES + FLOATING CARDS AT BOTTOM === */}
+          {/* === PORTRAIT + FLOATING CARDS AT BOTTOM === */}
           <div className="mt-10 flex items-end justify-center">
             <div className="relative z-20 mx-auto mb-4 max-w-md">
               {/* portrait */}
@@ -114,19 +124,11 @@ export function Banner() {
                   className="w-full h-auto"
                   priority
                 />
-
-                {/* big left blur to hide vertical cut */}
-                <div className="pointer-events-none absolute top-10 -left-10 h-40 w-40 rounded-full bg-gradient-to-tr from-lime-100 via-white/80 to-emerald-200 opacity-80 blur-3xl z-30" />
-
-                {/* head/shoulder circles */}
-                <div className="pointer-events-none absolute -top-6 left-0 h-20 w-20 rounded-full bg-gradient-to-tr from-white/80 via-lime-100 to-emerald-100 opacity-90 blur-xl md:h-28 md:w-28 md:blur-2xl z-30" />
-                <div className="pointer-events-none absolute -top-4 right-0 h-16 w-16 rounded-full bg-gradient-to-tr from-sky-100 via-white/80 to-sky-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl z-30" />
-                <div className="pointer-events-none absolute bottom-10 -right-4 h-16 w-16 rounded-full bg-gradient-to-tr from-yellow-100 via-white/70 to-lime-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl z-30" />
               </div>
 
               {/* floating cards (desktop) */}
               <div
-                className="absolute -bottom-6 -left-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
+                className="absolute -bottom-6 -left-10 z-30 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
                 onClick={() => handleCardClick("/projects/tulasi", false)}
               >
                 <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
@@ -137,7 +139,7 @@ export function Banner() {
               </div>
 
               <div
-                className="absolute -bottom-14 left-1/2 z-40 hidden w-52 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
+                className="absolute -bottom-14 left-1/2 z-30 hidden w-52 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
                 onClick={() => handleCardClick("/projects/teaching-strategies", false)}
               >
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
@@ -150,7 +152,7 @@ export function Banner() {
               </div>
 
               <div
-                className="absolute top-6 -right-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
+                className="absolute top-6 -right-10 z-30 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
                 onClick={() => handleCardClick("/projects/chargeit", true)}
               >
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-700">
