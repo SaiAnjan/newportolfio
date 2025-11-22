@@ -59,6 +59,22 @@ export default async function Home() {
           <h3 className="text-2xl font-light mb-8">Featured Projects</h3>
           <div className="space-y-12">
             <div>
+              <Link href="/projects/ai-saas-dashboard" className="block group">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2">
+                  <h4 className="text-xl font-light group-hover:opacity-70 transition-opacity">
+                    AI-Powered Enterprise Dashboard
+                  </h4>
+                  <span className="text-sm text-gray-500 sm:ml-4">2024</span>
+                </div>
+                <p className="text-sm text-gray-600 mb-2">
+                  Conversational design for complex enterprise workflows, featuring Copilot-style natural language interfaces and intelligent automation.
+                </p>
+                <p className="text-xs text-gray-500 italic">
+                  AI Integration: Copilot Studio, conversational UX, automated insights, NLP-powered queries
+                </p>
+              </Link>
+            </div>
+            <div>
               <Link href="/projects/gpay" className="block group">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2">
                   <h4 className="text-xl font-light group-hover:opacity-70 transition-opacity">
