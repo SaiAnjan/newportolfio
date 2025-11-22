@@ -13,10 +13,21 @@ export default async function Home() {
       <div className="max-w-2xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="mb-16">
-          <h1 className="text-4xl font-light mb-2">Sai Anjan</h1>
-          <p className="text-lg font-light text-gray-600">
-            UX Designer
-          </p>
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h1 className="text-4xl font-light mb-2">Sai Anjan</h1>
+              <p className="text-lg font-light text-gray-600">
+                UX Designer
+              </p>
+            </div>
+            <a
+              href="/resume.pdf"
+              download
+              className="text-sm text-gray-600 hover:text-black transition-colors border border-gray-300 px-4 py-2 rounded hover:border-black"
+            >
+              Download Resume
+            </a>
+          </div>
           <p className="text-sm text-gray-500 mt-2">
             Product Designer with over 5 years of experience in UX research and interaction design. 
             Focused on creating user-centered designs and solving complex problems through innovation.
