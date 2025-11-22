@@ -12,7 +12,7 @@ export default function Home() {
         <div className="flex flex-col md:flex-row mt-12 md:mt-24 mb-8 md:mb-4">
           <div className="order-1 md:order-1 mb-4 md:mb-0 w-full md:w-1/4">
             <Image
-              src="/Images/me.jpg"
+              src="/images/me.jpg"
               alt="Sai Anjan"
               width={96}
               height={96}
@@ -77,56 +77,56 @@ export default function Home() {
           year="2024"
           title="Gpay + Wallet"
           readTime="7 min read"
-          image="/Images/gpay.png"
+          image="/images/gpay.png"
           href="/projects/gpay"
         />
         <ProjectCard
           year="2022"
           title="Mindhouse live class filtering"
           readTime="7 min read"
-          image="/Images/mindhouse.png"
+          image="/images/mindhouse.png"
           href="/projects/mindhouse"
         />
         <ProjectCard
           year="2020"
           title="Teaching Strategies"
           readTime="7 min read"
-          image="/Images/p2.png"
+          image="/images/p2.png"
           href="/projects/teaching-strategies"
         />
         <ProjectCard
           year="2020"
           title="Note － M"
           readTime="7 min read"
-          image="/Images/notem.png"
+          image="/images/notem.png"
           href="/projects/note-m"
         />
         <ProjectCard
           year="2020"
           title="Tulasi"
           readTime="7 min read"
-          image="/Images/tulasi.png"
+          image="/images/tulasi.png"
           href="/projects/tulasi"
         />
         <ProjectCard
           year="2019"
           title="Summer Internship"
           readTime="6 min read"
-          image="/Images/ms.png"
+          image="/images/ms.png"
           href="/projects/summer-internship"
         />
         <ProjectCard
           year="2019"
           title="Pepper"
           readTime="5 min read"
-          image="/Images/pepper.png"
+          image="/images/pepper.png"
           href="/projects/pepper"
         />
         <ProjectCard
           year="2018"
           title="Co － Cards"
           readTime="7 min read"
-          image="/Images/cocards.png"
+          image="/images/cocards.png"
           href="https://www.behance.net/gallery/82968779/Co-Cards-Interactive-learning-tool-for-high-school-kids"
           external
         />
@@ -134,21 +134,21 @@ export default function Home() {
           year="2018"
           title="e － Vaahan"
           readTime="7 min read"
-          image="/Images/evaahan.png"
+          image="/images/evaahan.png"
           href="/projects/evaahan"
         />
         <ProjectCard
           year="2018"
           title="Anjani Font"
           readTime="7 min read"
-          image="/Images/anjani.png"
+          image="/images/anjani.png"
           href="/projects/anjani-font"
         />
         <ProjectCard
           year="2017"
           title="AP Jhanmabhoomi magazine design"
           readTime="7 min read"
-          image="/Images/magazine.png"
+          image="/images/magazine.png"
           href="https://www.behance.net/gallery/89177421/1000-days-of-Transforming-The-Motherland"
           external
         />
@@ -194,7 +194,7 @@ export default function Home() {
               <div className="pl-0 md:pl-3 order-1 md:order-2 mb-4 md:mb-0 w-full md:w-3/10">
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                   <Image
-                    src="/Images/interactions/range-slider.png"
+                    src="/images/interactions/range-slider.png"
                     alt="Dual Thumb Range Slider showing a price range selector from $0 to $150,000"
                     fill
                     className="object-cover rounded-lg"
