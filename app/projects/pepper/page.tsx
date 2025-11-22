@@ -22,7 +22,7 @@ export default function PepperPage() {
         </header>
 
         <main className="max-w-4xl mx-auto px-4 py-12">
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mb-8">
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mb-12">
             <Image
               src="/images/pepper.png"
               alt="Pepper Project"
@@ -30,10 +30,21 @@ export default function PepperPage() {
               className="object-cover rounded-lg"
             />
           </div>
-          <div className="prose prose-sm max-w-none">
-            <p className="text-base text-gray-600 leading-relaxed">
-              This project page is being migrated. The full case study will be available soon.
-            </p>
+          
+          <div className="prose prose-lg max-w-none space-y-8">
+            <section>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Project Overview</h2>
+              <p className="text-base leading-relaxed text-gray-700">
+                Pepper is a design project focused on creating engaging user experiences. The project explores innovative interaction patterns and user interface design principles.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Design Approach</h2>
+              <p className="text-base leading-relaxed text-gray-700">
+                This project emphasizes user-centered design and explores how thoughtful interface design can enhance user engagement and satisfaction.
+              </p>
+            </section>
           </div>
         </main>
 
