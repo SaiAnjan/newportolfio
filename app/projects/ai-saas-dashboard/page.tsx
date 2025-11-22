@@ -376,24 +376,85 @@ export default function AISaaSDashboardPage() {
             <div className="space-y-8 text-base leading-relaxed text-gray-700">
               <div>
                 <h3 className="text-xl font-light mb-4">Key Screenshots & Mockups</h3>
-                <div className="space-y-4">
-                  <div className="bg-gray-100 p-8 rounded-lg text-center">
-                    <p className="text-sm text-gray-500 italic">
-                      [Main Dashboard View - Showing conversational interface with AI insights panel]
+                <div className="space-y-8">
+                  {/* Conversational Workflow Diagram */}
+                  <div>
+                    <h4 className="text-lg font-light mb-3">Conversational Workflow Diagram</h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      User-agent interaction flow showing how natural language queries are processed and responded to.
                     </p>
-                    <p className="text-xs text-gray-400 mt-2">
-                      Interactive prototype available upon request
-                    </p>
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <Image
+                        src="/images/ai-saas-dashboard/conversational-workflow-diagram.png"
+                        alt="Conversational workflow diagram showing user-agent interaction"
+                        fill
+                        className="object-contain rounded-lg"
+                      />
+                    </div>
                   </div>
-                  <div className="bg-gray-100 p-8 rounded-lg text-center">
-                    <p className="text-sm text-gray-500 italic">
-                      [Conversational Query Interface - Natural language input with contextual responses]
+
+                  {/* SaaS Dashboard Wireframe */}
+                  <div>
+                    <h4 className="text-lg font-light mb-3">SaaS Dashboard Wireframe</h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Wireframe showing data visualization components, filters, and conversational interface integration.
                     </p>
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <Image
+                        src="/images/ai-saas-dashboard/saas-dashboard-wireframe.png"
+                        alt="SaaS dashboard wireframe with data visualization and filters"
+                        fill
+                        className="object-contain rounded-lg"
+                      />
+                    </div>
                   </div>
-                  <div className="bg-gray-100 p-8 rounded-lg text-center">
-                    <p className="text-sm text-gray-500 italic">
-                      [AI-Powered Insights Panel - Proactive recommendations and automated reports]
+
+                  {/* AI Automation Flow Diagram */}
+                  <div>
+                    <h4 className="text-lg font-light mb-3">AI Automation Flow Diagram</h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Copilot Studio UX writer automation flow illustrating how AI automates content generation and workflow tasks.
                     </p>
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <Image
+                        src="/images/ai-saas-dashboard/ai-automation-flow-diagram.png"
+                        alt="AI automation flow diagram showing Copilot Studio UX writer automation"
+                        fill
+                        className="object-contain rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  {/* UX Research Insights */}
+                  <div>
+                    <h4 className="text-lg font-light mb-3">UX Research Insights</h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Infographic and framework visuals summarizing user feedback and research findings.
+                    </p>
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <Image
+                        src="/images/ai-saas-dashboard/ux-research-insights.png"
+                        alt="UX research insights infographic and framework visuals"
+                        fill
+                        className="object-contain rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Conversational Design Principles */}
+                  <div>
+                    <h4 className="text-lg font-light mb-3">Conversational Design Principles</h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Diagram and summary visual outlining key principles for designing conversational AI interfaces.
+                    </p>
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <Image
+                        src="/images/ai-saas-dashboard/conversational-design-principles.png"
+                        alt="Conversational design principles diagram and summary visual"
+                        fill
+                        className="object-contain rounded-lg"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
