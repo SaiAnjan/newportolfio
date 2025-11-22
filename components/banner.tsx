@@ -2,16 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NDAModal } from "./nda-modal";
 
 export function Banner() {
+  const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [opacity, setOpacity] = useState(1);
   const [blur, setBlur] = useState(0);
   const [showNDA, setShowNDA] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
@@ -29,7 +33,7 @@ export function Banner() {
       setBlur(Math.min(8, scrollProgress * 8));
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -44,13 +48,13 @@ export function Banner() {
     if (isProtected) {
       setShowNDA(true);
     } else if (href) {
-      window.location.href = href;
+      router.push(href);
     }
   };
 
   const handleNDAAccept = () => {
     setShowNDA(false);
-    window.location.href = "/projects/chargeit";
+    router.push("/projects/chargeit");
   };
 
   return (
