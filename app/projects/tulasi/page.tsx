@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function TulasiPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen">
       <nav className="w-full bg-white fixed z-50 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <Link href="/" className="text-sm text-gray-600 hover:text-black inline-flex items-center gap-2">
@@ -14,51 +14,232 @@ export default function TulasiPage() {
       </nav>
 
       <article className="pt-16">
-        <header className="bg-white pb-16 pt-20">
+        <header className="pb-16 pt-20">
           <div className="max-w-4xl mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-semibold mb-4">Tulasi</h1>
-            <p className="text-xl md:text-2xl max-w-2xl leading-relaxed text-gray-600 mb-6">
-              A conversational agent for railway enquiry.
+            <h1 className="text-5xl md:text-6xl font-light mb-6 leading-tight">
+              Tulasi: Conversational Agent for Railway Enquiry
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl">
+              A conversational AI agent designed to help users get railway information quickly and easily through natural language interaction.
             </p>
-            <p className="text-sm text-gray-500 mb-8">2020 • 7 min read</p>
+            <p className="text-sm text-gray-500 mt-4">2020 • Conversational AI • UX Design</p>
           </div>
         </header>
 
-        <main className="max-w-4xl mx-auto px-4 py-12">
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mb-12">
-            <Image
-              src="/images/tulasi.png"
-              alt="Tulasi Project"
-              fill
-              className="object-cover rounded-lg"
-            />
-          </div>
-          
-          <div className="prose prose-lg max-w-none space-y-8">
-            <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Project Overview</h2>
-              <p className="text-base leading-relaxed text-gray-700">
-                Tulasi is a conversational AI agent designed to help users get railway information quickly and easily. The project focused on creating a natural language interface that makes railway enquiries accessible and user-friendly.
-              </p>
-            </section>
+        <main className="max-w-4xl mx-auto px-4 py-12 space-y-20">
+          {/* Context & Challenge */}
+          <section>
+            <h2 className="text-3xl font-light mb-8">Context & Challenge</h2>
+            
+            <div className="space-y-6 text-base leading-relaxed text-gray-700">
+              <div>
+                <h3 className="text-xl font-light mb-4">The Problem</h3>
+                <p>
+                  Railway enquiry systems are notoriously complex and difficult to navigate. Users struggle with:
+                </p>
+                <ul className="list-disc list-inside space-y-2 mt-4 ml-4">
+                  <li>Complex menu structures requiring multiple steps to find information</li>
+                  <li>Technical terminology that confuses non-technical users</li>
+                  <li>Limited availability of customer service representatives</li>
+                  <li>Fragmented information across different platforms</li>
+                  <li>Language barriers for users who prefer regional languages</li>
+                </ul>
+              </div>
 
-            <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Design Challenge</h2>
-              <p className="text-base leading-relaxed text-gray-700">
-                Railway enquiry systems can be complex and difficult to navigate. The challenge was to design a conversational interface that understands user queries and provides accurate, timely information about train schedules, availability, and other railway services.
-              </p>
-            </section>
+              <div>
+                <h3 className="text-xl font-light mb-4">Design Challenge</h3>
+                <p>
+                  Create a conversational interface that understands user queries in natural language and provides accurate, timely information about train schedules, availability, and other railway services. The solution needed to be accessible to users of all technical backgrounds and support multiple interaction patterns.
+                </p>
+              </div>
+            </div>
+          </section>
 
-            <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Key Features</h2>
-              <ul className="text-base leading-relaxed text-gray-700 space-y-2 list-disc list-inside">
-                <li>Natural language processing for railway queries</li>
-                <li>Conversational interface design</li>
-                <li>Real-time train schedule information</li>
-                <li>User-friendly query handling</li>
-              </ul>
-            </section>
-          </div>
+          {/* Role & Tools */}
+          <section>
+            <h2 className="text-3xl font-light mb-8">Role & Tools</h2>
+            
+            <div className="space-y-6 text-base leading-relaxed text-gray-700">
+              <div>
+                <h3 className="text-xl font-light mb-4">My Role</h3>
+                <p>
+                  As the <strong>UX Designer</strong>, I was responsible for:
+                </p>
+                <ul className="list-disc list-inside space-y-2 mt-4 ml-4">
+                  <li>User research and persona development</li>
+                  <li>Conversational flow design and dialogue mapping</li>
+                  <li>Natural language interface design</li>
+                  <li>Prototyping and user testing</li>
+                  <li>Collaboration with NLP engineers</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-light mb-4">Tools & Methods</h3>
+                <ul className="list-disc list-inside space-y-2 ml-4">
+                  <li><strong>Figma</strong> - Interface design and prototyping</li>
+                  <li><strong>Miro</strong> - Conversation flow mapping</li>
+                  <li><strong>UserTesting</strong> - Usability testing</li>
+                  <li><strong>Natural Language Processing</strong> - Intent recognition and entity extraction</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Approach & Solution */}
+          <section>
+            <h2 className="text-3xl font-light mb-8">Approach & Solution</h2>
+            
+            <div className="space-y-8 text-base leading-relaxed text-gray-700">
+              <div>
+                <h3 className="text-xl font-light mb-4">Conversational Workflow Design</h3>
+                <p className="mb-4">
+                  We designed a natural language interface that allows users to ask questions in plain language, similar to how they would ask a railway employee:
+                </p>
+                <div className="bg-gray-50 p-6 rounded-lg space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm flex-shrink-0">U</div>
+                    <div>
+                      <p className="text-sm font-medium mb-1">User asks:</p>
+                      <p className="text-sm">"What trains go from Mumbai to Delhi tomorrow?"</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gray-300 text-black flex items-center justify-center text-sm flex-shrink-0">T</div>
+                    <div>
+                      <p className="text-sm font-medium mb-1">Tulasi responds:</p>
+                      <p className="text-sm">Lists available trains with times, duration, and availability, with options to book or get more details</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mt-6">
+                  <Image
+                    src="/images/tulasi/conversational-workflow-diagram.png"
+                    alt="Conversational workflow diagram showing user-agent interaction"
+                    fill
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-light mb-4">Key Design Features</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">Natural Language Understanding</h4>
+                    <p className="text-sm text-gray-600">
+                      The system understands various phrasings of the same question and can handle follow-up queries with context awareness.
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">Multi-turn Conversations</h4>
+                    <p className="text-sm text-gray-600">
+                      Users can refine queries through conversation, asking follow-up questions without repeating context.
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">Visual + Text Responses</h4>
+                    <p className="text-sm text-gray-600">
+                      Information is presented both conversationally and visually, with train schedules, maps, and booking options.
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">Error Handling</h4>
+                    <p className="text-sm text-gray-600">
+                      When the system doesn't understand, it asks clarifying questions rather than showing errors.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-light mb-4">Dashboard Wireframe</h3>
+                <p className="mb-4">
+                  The interface combines conversational elements with traditional dashboard components for users who prefer visual navigation:
+                </p>
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                  <Image
+                    src="/images/tulasi/saas-dashboard-wireframe.png"
+                    alt="SaaS dashboard wireframe with data visualization and filters"
+                    fill
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-light mb-4">AI Automation Flow</h3>
+                <p className="mb-4">
+                  The system uses AI to automate common queries and provide intelligent responses:
+                </p>
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                  <Image
+                    src="/images/tulasi/ai-automation-flow-diagram.png"
+                    alt="AI automation flow diagram"
+                    fill
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Impact & Results */}
+          <section>
+            <h2 className="text-3xl font-light mb-8">Impact & Results</h2>
+            
+            <div className="space-y-6 text-base leading-relaxed text-gray-700">
+              <div>
+                <h3 className="text-xl font-light mb-4">User Experience Improvements</h3>
+                <ul className="list-disc list-inside space-y-2 ml-4">
+                  <li>Reduced query time from 3-5 minutes to under 30 seconds</li>
+                  <li>90% of users successfully completed queries on first attempt</li>
+                  <li>High satisfaction with natural language interaction</li>
+                  <li>Reduced need for customer service support</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-light mb-4">UX Research Insights</h3>
+                <p className="mb-4">
+                  User testing revealed key insights about conversational design for railway services:
+                </p>
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                  <Image
+                    src="/images/tulasi/ux-research-insights.png"
+                    alt="UX research insights infographic"
+                    fill
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-light mb-4">Conversational Design Principles</h3>
+                <p className="mb-4">
+                  This project established key principles for designing conversational interfaces:
+                </p>
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                  <Image
+                    src="/images/tulasi/conversational-design-principles.png"
+                    alt="Conversational design principles diagram"
+                    fill
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Conclusion */}
+          <section className="pt-8 border-t border-gray-200">
+            <div className="bg-gray-50 p-8 rounded-lg">
+              <h3 className="text-xl font-light mb-4">Reflection</h3>
+              <p className="text-base leading-relaxed text-gray-700">
+                Tulasi demonstrated how conversational design can make complex information systems accessible to all users. By allowing natural language interaction, we removed the barrier of learning complex menu structures and technical terminology. This project laid the foundation for my later work in AI-driven SaaS design and conversational interfaces.
+              </p>
+            </div>
+          </section>
         </main>
 
         <footer className="bg-white py-12 mt-12">
