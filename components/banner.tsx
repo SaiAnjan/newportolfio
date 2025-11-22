@@ -77,105 +77,9 @@ export function Banner() {
           </Link>
         </div>
 
-        <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-4 py-16">
-          {/* === PORTRAIT + CIRCLES + FLOATING CARDS === */}
-          <div className="relative z-20 mx-auto max-w-md">
-            {/* portrait */}
-            <div className="relative w-full">
-              <Image
-                src="/images/potrait_cutout.png"
-                alt="Sai Anjan portrait"
-                width={400}
-                height={400}
-                className="w-full h-auto"
-                priority
-              />
-
-              {/* blurred circles over portrait */}
-              <div className="pointer-events-none absolute -top-6 -left-4 h-20 w-20 rounded-full bg-gradient-to-tr from-white/80 via-lime-100 to-emerald-100 opacity-90 blur-xl md:h-28 md:w-28 md:blur-2xl" />
-              <div className="pointer-events-none absolute -top-4 right-0 h-16 w-16 rounded-full bg-gradient-to-tr from-sky-100 via-white/80 to-sky-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl" />
-              <div className="pointer-events-none absolute bottom-10 -right-6 h-16 w-16 rounded-full bg-gradient-to-tr from-yellow-100 via-white/70 to-lime-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl" />
-            </div>
-
-            {/* floating cards (desktop) */}
-            <div
-              className="absolute -bottom-6 -left-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
-              onClick={() => handleCardClick("/projects/tulasi", false)}
-            >
-              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
-              <div className="text-xs">
-                <p className="font-semibold text-slate-900">Tulasi</p>
-                <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
-              </div>
-            </div>
-
-            <div
-              className="absolute -bottom-14 left-1/2 z-40 hidden w-52 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
-              onClick={() => handleCardClick("/projects/teaching-strategies", false)}
-            >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
-                TS
-              </span>
-              <div className="text-xs">
-                <p className="font-semibold text-slate-900">Teaching Strategies</p>
-                <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
-              </div>
-            </div>
-
-            <div
-              className="absolute top-6 -right-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
-              onClick={() => handleCardClick("/projects/chargeit", true)}
-            >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-700">
-                🔒
-              </span>
-              <div className="text-xs">
-                <p className="font-semibold text-slate-900">Chargeit</p>
-                <p className="text-[11px] text-slate-500">Enterprise · Payment · NDA</p>
-              </div>
-            </div>
-          </div>
-
-          {/* mobile cards (stacked) */}
-          <div className="mt-6 flex w-full max-w-md flex-col gap-3 md:hidden">
-            <div
-              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
-              onClick={() => handleCardClick("/projects/tulasi", false)}
-            >
-              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
-              <div className="text-xs">
-                <p className="font-semibold text-slate-900">Tulasi</p>
-                <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
-              </div>
-            </div>
-            <div
-              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
-              onClick={() => handleCardClick("/projects/teaching-strategies", false)}
-            >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
-                TS
-              </span>
-              <div className="text-xs">
-                <p className="font-semibold text-slate-900">Teaching Strategies</p>
-                <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
-              </div>
-            </div>
-            <div
-              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
-              onClick={() => handleCardClick("/projects/chargeit", true)}
-            >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-700">
-                🔒
-              </span>
-              <div className="text-xs">
-                <p className="font-semibold text-slate-900">Chargeit</p>
-                <p className="text-[11px] text-slate-500">Enterprise · Payment · NDA</p>
-              </div>
-            </div>
-          </div>
-
-          {/* text content */}
-          <div className="relative z-30 mt-10 max-w-2xl text-center md:mt-16">
+        <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-between px-4 py-16">
+          {/* === TEXT AT TOP === */}
+          <div className="relative z-30 mx-auto max-w-2xl text-center">
             <h1 className="text-4xl font-semibold tracking-tight text-slate-900 md:text-5xl">
               Sai Anjan
             </h1>
@@ -195,6 +99,107 @@ export function Banner() {
             >
               About
             </button>
+          </div>
+
+          {/* === PORTRAIT + CIRCLES + FLOATING CARDS AT BOTTOM === */}
+          <div className="mt-10 flex items-end justify-center">
+            <div className="relative z-20 mx-auto mb-4 max-w-md">
+              {/* portrait */}
+              <div className="relative w-full">
+                <Image
+                  src="/images/potrait_cutout.png"
+                  alt="Sai Anjan portrait"
+                  width={400}
+                  height={400}
+                  className="w-full h-auto"
+                  priority
+                />
+
+                {/* big left blur to hide vertical cut */}
+                <div className="pointer-events-none absolute top-10 -left-10 h-40 w-40 rounded-full bg-gradient-to-tr from-lime-100 via-white/80 to-emerald-200 opacity-80 blur-3xl z-30" />
+
+                {/* head/shoulder circles */}
+                <div className="pointer-events-none absolute -top-6 left-0 h-20 w-20 rounded-full bg-gradient-to-tr from-white/80 via-lime-100 to-emerald-100 opacity-90 blur-xl md:h-28 md:w-28 md:blur-2xl z-30" />
+                <div className="pointer-events-none absolute -top-4 right-0 h-16 w-16 rounded-full bg-gradient-to-tr from-sky-100 via-white/80 to-sky-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl z-30" />
+                <div className="pointer-events-none absolute bottom-10 -right-4 h-16 w-16 rounded-full bg-gradient-to-tr from-yellow-100 via-white/70 to-lime-200 opacity-90 blur-xl md:h-24 md:w-24 md:blur-2xl z-30" />
+              </div>
+
+              {/* floating cards (desktop) */}
+              <div
+                className="absolute -bottom-6 -left-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
+                onClick={() => handleCardClick("/projects/tulasi", false)}
+              >
+                <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
+                <div className="text-xs">
+                  <p className="font-semibold text-slate-900">Tulasi</p>
+                  <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
+                </div>
+              </div>
+
+              <div
+                className="absolute -bottom-14 left-1/2 z-40 hidden w-52 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
+                onClick={() => handleCardClick("/projects/teaching-strategies", false)}
+              >
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
+                  TS
+                </span>
+                <div className="text-xs">
+                  <p className="font-semibold text-slate-900">Teaching Strategies</p>
+                  <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
+                </div>
+              </div>
+
+              <div
+                className="absolute top-6 -right-10 z-40 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
+                onClick={() => handleCardClick("/projects/chargeit", true)}
+              >
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-700">
+                  🔒
+                </span>
+                <div className="text-xs">
+                  <p className="font-semibold text-slate-900">Chargeit</p>
+                  <p className="text-[11px] text-slate-500">Enterprise · Payment · NDA</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* mobile stacked cards */}
+          <div className="mt-4 flex w-full max-w-md flex-col gap-3 self-center md:hidden">
+            <div
+              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
+              onClick={() => handleCardClick("/projects/tulasi", false)}
+            >
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Tulasi</p>
+                <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
+              </div>
+            </div>
+            <div
+              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
+              onClick={() => handleCardClick("/projects/teaching-strategies", false)}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
+                TS
+              </span>
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Teaching Strategies</p>
+                <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
+              </div>
+            </div>
+            <div
+              className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-md cursor-pointer"
+              onClick={() => handleCardClick("/projects/chargeit", true)}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-700">
+                🔒
+              </span>
+              <div className="text-xs">
+                <p className="font-semibold text-slate-900">Chargeit</p>
+                <p className="text-[11px] text-slate-500">Enterprise · Payment · NDA</p>
+              </div>
+            </div>
           </div>
         </div>
 
