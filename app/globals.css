@@ -12,11 +12,10 @@
 
 :root {
   --font-bagnard: 'Bagnard', serif;
-  --font-archivo-narrow: var(--font-archivo-narrow);
 }
 
 body {
-  font-family: var(--font-archivo-narrow), sans-serif;
+  font-family: var(--font-archivo-narrow), 'Archivo Narrow', sans-serif;
   background-color: #F4F4F4;
 }
 
