@@ -53,93 +53,115 @@ export default async function Home() {
         {/* All Projects */}
         <section className="mb-20">
           <h3 className="accent-heading text-2xl font-light mb-8">Projects</h3>
-          <div className="space-y-6">
-            <Link href="/projects/gpay" className="block group">
+          <div className="space-y-2">
+            <Link href="/projects/gpay" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Gpay + Wallet</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Gpay + Wallet</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2024</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </Link>
-            <Link href="/projects/mindhouse" className="block group">
+            <Link href="/projects/mindhouse" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Mindhouse live class filtering</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Mindhouse live class filtering</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2022</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </Link>
-            <Link href="/projects/teaching-strategies" className="block group">
+            <Link href="/projects/teaching-strategies" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Teaching Strategies</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Teaching Strategies</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </Link>
-            <Link href="/projects/note-m" className="block group">
+            <Link href="/projects/note-m" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Note － M</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Note － M</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </Link>
-            <Link href="/projects/tulasi" className="block group">
+            <Link href="/projects/tulasi" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Tulasi</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Tulasi</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </Link>
-            <Link href="/projects/summer-internship" className="block group">
+            <Link href="/projects/summer-internship" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Summer Internship</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Summer Internship</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2019</span>
               </div>
-              <p className="text-sm text-gray-500">6 min read</p>
+              <p className="meta text-sm">6 min read</p>
             </Link>
-            <Link href="/projects/pepper" className="block group">
+            <Link href="/projects/pepper" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Pepper</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Pepper</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2019</span>
               </div>
-              <p className="text-sm text-gray-500">5 min read</p>
+              <p className="meta text-sm">5 min read</p>
             </Link>
             <a
               href="https://www.behance.net/gallery/82968779/Co-Cards-Interactive-learning-tool-for-high-school-kids"
               target="_blank"
               rel="noopener noreferrer"
-              className="block group"
+              className="project-row block"
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Co － Cards</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Co － Cards</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </a>
-            <Link href="/projects/evaahan" className="block group">
+            <Link href="/projects/evaahan" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">e － Vaahan</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">e － Vaahan</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </Link>
-            <Link href="/projects/anjani-font" className="block group">
+            <Link href="/projects/anjani-font" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">Anjani Font</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">Anjani Font</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </Link>
             <a
               href="https://www.behance.net/gallery/89177421/1000-days-of-Transforming-The-Motherland"
               target="_blank"
               rel="noopener noreferrer"
-              className="block group"
+              className="project-row block"
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">AP Jhanmabhoomi magazine design</h4>
+                <h4 className="text-lg font-light">
+                  <span className="project-link">AP Jhanmabhoomi magazine design</span>
+                </h4>
                 <span className="project-year text-sm sm:ml-4">2017</span>
               </div>
-              <p className="text-sm text-gray-500">7 min read</p>
+              <p className="meta text-sm">7 min read</p>
             </a>
           </div>
         </section>
@@ -257,7 +279,7 @@ export default async function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="pt-8 border-t border-gray-200">
+        <footer className="pt-8 border-t" style={{ borderColor: 'rgba(15, 91, 70, 0.15)' }}>
           <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} Sai Anjan. Made with ❤️ in Hyderabad, India.
           </p>

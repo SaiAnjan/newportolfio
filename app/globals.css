@@ -35,37 +35,91 @@ h1, h2, h3, h4, h5, h6 {
 
 .accent-heading {
   color: var(--color-basil);
+  position: relative;
+  display: inline-block;
+}
+
+.accent-heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.2rem;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-coral);
+  transition: width 180ms ease-out;
+}
+
+.accent-heading:hover::after {
+  width: 100%;
 }
 
 a {
   color: var(--color-basil);
-  transition: color 0.2s ease;
+  text-decoration: none;
+  transition: color 160ms ease-out, box-shadow 160ms ease-out;
 }
 
 a:hover {
   color: var(--color-coral);
+  box-shadow: 0 1px 0 0 var(--color-coral);
 }
 
 .primary-button {
-  background-color: var(--color-coral);
+  background-color: var(--color-basil);
   color: #fff;
   border-radius: 999px;
-  padding: 0.5rem 1.25rem;
+  padding: 0.55rem 1.4rem;
+  font-size: 0.9rem;
   font-weight: 500;
   border: none;
-  transition: background-color 0.2s ease;
+  transition: background-color 180ms ease-out, transform 150ms ease-out, box-shadow 150ms ease-out;
 }
 
 .primary-button:hover {
-  background-color: var(--color-basil);
+  background-color: var(--color-coral);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
 
 .project-year {
-  color: rgba(15, 91, 70, 0.7);
+  color: rgba(15, 91, 70, 0.85);
+  font-weight: 500;
+}
+
+.project-link {
+  position: relative;
+  display: inline-block;
+  padding: 0 0.08em;
+  background-image: linear-gradient(to right, var(--color-coral), var(--color-basil));
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 220ms ease-out, color 220ms ease-out;
+}
+
+.project-link:hover {
+  background-size: 100% 100%;
+  color: #fff;
+}
+
+.project-row {
+  padding: 0.4rem 0;
+  border-radius: 6px;
+  transition: background-color 180ms ease-out, transform 180ms ease-out;
+}
+
+.project-row:hover {
+  background-color: rgba(248, 244, 232, 0.9);
+  transform: translateY(-1px);
+}
+
+.meta {
+  color: rgba(15, 91, 70, 0.75);
 }
 
 hr {
-  border-color: rgba(23, 26, 26, 0.08);
+  border-color: rgba(15, 91, 70, 0.15);
 }
 
 @layer base {

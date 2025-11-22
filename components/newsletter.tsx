@@ -29,7 +29,7 @@ export function Newsletter() {
   };
 
   return (
-    <section className="py-16 border-t" style={{ borderColor: 'rgba(23, 26, 26, 0.08)' }}>
+    <section className="py-16 border-t" style={{ borderColor: 'rgba(15, 91, 70, 0.15)' }}>
       <div className="max-w-2xl mx-auto px-4">
         <h2 className="accent-heading text-2xl font-light mb-4">Newsletter</h2>
         <p className="text-sm text-gray-600 mb-6 leading-relaxed">
