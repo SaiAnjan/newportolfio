@@ -67,14 +67,14 @@ export function Banner() {
         <div className="pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-tr from-lime-300 via-emerald-200 to-white opacity-60 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 right-0 h-96 w-96 rounded-full bg-gradient-to-tl from-sky-300 via-blue-200 to-white opacity-70 blur-3xl" />
 
-        {/* bottom hills behind portrait */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center">
-          {/* back hill */}
-          <div className="h-40 w-[130%] max-w-5xl rounded-[999px] bg-gradient-to-t from-slate-900/25 via-slate-900/5 to-transparent blur-sm" />
+        {/* back, darker hill */}
+        <div className="pointer-events-none absolute inset-x-[-10%] bottom-[-140px] z-10 flex justify-center">
+          <div className="h-[260px] w-full max-w-[1400px] rounded-[999px] bg-gradient-to-t from-slate-900/25 via-slate-900/5 to-transparent" />
         </div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-[-10px] z-10 flex justify-center">
-          {/* front lighter hill */}
-          <div className="h-32 w-[110%] max-w-4xl rounded-[999px] bg-gradient-to-t from-white/80 via-white/60 to-transparent shadow-[0_-40px_80px_rgba(0,0,0,0.1)]" />
+
+        {/* front, lighter hill */}
+        <div className="pointer-events-none absolute inset-x-[-5%] bottom-[-100px] z-10 flex justify-center">
+          <div className="h-[220px] w-full max-w-[1200px] rounded-[999px] bg-gradient-to-t from-white/85 via-white/70 to-transparent shadow-[0_-40px_80px_rgba(0,0,0,0.22)]" />
         </div>
 
         {/* Resume Link - Top Right */}
@@ -126,31 +126,37 @@ export function Banner() {
                 />
               </div>
 
-              {/* floating cards (desktop) */}
-              <div
-                className="absolute -bottom-6 -left-10 z-30 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
-                onClick={() => handleCardClick("/projects/tulasi", false)}
-              >
-                <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
-                <div className="text-xs">
-                  <p className="font-semibold text-slate-900">Tulasi</p>
-                  <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
+              {/* Tulasi – left of portrait on desktop */}
+              <div className="hidden md:flex absolute bottom-16 -left-28 z-30">
+                <div
+                  className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] cursor-pointer"
+                  onClick={() => handleCardClick("/projects/tulasi", false)}
+                >
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400" />
+                  <div className="text-xs">
+                    <p className="font-semibold text-slate-900">Tulasi</p>
+                    <p className="text-[11px] text-slate-500">Conversational AI for railways</p>
+                  </div>
                 </div>
               </div>
 
-              <div
-                className="absolute -bottom-14 left-1/2 z-30 hidden w-52 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
-                onClick={() => handleCardClick("/projects/teaching-strategies", false)}
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
-                  TS
-                </span>
-                <div className="text-xs">
-                  <p className="font-semibold text-slate-900">Teaching Strategies</p>
-                  <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
+              {/* Teaching Strategies – right of portrait on desktop */}
+              <div className="hidden md:flex absolute bottom-16 -right-28 z-30">
+                <div
+                  className="flex items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] cursor-pointer"
+                  onClick={() => handleCardClick("/projects/teaching-strategies", false)}
+                >
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold text-emerald-700">
+                    TS
+                  </span>
+                  <div className="text-xs">
+                    <p className="font-semibold text-slate-900">Teaching Strategies</p>
+                    <p className="text-[11px] text-slate-500">Dashboard · Analytics · Data</p>
+                  </div>
                 </div>
               </div>
 
+              {/* Chargeit – top-right of portrait */}
               <div
                 className="absolute top-6 -right-10 z-30 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-xl transition-transform duration-300 hover:scale-[1.03] md:flex cursor-pointer"
                 onClick={() => handleCardClick("/projects/chargeit", true)}
