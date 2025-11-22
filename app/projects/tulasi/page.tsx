@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProjectImage } from "@/components/project-image";
 
 export default function TulasiPage() {
   return (
@@ -112,21 +113,11 @@ export default function TulasiPage() {
                     </div>
                   </div>
                 </div>
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mt-6">
-                  <Image
-                    src="/images/tulasi/conversational-workflow-diagram.png"
-                    alt="Conversational workflow diagram showing user-agent interaction"
-                    fill
-                    className="object-contain rounded-lg"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/images/tulasi.png';
-                    }}
-                  />
-                </div>
-                <p className="text-xs text-gray-400 mt-2 italic">
-                  Image will appear here once conversational-workflow-diagram.png is added to /public/images/tulasi/
-                </p>
+                <ProjectImage
+                  src="/images/tulasi/conversational-workflow-diagram.png"
+                  alt="Conversational workflow diagram showing user-agent interaction"
+                  placeholder="Image will appear here once conversational-workflow-diagram.png is added (Page 10 from PDF)"
+                />
               </div>
 
               <div>
@@ -164,21 +155,11 @@ export default function TulasiPage() {
                 <p className="mb-4">
                   The interface combines conversational elements with traditional dashboard components for users who prefer visual navigation:
                 </p>
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
-                  <Image
-                    src="/images/tulasi/saas-dashboard-wireframe.png"
-                    alt="SaaS dashboard wireframe with data visualization and filters"
-                    fill
-                    className="object-contain rounded-lg"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/images/tulasi.png';
-                    }}
-                  />
-                </div>
-                <p className="text-xs text-gray-400 mt-2 italic">
-                  Image will appear here once saas-dashboard-wireframe.png is added to /public/images/tulasi/
-                </p>
+                <ProjectImage
+                  src="/images/tulasi/saas-dashboard-wireframe.png"
+                  alt="SaaS dashboard wireframe with data visualization and filters"
+                  placeholder="Image will appear here once saas-dashboard-wireframe.png is added (Page 15 from PDF)"
+                />
               </div>
 
               <div>
@@ -186,21 +167,11 @@ export default function TulasiPage() {
                 <p className="mb-4">
                   The system uses AI to automate common queries and provide intelligent responses:
                 </p>
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
-                  <Image
-                    src="/images/tulasi/ai-automation-flow-diagram.png"
-                    alt="AI automation flow diagram"
-                    fill
-                    className="object-contain rounded-lg"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/images/tulasi.png';
-                    }}
-                  />
-                </div>
-                <p className="text-xs text-gray-400 mt-2 italic">
-                  Image will appear here once ai-automation-flow-diagram.png is added to /public/images/tulasi/
-                </p>
+                <ProjectImage
+                  src="/images/tulasi/ai-automation-flow-diagram.png"
+                  alt="AI automation flow diagram"
+                  placeholder="Image will appear here once ai-automation-flow-diagram.png is added (Page 18 from PDF)"
+                />
               </div>
             </div>
           </section>
@@ -225,21 +196,11 @@ export default function TulasiPage() {
                 <p className="mb-4">
                   User testing revealed key insights about conversational design for railway services:
                 </p>
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
-                  <Image
-                    src="/images/tulasi/ux-research-insights.png"
-                    alt="UX research insights infographic"
-                    fill
-                    className="object-contain rounded-lg"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/images/tulasi.png';
-                    }}
-                  />
-                </div>
-                <p className="text-xs text-gray-400 mt-2 italic">
-                  Image will appear here once ux-research-insights.png is added to /public/images/tulasi/
-                </p>
+                <ProjectImage
+                  src="/images/tulasi/ux-research-insights.png"
+                  alt="UX research insights infographic"
+                  placeholder="Image will appear here once ux-research-insights.png is added (Page 22 from PDF)"
+                />
               </div>
 
               <div>
@@ -247,21 +208,11 @@ export default function TulasiPage() {
                 <p className="mb-4">
                   This project established key principles for designing conversational interfaces:
                 </p>
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
-                  <Image
-                    src="/images/tulasi/conversational-design-principles.png"
-                    alt="Conversational design principles diagram"
-                    fill
-                    className="object-contain rounded-lg"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/images/tulasi.png';
-                    }}
-                  />
-                </div>
-                <p className="text-xs text-gray-400 mt-2 italic">
-                  Image will appear here once conversational-design-principles.png is added to /public/images/tulasi/
-                </p>
+                <ProjectImage
+                  src="/images/tulasi/conversational-design-principles.png"
+                  alt="Conversational design principles diagram"
+                  placeholder="Image will appear here once conversational-design-principles.png is added (Page 25 from PDF)"
+                />
               </div>
             </div>
           </section>
