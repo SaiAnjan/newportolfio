@@ -29,9 +29,9 @@ export function Newsletter() {
   };
 
   return (
-    <section className="py-16 border-t border-gray-200">
+    <section className="py-16 border-t" style={{ borderColor: 'rgba(23, 26, 26, 0.08)' }}>
       <div className="max-w-2xl mx-auto px-4">
-        <h2 className="text-2xl font-light mb-4">Newsletter</h2>
+        <h2 className="accent-heading text-2xl font-light mb-4">Newsletter</h2>
         <p className="text-sm text-gray-600 mb-6 leading-relaxed">
           Subscribe to get updates on my latest writing about UX design, product thinking, and design engineering.
         </p>
@@ -48,7 +48,7 @@ export function Newsletter() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="px-6 py-3 bg-black text-white rounded-lg hover:opacity-80 transition-opacity disabled:opacity-50 text-sm font-medium"
+            className="primary-button text-sm disabled:opacity-50"
           >
             {status === "loading" ? "Subscribing..." : status === "success" ? "Subscribed!" : "Subscribe"}
           </button>

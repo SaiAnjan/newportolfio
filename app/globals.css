@@ -12,12 +12,17 @@
 
 :root {
   --font-bagnard: 'Bagnard', serif;
+  --color-basil: #0F5B46;
+  --color-coral: #F35A30;
+  --color-linen: #F3EDDD;
+  --color-ivory: #F8F4E8;
+  --color-charcoal: #171A1A;
 }
 
 body {
   font-family: var(--font-archivo-narrow), 'Archivo Narrow', sans-serif;
-  background-color: #FAF8F3;
-  color: rgba(0, 0, 0, 0.8);
+  background-color: var(--color-linen);
+  color: var(--color-charcoal);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -25,6 +30,42 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.03em;
   font-weight: normal;
   line-height: 1.1;
+  color: var(--color-charcoal);
+}
+
+.accent-heading {
+  color: var(--color-basil);
+}
+
+a {
+  color: var(--color-basil);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-coral);
+}
+
+.primary-button {
+  background-color: var(--color-coral);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.primary-button:hover {
+  background-color: var(--color-basil);
+}
+
+.project-year {
+  color: rgba(15, 91, 70, 0.7);
+}
+
+hr {
+  border-color: rgba(23, 26, 26, 0.08);
 }
 
 @layer base {

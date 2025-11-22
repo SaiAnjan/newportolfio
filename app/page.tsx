@@ -6,7 +6,7 @@ export default async function Home() {
   const blogPosts = await getSubstackPosts();
 
   return (
-    <main className="min-h-screen bg-[#FAF8F3]">
+    <main className="min-h-screen">
       <div className="max-w-4xl mx-auto px-4 py-16">
         {/* Header with Resume */}
         <div className="flex items-start justify-between mb-16">
@@ -18,7 +18,7 @@ export default async function Home() {
           </div>
           <Link
             href="/resume"
-            className="text-sm text-gray-600 hover:text-black transition-colors border border-gray-300 px-4 py-2 rounded hover:border-black"
+            className="primary-button text-sm"
           >
             View Resume
           </Link>
@@ -26,7 +26,7 @@ export default async function Home() {
 
         {/* Hero Section */}
         <section className="mb-20">
-          <h2 className="text-5xl md:text-6xl font-light mb-6 leading-tight">
+          <h2 className="accent-heading text-5xl md:text-6xl font-light mb-6 leading-tight">
             Experienced AI-Driven UX Designer Specializing in SaaS & Enterprise Dashboards
           </h2>
           <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl">
@@ -36,7 +36,7 @@ export default async function Home() {
 
         {/* About Me */}
         <section className="mb-20">
-          <h3 className="text-2xl font-light mb-6">About</h3>
+          <h3 className="accent-heading text-2xl font-light mb-6">About</h3>
           <div className="space-y-4 text-base leading-relaxed text-gray-700 max-w-3xl">
             <p>
               I'm a Product Designer with over 5 years of experience specializing in AI-driven SaaS applications and enterprise dashboard design. My expertise lies in creating intelligent user interfaces that seamlessly integrate AI automation tools, conversational design, and data visualization.
@@ -52,54 +52,54 @@ export default async function Home() {
 
         {/* All Projects */}
         <section className="mb-20">
-          <h3 className="text-2xl font-light mb-8">Projects</h3>
+          <h3 className="accent-heading text-2xl font-light mb-8">Projects</h3>
           <div className="space-y-6">
             <Link href="/projects/gpay" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Gpay + Wallet</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2024</span>
+                <span className="project-year text-sm sm:ml-4">2024</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </Link>
             <Link href="/projects/mindhouse" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Mindhouse live class filtering</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2022</span>
+                <span className="project-year text-sm sm:ml-4">2022</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </Link>
             <Link href="/projects/teaching-strategies" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Teaching Strategies</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2020</span>
+                <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </Link>
             <Link href="/projects/note-m" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Note － M</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2020</span>
+                <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </Link>
             <Link href="/projects/tulasi" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Tulasi</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2020</span>
+                <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </Link>
             <Link href="/projects/summer-internship" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Summer Internship</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2019</span>
+                <span className="project-year text-sm sm:ml-4">2019</span>
               </div>
               <p className="text-sm text-gray-500">6 min read</p>
             </Link>
             <Link href="/projects/pepper" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Pepper</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2019</span>
+                <span className="project-year text-sm sm:ml-4">2019</span>
               </div>
               <p className="text-sm text-gray-500">5 min read</p>
             </Link>
@@ -111,21 +111,21 @@ export default async function Home() {
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Co － Cards</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2018</span>
+                <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </a>
             <Link href="/projects/evaahan" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">e － Vaahan</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2018</span>
+                <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </Link>
             <Link href="/projects/anjani-font" className="block group">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">Anjani Font</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2018</span>
+                <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </Link>
@@ -137,7 +137,7 @@ export default async function Home() {
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">AP Jhanmabhoomi magazine design</h4>
-                <span className="text-sm text-gray-500 sm:ml-4">2017</span>
+                <span className="project-year text-sm sm:ml-4">2017</span>
               </div>
               <p className="text-sm text-gray-500">7 min read</p>
             </a>
@@ -145,8 +145,8 @@ export default async function Home() {
         </section>
 
         {/* Thought Leadership */}
-        <section className="mb-20">
-          <h3 className="text-2xl font-light mb-8">Thought Leadership</h3>
+        <section className="mt-16 mb-20">
+          <h3 className="accent-heading text-2xl font-light mb-8">Thought Leadership</h3>
           {blogPosts.length === 0 ? (
             <p className="text-sm text-gray-500">No posts yet. Check back soon!</p>
           ) : (
@@ -171,7 +171,7 @@ export default async function Home() {
               ))}
               <Link
                 href="/blog"
-                className="text-sm text-gray-500 hover:text-black inline-block mt-2"
+                className="text-sm text-gray-500 inline-block mt-2"
               >
                 View all posts →
               </Link>
@@ -180,17 +180,19 @@ export default async function Home() {
           <div className="mt-8">
             <p className="text-sm text-gray-600 mb-4">
               I write about AI ethics in design, SaaS UX challenges, conversational AI, and the future of enterprise software.
-              Follow my writing on <a href="https://substack.com/@saianjan" target="_blank" rel="noopener noreferrer" className="text-black hover:underline">Substack</a>.
+              Follow my writing on <a href="https://substack.com/@saianjan" target="_blank" rel="noopener noreferrer">Substack</a>.
             </p>
           </div>
         </section>
 
         {/* Newsletter */}
-        <Newsletter />
+        <div className="mt-16">
+          <Newsletter />
+        </div>
 
         {/* Contact & Social Proof */}
-        <section className="mb-16">
-          <h3 className="text-2xl font-light mb-8">Contact</h3>
+        <section className="mt-16 mb-16">
+          <h3 className="accent-heading text-2xl font-light mb-8">Contact</h3>
           <div className="space-y-6">
             <div>
               <p className="text-base text-gray-700 mb-4">
@@ -198,10 +200,7 @@ export default async function Home() {
               </p>
               <p className="text-sm text-gray-600 mb-2">
                 Email:{" "}
-                <a
-                  href="mailto:saianjan.margani@gmail.com"
-                  className="text-black hover:underline"
-                >
+                <a href="mailto:saianjan.margani@gmail.com">
                   saianjan.margani@gmail.com
                 </a>
               </p>
@@ -216,7 +215,7 @@ export default async function Home() {
                   href="https://www.linkedin.com/in/saianjan/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 hover:text-black transition-colors"
+                  className="text-sm"
                 >
                   LinkedIn
                 </a>
@@ -224,7 +223,7 @@ export default async function Home() {
                   href="https://substack.com/@saianjan"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 hover:text-black transition-colors"
+                  className="text-sm"
                 >
                   Substack
                 </a>
@@ -232,7 +231,7 @@ export default async function Home() {
                   href="https://x.com/Dhaathre"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 hover:text-black transition-colors"
+                  className="text-sm"
                 >
                   Twitter
                 </a>
@@ -240,7 +239,7 @@ export default async function Home() {
                   href="https://medium.com/@saianjan.margani"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 hover:text-black transition-colors"
+                  className="text-sm"
                 >
                   Medium
                 </a>
@@ -248,7 +247,7 @@ export default async function Home() {
                   href="https://dribbble.com/saianjan"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 hover:text-black transition-colors"
+                  className="text-sm"
                 >
                   Dribbble
                 </a>
