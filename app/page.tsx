@@ -56,6 +56,121 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* All Projects */}
+        <section className="mb-16">
+          <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-6">
+            Projects
+          </h2>
+          <div className="space-y-6">
+            <Link href="/projects/gpay" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Gpay + Wallet</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2024</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </Link>
+            <Link href="/projects/mindhouse" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Mindhouse live class filtering</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2022</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </Link>
+            <Link href="/projects/teaching-strategies" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Teaching Strategies</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2020</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </Link>
+            <Link href="/projects/note-m" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Note － M</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2020</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </Link>
+            <Link href="/projects/tulasi" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Tulasi</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2020</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </Link>
+            <Link href="/projects/summer-internship" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Summer Internship</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2019</span>
+              </div>
+              <p className="text-sm text-gray-500">6 min read</p>
+            </Link>
+            <Link href="/projects/pepper" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Pepper</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2019</span>
+              </div>
+              <p className="text-sm text-gray-500">5 min read</p>
+            </Link>
+            <a
+              href="https://www.behance.net/gallery/82968779/Co-Cards-Interactive-learning-tool-for-high-school-kids"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block group"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Co － Cards</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2018</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </a>
+            <Link href="/projects/evaahan" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">e － Vaahan</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2018</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </Link>
+            <Link href="/projects/anjani-font" className="block group">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">Anjani Font</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2018</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </Link>
+            <a
+              href="https://www.behance.net/gallery/89177421/1000-days-of-Transforming-The-Motherland"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block group"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+                <h3 className="text-lg font-light">AP Jhanmabhoomi magazine design</h3>
+                <span className="text-sm text-gray-500 sm:ml-4">2017</span>
+              </div>
+              <p className="text-sm text-gray-500">7 min read</p>
+            </a>
+          </div>
+        </section>
+
+        {/* Interaction Techniques */}
+        <section className="mb-16">
+          <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-6">
+            Interaction Techniques
+          </h2>
+          <a
+            href="https://v0.dev/chat/dual-thumb-range-slider-fkMr4tGGxdp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block group"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
+              <h3 className="text-lg font-light">Dual Thumb Range Slider</h3>
+              <span className="text-sm text-gray-500 sm:ml-4">2024</span>
+            </div>
+            <p className="text-sm text-gray-500">Interactive demo</p>
+          </a>
+        </section>
+
         {/* Work Experience */}
         <section className="mb-16">
           <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-6">
