@@ -71,16 +71,6 @@ export function Banner() {
         <div className="pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-tr from-lime-300 via-emerald-200 to-white opacity-60 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 right-0 h-96 w-96 rounded-full bg-gradient-to-tl from-sky-300 via-blue-200 to-white opacity-70 blur-3xl" />
 
-        {/* back, darker hill */}
-        <div className="pointer-events-none absolute inset-x-[-10%] bottom-[-140px] z-10 flex justify-center">
-          <div className="h-[260px] w-full max-w-[1400px] rounded-[999px] bg-gradient-to-t from-slate-900/25 via-slate-900/5 to-transparent" />
-        </div>
-
-        {/* front, lighter hill */}
-        <div className="pointer-events-none absolute inset-x-[-5%] bottom-[-100px] z-10 flex justify-center">
-          <div className="h-[220px] w-full max-w-[1200px] rounded-[999px] bg-gradient-to-t from-white/85 via-white/70 to-transparent shadow-[0_-40px_80px_rgba(0,0,0,0.22)]" />
-        </div>
-
         {/* Resume Link - Top Right */}
         <div className="absolute top-6 right-6 z-50">
           <Link
