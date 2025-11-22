@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Rubik } from "next/font/google";
+import { Archivo_Narrow } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -13,16 +13,11 @@ export const metadata: Metadata = {
   description: "Product Designer with over 5 years of experience in UX research and interaction design",
 };
 
-const inter = Inter({
-  variable: "--font-inter",
+const archivoNarrow = Archivo_Narrow({
+  variable: "--font-archivo-narrow",
   display: "swap",
   subsets: ["latin"],
-});
-
-const rubik = Rubik({
-  variable: "--font-rubik",
-  display: "swap",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export default function RootLayout({
@@ -32,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${rubik.variable} font-sans antialiased`}>
+      <body className={`${archivoNarrow.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

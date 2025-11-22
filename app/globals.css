@@ -2,14 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Bagnard';
+  src: url('/fonts/Bagnard.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --font-inter: 'Inter', sans-serif;
-  --font-rubik: 'Rubik', sans-serif;
+  --font-bagnard: 'Bagnard', serif;
+  --font-archivo-narrow: var(--font-archivo-narrow);
 }
 
 body {
-  font-family: var(--font-inter);
+  font-family: var(--font-archivo-narrow), sans-serif;
   background-color: #F4F4F4;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-bagnard), serif;
 }
 
 @layer base {
