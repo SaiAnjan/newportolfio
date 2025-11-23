@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSubstackPosts, formatDate } from "@/lib/substack";
 import { Newsletter } from "@/components/newsletter";
+import { MagneticFilings } from "@/components/magnetic-filings";
 
 export default async function Home() {
   const blogPosts = await getSubstackPosts();
@@ -12,7 +13,7 @@ export default async function Home() {
         <div className="flex items-start justify-between mb-16">
           <div>
             <h1 className="text-4xl font-light mb-2">Sai Anjan</h1>
-            <p className="text-lg font-light text-gray-600">
+            <p className="text-lg font-light text-gray-600 mt-0.5">
               UX Designer
             </p>
           </div>
@@ -25,18 +26,40 @@ export default async function Home() {
         </div>
 
         {/* Hero Section */}
-        <section className="mb-20">
-          <h2 className="accent-heading text-5xl md:text-6xl font-light mb-6 leading-tight">
-            Experienced AI-Driven UX Designer Specializing in SaaS & Enterprise Dashboards
+        <section className="mb-20 fade-up">
+          <h2 className="animated-heading text-5xl md:text-6xl font-light mb-6 leading-tight">
+            Curious AI-Driven UX Designer Specializing in SaaS & Enterprise Dashboards
           </h2>
           <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl">
             Designing intelligent, data-driven user experiences for complex workflows. Transforming enterprise software through thoughtful AI integration and conversational design.
           </p>
         </section>
 
+        {/* GPT Mode */}
+        <section className="mb-20 fade-up" style={{ animationDelay: '80ms' }}>
+          <div className="gpt-mode-card rounded-2xl relative overflow-hidden" style={{ backgroundColor: 'white' }}>
+            <MagneticFilings />
+            <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-6 md:p-8" style={{ position: 'relative', zIndex: 10 }}>
+              <div className="space-y-2">
+                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">New</p>
+                <h3 className="text-2xl font-light text-[var(--color-charcoal)]">GPT Mode — talk to my portfolio</h3>
+                <p className="text-base text-gray-700 max-w-2xl">
+                  Ask questions like you would with ChatGPT. This mode answers using only my projects, resume, and writing—no external APIs or costs.
+                </p>
+              </div>
+              <Link
+                href="/gpt-mode"
+                className="primary-button inline-flex items-center justify-center text-sm whitespace-nowrap"
+              >
+                Try GPT Mode
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* About Me */}
-        <section className="mb-20">
-          <h3 className="accent-heading text-2xl font-light mb-6">About</h3>
+        <section className="mb-20 fade-up" style={{ animationDelay: '100ms' }}>
+          <h3 className="animated-heading text-2xl font-light mb-6">About</h3>
           <div className="space-y-4 text-base leading-relaxed text-gray-700 max-w-3xl">
             <p>
               I'm a Product Designer with over 5 years of experience specializing in AI-driven SaaS applications and enterprise dashboard design. My expertise lies in creating intelligent user interfaces that seamlessly integrate AI automation tools, conversational design, and data visualization.
@@ -51,13 +74,13 @@ export default async function Home() {
         </section>
 
         {/* All Projects */}
-        <section className="mb-20">
-          <h3 className="accent-heading text-2xl font-light mb-8">Projects</h3>
+        <section className="mb-20 fade-up" style={{ animationDelay: '200ms' }}>
+          <h3 className="animated-heading text-2xl font-light mb-8">Projects</h3>
           <div className="space-y-2">
             <Link href="/projects/gpay" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Gpay + Wallet</span>
+                  <span className="project-title-link animated-heading">Gpay + Wallet</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2024</span>
               </div>
@@ -66,7 +89,7 @@ export default async function Home() {
             <Link href="/projects/mindhouse" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Mindhouse live class filtering</span>
+                  <span className="project-title-link animated-heading">Mindhouse live class filtering</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2022</span>
               </div>
@@ -75,7 +98,7 @@ export default async function Home() {
             <Link href="/projects/teaching-strategies" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Teaching Strategies</span>
+                  <span className="project-title-link animated-heading">Teaching Strategies</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
@@ -84,7 +107,7 @@ export default async function Home() {
             <Link href="/projects/note-m" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Note － M</span>
+                  <span className="project-title-link animated-heading">Note － M</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
@@ -93,7 +116,7 @@ export default async function Home() {
             <Link href="/projects/tulasi" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Tulasi</span>
+                  <span className="project-title-link animated-heading">Tulasi</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2020</span>
               </div>
@@ -102,7 +125,7 @@ export default async function Home() {
             <Link href="/projects/summer-internship" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Summer Internship</span>
+                  <span className="project-title-link animated-heading">Summer Internship</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2019</span>
               </div>
@@ -111,7 +134,7 @@ export default async function Home() {
             <Link href="/projects/pepper" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Pepper</span>
+                  <span className="project-title-link animated-heading">Pepper</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2019</span>
               </div>
@@ -125,7 +148,7 @@ export default async function Home() {
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Co － Cards</span>
+                  <span className="project-title-link animated-heading">Co － Cards</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
@@ -134,7 +157,7 @@ export default async function Home() {
             <Link href="/projects/evaahan" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">e － Vaahan</span>
+                  <span className="project-title-link animated-heading">e － Vaahan</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
@@ -143,7 +166,7 @@ export default async function Home() {
             <Link href="/projects/anjani-font" className="project-row block">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">Anjani Font</span>
+                  <span className="project-title-link animated-heading">Anjani Font</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2018</span>
               </div>
@@ -157,7 +180,7 @@ export default async function Home() {
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
                 <h4 className="text-lg font-light">
-                  <span className="project-link">AP Jhanmabhoomi magazine design</span>
+                  <span className="project-title-link animated-heading">AP Jhanmabhoomi magazine design</span>
                 </h4>
                 <span className="project-year text-sm sm:ml-4">2017</span>
               </div>
@@ -167,8 +190,8 @@ export default async function Home() {
         </section>
 
         {/* Thought Leadership */}
-        <section className="mt-16 mb-20">
-          <h3 className="accent-heading text-2xl font-light mb-8">Thought Leadership</h3>
+        <section className="mt-16 mb-20 fade-up" style={{ animationDelay: '300ms' }}>
+          <h3 className="animated-heading text-2xl font-light mb-8">Thought Leadership</h3>
           {blogPosts.length === 0 ? (
             <p className="text-sm text-gray-500">No posts yet. Check back soon!</p>
           ) : (
@@ -208,13 +231,13 @@ export default async function Home() {
         </section>
 
         {/* Newsletter */}
-        <div className="mt-16">
+        <div className="mt-16 fade-up" style={{ animationDelay: '400ms' }}>
           <Newsletter />
         </div>
 
         {/* Contact & Social Proof */}
-        <section className="mt-16 mb-16">
-          <h3 className="accent-heading text-2xl font-light mb-8">Contact</h3>
+        <section className="mt-16 mb-16 fade-up" style={{ animationDelay: '500ms' }}>
+          <h3 className="animated-heading text-2xl font-light mb-8">Contact</h3>
           <div className="space-y-6">
             <div>
               <p className="text-base text-gray-700 mb-4">

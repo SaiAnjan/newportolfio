@@ -61,3 +61,4 @@
 - ⏳ Supabase setup pending
 - ⏳ Vercel setup pending
 
+

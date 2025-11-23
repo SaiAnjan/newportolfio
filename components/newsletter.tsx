@@ -31,7 +31,7 @@ export function Newsletter() {
   return (
     <section className="py-16 border-t" style={{ borderColor: 'rgba(15, 91, 70, 0.15)' }}>
       <div className="max-w-2xl mx-auto px-4">
-        <h2 className="accent-heading text-2xl font-light mb-4">Newsletter</h2>
+        <h2 className="animated-heading text-2xl font-light mb-4">Newsletter</h2>
         <p className="text-sm text-gray-600 mb-6 leading-relaxed">
           Subscribe to get updates on my latest writing about UX design, product thinking, and design engineering.
         </p>

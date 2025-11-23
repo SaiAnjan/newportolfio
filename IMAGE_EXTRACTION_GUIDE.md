@@ -90,3 +90,4 @@ public/images/ai-saas-dashboard/
 
 The case study page is already set up to display these images once you add them to the directory.
 
+

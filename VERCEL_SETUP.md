@@ -80,3 +80,4 @@ After deployment:
 - Each deployment automatically uses the latest code from GitHub
 - Vercel provides free SSL certificates automatically
 
+

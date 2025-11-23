@@ -47,3 +47,4 @@ echo "1. Go to https://vercel.com and import this repository"
 echo "2. Set up Supabase project at https://supabase.com"
 echo "3. Add environment variables in Vercel dashboard"
 
+

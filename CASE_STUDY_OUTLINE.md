@@ -159,3 +159,4 @@
 - Progressive disclosure prevents information overload
 - Voice and text interfaces serve different use cases
 
+

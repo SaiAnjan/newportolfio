@@ -23,3 +23,4 @@ Make sure these environment variables are set in Vercel:
 
 The code was checking for `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` but we're using `NEXT_PUBLIC_SUPABASE_ANON_KEY`. I've updated the check to use the correct variable name.
 
+

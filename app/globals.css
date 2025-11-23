@@ -12,11 +12,11 @@
 
 :root {
   --font-bagnard: 'Bagnard', serif;
-  --color-basil: #0F5B46;
-  --color-coral: #F35A30;
-  --color-linen: #F3EDDD;
-  --color-ivory: #F8F4E8;
-  --color-charcoal: #171A1A;
+  --color-basil: #0F5B46;    /* deep green accent */
+  --color-coral: #F35A30;    /* orange accent */
+  --color-linen: #F3EDDD;    /* main background */
+  --color-ivory: #F8F4E8;    /* cards / surfaces */
+  --color-charcoal: #171A1A; /* main text */
 }
 
 body {
@@ -54,64 +54,92 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
+.animated-heading {
+  color: var(--color-basil);
+  position: relative;
+  display: inline-block;
+}
+
+.animated-heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.2rem;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-coral);
+  transition: width 180ms ease-out;
+}
+
+.animated-heading:hover::after {
+  width: 100%;
+}
+
 a {
   color: var(--color-basil);
   text-decoration: none;
-  transition: color 160ms ease-out, box-shadow 160ms ease-out;
+  transition: color 160ms ease-out;
 }
 
 a:hover {
   color: var(--color-coral);
-  box-shadow: 0 1px 0 0 var(--color-coral);
 }
 
 .primary-button {
-  background-color: var(--color-basil);
+  background-color: var(--color-coral);
   color: #fff;
   border-radius: 999px;
-  padding: 0.55rem 1.4rem;
-  font-size: 0.9rem;
+  padding: 0.5rem 1.25rem;
   font-weight: 500;
-  border: none;
-  transition: background-color 180ms ease-out, transform 150ms ease-out, box-shadow 150ms ease-out;
+  transition: background-color 180ms ease-out, transform 180ms ease-out, box-shadow 180ms ease-out;
 }
 
 .primary-button:hover {
-  background-color: var(--color-coral);
+  background-color: var(--color-basil);
   transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
 }
 
 .project-year {
-  color: rgba(15, 91, 70, 0.85);
+  color: rgba(15, 91, 70, 0.8);
   font-weight: 500;
 }
 
-.project-link {
+.project-title-link {
   position: relative;
   display: inline-block;
-  padding: 0 0.08em;
-  background-image: linear-gradient(to right, var(--color-coral), var(--color-basil));
-  background-size: 0% 100%;
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  transition: background-size 220ms ease-out, color 220ms ease-out;
+  color: var(--color-charcoal);
 }
 
-.project-link:hover {
-  background-size: 100% 100%;
-  color: #fff;
+.project-title-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.2rem;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-coral);
+  transition: width 180ms ease-out;
+}
+
+.project-title-link:hover::after {
+  width: 100%;
+}
+
+.project-title-link:hover {
+  color: var(--color-coral);
 }
 
 .project-row {
-  padding: 0.4rem 0;
-  border-radius: 6px;
-  transition: background-color 180ms ease-out, transform 180ms ease-out;
+  border-radius: 0.75rem;
+  padding: 0.9rem 1rem;
+  transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
 .project-row:hover {
   background-color: rgba(248, 244, 232, 0.9);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
 }
 
 .meta {
@@ -178,6 +206,20 @@ hr {
   }
 }
 
+/* Dark mode color overrides */
+.dark {
+  --color-basil: #45C49C;      /* a slightly lighter basil for contrast */
+  --color-coral: #FF8358;      /* slightly brighter coral */
+  --color-linen: #050809;      /* dark background */
+  --color-ivory: #141818;      /* surfaces / cards */
+  --color-charcoal: #F5F2E7;   /* main text */
+}
+
+.dark body {
+  background-color: var(--color-linen);
+  color: var(--color-charcoal);
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -202,4 +244,96 @@ hr {
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gpt-mode-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.gpt-mode-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/bg_gradient.webp");
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  z-index: 0;
+  animation: gradientShift 8s ease infinite;
+}
+
+.gpt-mode-card:hover::before {
+  opacity: 0.2;
+}
+
+.gpt-mode-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fade-up animation */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 420ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* Cloud bubbles animation - slide up from bottom */
+@keyframes slideUpClouds {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-up-clouds {
+  animation: slideUpClouds 500ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.cloud-bubble {
+  opacity: 0;
+  animation: slideUpClouds 500ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* Info card for project pages */
+.info-card {
+  background-color: var(--color-ivory);
+  border-radius: 16px;
+  border: 1px solid rgba(23, 26, 26, 0.06);
+  transition: transform 160ms ease-out, box-shadow 160ms ease-out, border-color 160ms ease-out;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  border-color: rgba(15, 91, 70, 0.25);
 }

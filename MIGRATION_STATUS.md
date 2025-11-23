@@ -120,3 +120,4 @@ my-portfolio/
 - We're using Tailwind CSS (already configured) instead of Tachyons
 - Inter and Rubik fonts are configured via Next.js font optimization
 
+

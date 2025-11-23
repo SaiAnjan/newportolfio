@@ -22,3 +22,4 @@ export function ExperienceItem({ period, title, location }: ExperienceItemProps)
   );
 }
 
+

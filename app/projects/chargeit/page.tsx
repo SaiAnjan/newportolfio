@@ -14,9 +14,9 @@ export default function ChargeitPage() {
       </nav>
 
       <article className="pt-16">
-        <header className="pb-16 pt-20">
+        <header className="pb-16 pt-20 fade-up">
           <div className="max-w-4xl mx-auto px-4">
-            <h1 className="text-5xl md:text-6xl font-light mb-6 leading-tight">
+            <h1 className="project-title-link animated-heading text-5xl md:text-6xl font-light mb-6 leading-tight">
               Chargeit: Enterprise Payment Solution
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl">
@@ -27,7 +27,7 @@ export default function ChargeitPage() {
         </header>
 
         <main className="max-w-4xl mx-auto px-4 py-12 space-y-20">
-          <section>
+          <section className="fade-up" style={{ animationDelay: '100ms' }}>
             <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mb-8">
               <Image
                 src="/images/ChargeIT/Thumbnail.png"
@@ -36,9 +36,11 @@ export default function ChargeitPage() {
                 className="object-cover"
               />
             </div>
-            <p className="text-base leading-relaxed text-gray-700">
-              This project is protected by an NDA. Detailed case study content will be available upon request with proper authorization.
-            </p>
+            <div className="info-card">
+              <p className="text-base leading-relaxed text-gray-700">
+                This project is protected by an NDA. Detailed case study content will be available upon request with proper authorization.
+              </p>
+            </div>
           </section>
         </main>
 
@@ -51,4 +53,5 @@ export default function ChargeitPage() {
     </main>
   );
 }
+
 

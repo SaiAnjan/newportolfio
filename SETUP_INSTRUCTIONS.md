@@ -90,3 +90,4 @@ After setting up the basic infrastructure, we'll:
 2. Convert HTML pages to Next.js pages
 3. Set up your portfolio content
 
+
