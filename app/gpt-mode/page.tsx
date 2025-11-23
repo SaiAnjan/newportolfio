@@ -260,7 +260,7 @@ export default function GPTModePage() {
           {/* Suggestion Clouds - Only for latest assistant message */}
           {(() => {
             const latestAssistantMessage = [...messages].reverse().find(m => m.role === "assistant" && m.suggestions && m.suggestions.length > 0);
-            return latestAssistantMessage ? (
+            return latestAssistantMessage && latestAssistantMessage.suggestions ? (
               <div className="px-4 pb-3">
                 <div className="max-w-4xl mx-auto">
                   <div className="flex flex-wrap gap-2.5 justify-center">
