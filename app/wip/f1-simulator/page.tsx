@@ -105,6 +105,7 @@ export default function F1SimulatorPage() {
       // Build positions editor (P1..P20) with card-based selectors
       const positionSelects: Map<number, { container: HTMLElement; selectedDriver: string | null; cards: Map<string, HTMLElement> }> = new Map();
       function buildPositions() {
+      if (!positionsWrap) return;
       positionsWrap.innerHTML = '';
       positionSelects.clear();
       for (let p=1; p<=20; p++) {
@@ -190,7 +191,7 @@ export default function F1SimulatorPage() {
         row.appendChild(posBox);
         row.appendChild(selectorContainer);
         row.appendChild(ptsBox);
-        positionsWrap.appendChild(row);
+        if (positionsWrap) positionsWrap.appendChild(row);
         
         positionSelects.set(p, { container: selectorContainer, selectedDriver: null, cards });
       }
@@ -199,6 +200,7 @@ export default function F1SimulatorPage() {
       // Build DNF list (checkboxes)
       const dnfChecks = new Map<string, HTMLInputElement>();
       function buildDnfList() {
+      if (!dnfListWrap) return;
       dnfListWrap.innerHTML = '';
       dnfChecks.clear();
       const list = document.createElement('div');
@@ -242,7 +244,7 @@ export default function F1SimulatorPage() {
         
         list.appendChild(label);
       }
-      dnfListWrap.appendChild(list);
+      if (dnfListWrap) dnfListWrap.appendChild(list);
       }
 
       // ==========================
