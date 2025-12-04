@@ -75,24 +75,24 @@ export default function F1SimulatorPage() {
       // ==========================
       // DOM helpers - Mobile elements
       // ==========================
-      const pointsBody = document.querySelector('#pointsTable tbody');
-      const leaderName = document.querySelector('#leaderName');
-      const fastestLapSel = document.querySelector('#fastestLap') as HTMLSelectElement;
-      const positionsWrap = document.querySelector('#positions');
-      const dnfListWrap = document.querySelector('#dnfList');
-      const resetBtn = document.querySelector('#resetBtn');
-      const presetMaxBtn = document.querySelector('#presetMaxBtn');
-      const leaderImageContainer = document.querySelector('#leaderImageContainer');
+      const pointsBody = document.querySelector('#pointsTable tbody') as HTMLTableSectionElement | null;
+      const leaderName = document.querySelector('#leaderName') as HTMLElement | null;
+      const fastestLapSel = document.querySelector('#fastestLap') as HTMLSelectElement | null;
+      const positionsWrap = document.querySelector('#positions') as HTMLElement | null;
+      const dnfListWrap = document.querySelector('#dnfList') as HTMLElement | null;
+      const resetBtn = document.querySelector('#resetBtn') as HTMLButtonElement | null;
+      const presetMaxBtn = document.querySelector('#presetMaxBtn') as HTMLButtonElement | null;
+      const leaderImageContainer = document.querySelector('#leaderImageContainer') as HTMLElement | null;
 
       // Desktop elements (optional - may not exist on mobile)
-      const pointsBodyDesktop = document.querySelector('#pointsTableDesktop tbody');
-      const leaderNameDesktop = document.querySelector('#leaderNameDesktop');
-      const fastestLapSelDesktop = document.querySelector('#fastestLapDesktop') as HTMLSelectElement;
-      const positionsWrapDesktop = document.querySelector('#positionsDesktop');
-      const dnfListWrapDesktop = document.querySelector('#dnfListDesktop');
-      const resetBtnDesktop = document.querySelector('#resetBtnDesktop');
-      const presetMaxBtnDesktop = document.querySelector('#presetMaxBtnDesktop');
-      const leaderImageContainerDesktop = document.querySelector('#leaderImageContainerDesktop');
+      const pointsBodyDesktop = document.querySelector('#pointsTableDesktop tbody') as HTMLTableSectionElement | null;
+      const leaderNameDesktop = document.querySelector('#leaderNameDesktop') as HTMLElement | null;
+      const fastestLapSelDesktop = document.querySelector('#fastestLapDesktop') as HTMLSelectElement | null;
+      const positionsWrapDesktop = document.querySelector('#positionsDesktop') as HTMLElement | null;
+      const dnfListWrapDesktop = document.querySelector('#dnfListDesktop') as HTMLElement | null;
+      const resetBtnDesktop = document.querySelector('#resetBtnDesktop') as HTMLButtonElement | null;
+      const presetMaxBtnDesktop = document.querySelector('#presetMaxBtnDesktop') as HTMLButtonElement | null;
+      const leaderImageContainerDesktop = document.querySelector('#leaderImageContainerDesktop') as HTMLElement | null;
 
       // Use mobile elements as primary, fallback to desktop if mobile not found
       const activePointsBody = pointsBody || pointsBodyDesktop;
@@ -410,9 +410,9 @@ export default function F1SimulatorPage() {
       }
       }
       
-      function renderPointsForTable(tbody: HTMLElement, rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
+      function renderPointsForTable(tbody: HTMLElement | null, rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
       if (!tbody) return;
-      pointsBody.innerHTML = '';
+      tbody.innerHTML = '';
       for (const r of rows) {
         const tr = document.createElement('tr');
         const name = document.createElement('td'); name.textContent = r.name; tr.appendChild(name);
@@ -435,18 +435,18 @@ export default function F1SimulatorPage() {
         totalSpan.textContent = r.total.toString();
         total.appendChild(totalSpan);
         tr.appendChild(total);
-        pointsBody.appendChild(tr);
+        tbody.appendChild(tr);
       }
       }
 
       function renderLeader(rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
       // Render for mobile
-      renderLeaderForElements(leaderName, document.querySelector('#leaderBox'), leaderImageContainer, rows);
+      renderLeaderForElements(leaderName, document.querySelector('#leaderBox') as HTMLElement | null, leaderImageContainer, rows);
       // Render for desktop
-      renderLeaderForElements(leaderNameDesktop, document.querySelector('#leaderBoxDesktop'), leaderImageContainerDesktop, rows);
+      renderLeaderForElements(leaderNameDesktop, document.querySelector('#leaderBoxDesktop') as HTMLElement | null, leaderImageContainerDesktop, rows);
       }
       
-      function renderLeaderForElements(nameEl: HTMLElement | null, boxEl: Element | null, imageContainer: Element | null, rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
+      function renderLeaderForElements(nameEl: HTMLElement | null, boxEl: HTMLElement | null, imageContainer: HTMLElement | null, rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
       // Detect ties among top
       if (rows.length === 0) { 
         if (nameEl) nameEl.textContent = '—'; 
