@@ -126,6 +126,18 @@ export default function F1SimulatorPage() {
         selectedDisplay.className = 'selected-driver-display';
         selectedDisplay.innerHTML = '<span class="placeholder">— Select driver —</span>';
         
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-driver-btn';
+        removeBtn.innerHTML = '×';
+        removeBtn.title = 'Remove driver';
+        removeBtn.style.display = 'none';
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setSelectedDriver(p, null);
+          updateDropdownOptions();
+          updateAll();
+        });
+        
         const cardsContainer = document.createElement('div');
         cardsContainer.className = 'driver-cards-grid';
         cardsContainer.style.display = 'none';
@@ -162,6 +174,7 @@ export default function F1SimulatorPage() {
         }
         
         selectorContainer.appendChild(selectedDisplay);
+        selectorContainer.appendChild(removeBtn);
         selectorContainer.appendChild(cardsContainer);
         
         const ptsBox = document.createElement('div');
@@ -382,6 +395,7 @@ export default function F1SimulatorPage() {
         selector.selectedDriver = driverName;
         const selectedDisplay = selector.container.querySelector('.selected-driver-display');
         const cardsContainer = selector.container.querySelector('.driver-cards-grid') as HTMLElement;
+        const removeBtn = selector.container.querySelector('.remove-driver-btn') as HTMLElement;
         
         if (selectedDisplay) {
           if (driverName) {
@@ -407,9 +421,11 @@ export default function F1SimulatorPage() {
             nameSpan.textContent = driverName;
             selectedDisplay.appendChild(nameSpan);
             selectedDisplay.classList.add('has-selection');
+            if (removeBtn) removeBtn.style.display = 'flex';
           } else {
             selectedDisplay.innerHTML = '<span class="placeholder">— Select driver —</span>';
             selectedDisplay.classList.remove('has-selection');
+            if (removeBtn) removeBtn.style.display = 'none';
           }
         }
         
@@ -580,7 +596,7 @@ export default function F1SimulatorPage() {
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Orbitron:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet" />
       <style dangerouslySetInnerHTML={{__html: `
         :root {
           --bg: #0b0f19;
@@ -601,7 +617,9 @@ export default function F1SimulatorPage() {
           min-height: 100vh;
         }
         .f1-simulator .number-font {
-          font-family: 'Racing Sans One', sans-serif;
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 600;
+          font-style: italic;
         }
         .f1-simulator * { box-sizing: border-box; }
         .f1-simulator header { 
@@ -612,7 +630,9 @@ export default function F1SimulatorPage() {
         .f1-simulator h1 { 
           margin: 0 0 6px; 
           font-size: 22px; 
-          font-family: 'Racing Sans One', sans-serif;
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 700;
+          font-style: italic;
           color: #ff3b30;
         }
         .f1-simulator .sub { color: var(--muted); font-size: 13px; }
@@ -705,7 +725,9 @@ export default function F1SimulatorPage() {
           border-radius: 8px; 
           padding: 6px 10px; 
           text-align: center;
-          font-family: 'Racing Sans One', sans-serif;
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 600;
+          font-style: italic;
         }
         .f1-simulator .leader-image-container {
           position: relative;
@@ -723,6 +745,9 @@ export default function F1SimulatorPage() {
           left: 50%;
           transform: translate(-50%, -50%);
           pointer-events: none;
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 700;
+          font-style: italic;
         }
         .f1-simulator .leader-image {
           position: relative;
@@ -780,7 +805,9 @@ export default function F1SimulatorPage() {
           border: 1px solid var(--border); 
         }
         .f1-simulator .chip .number-font {
-          font-family: 'Racing Sans One', sans-serif;
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 600;
+          font-style: italic;
         }
         .f1-simulator .chip.danger { 
           background: #2a1010; 
@@ -902,6 +929,35 @@ export default function F1SimulatorPage() {
           width: 32px;
           height: 32px;
           font-size: 12px;
+        }
+        .f1-simulator .remove-driver-btn {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          border: 1px solid var(--border);
+          background: var(--danger);
+          color: white;
+          cursor: pointer;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          line-height: 1;
+          padding: 0;
+          transition: all 0.2s;
+          z-index: 10;
+        }
+        .f1-simulator .remove-driver-btn:hover {
+          background: #ff5c52;
+          transform: translateY(-50%) scale(1.1);
+        }
+        .f1-simulator .driver-selector-container {
+          position: relative;
+          flex: 1;
         }
         .f1-simulator .driver-card-name {
           font-size: 11px;
