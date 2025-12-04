@@ -91,6 +91,7 @@ export default function F1SimulatorPage() {
 
       // Build fastest lap options (None/Outside Top-10 + all drivers)
       function buildFastestLapOptions() {
+      if (!fastestLapSel) return;
       fastestLapSel.innerHTML = '';
       const opts = ['— None (outside Top‑10) —', ...driverNames];
       for (const name of opts) {
@@ -270,7 +271,7 @@ export default function F1SimulatorPage() {
         });
         const dnfs = new Set<string>();
         dnfChecks.forEach((cb, name)=>{ if (cb.checked) dnfs.add(name); });
-        return {finishOrder, dnfs, fastestLap: fastestLapSel.value};
+        return {finishOrder, dnfs, fastestLap: fastestLapSel?.value || '— None (outside Top‑10) —'};
       }
 
       function validateAssignments(assignments: Assignments): string[] {
@@ -319,14 +320,30 @@ export default function F1SimulatorPage() {
       }
 
       function renderPoints(rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
+      if (!pointsBody) return;
       pointsBody.innerHTML = '';
       for (const r of rows) {
         const tr = document.createElement('tr');
         const name = document.createElement('td'); name.textContent = r.name; tr.appendChild(name);
         const team = document.createElement('td'); team.textContent = r.team; tr.appendChild(team);
-        const base = document.createElement('td'); base.textContent = r.base.toString(); tr.appendChild(base);
-        const delta = document.createElement('td'); delta.textContent = (r.delta>0?'+':'') + r.delta; tr.appendChild(delta);
-        const total = document.createElement('td'); total.textContent = r.total.toString(); tr.appendChild(total);
+        const base = document.createElement('td'); 
+        const baseSpan = document.createElement('span');
+        baseSpan.className = 'number-font';
+        baseSpan.textContent = r.base.toString();
+        base.appendChild(baseSpan);
+        tr.appendChild(base);
+        const delta = document.createElement('td'); 
+        const deltaSpan = document.createElement('span');
+        deltaSpan.className = 'number-font';
+        deltaSpan.textContent = (r.delta>0?'+':'') + r.delta;
+        delta.appendChild(deltaSpan);
+        tr.appendChild(delta);
+        const total = document.createElement('td'); 
+        const totalSpan = document.createElement('span');
+        totalSpan.className = 'number-font';
+        totalSpan.textContent = r.total.toString();
+        total.appendChild(totalSpan);
+        tr.appendChild(total);
         pointsBody.appendChild(tr);
       }
       }
@@ -494,7 +511,7 @@ export default function F1SimulatorPage() {
 
       // Event wiring: change → recompute
       function wireEvents() {
-      fastestLapSel.addEventListener('change', updateAll);
+      if (fastestLapSel) fastestLapSel.addEventListener('change', updateAll);
       
       // Wire up card-based selectors
       positionSelects.forEach((selector, pos) => {
@@ -555,7 +572,11 @@ export default function F1SimulatorPage() {
         cb.addEventListener('change', () => {
           if (cb.checked) {
             // clear any finishing assignment for this driver
-            for (const sel of positionSelects) if (sel.value===name) sel.value='';
+            positionSelects.forEach((selector, pos) => {
+              if (selector.selectedDriver === name) {
+                setSelectedDriver(pos, null);
+              }
+            });
             // if this driver currently selected for FL, keep it; FL point will not apply if not classified top‑10
           }
           // Update dropdown options when DNF status changes
@@ -563,28 +584,32 @@ export default function F1SimulatorPage() {
           updateAll();
         });
       });
-      resetBtn.addEventListener('click', () => {
-        positionSelects.forEach((selector, pos) => {
-          setSelectedDriver(pos, null);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          positionSelects.forEach((selector, pos) => {
+            setSelectedDriver(pos, null);
+          });
+          dnfChecks.forEach(cb=>cb.checked=false);
+          if (fastestLapSel) fastestLapSel.value = '— None (outside Top‑10) —';
+          updateDropdownOptions();
+          updateAll();
         });
-        dnfChecks.forEach(cb=>cb.checked=false);
-        fastestLapSel.value = '— None (outside Top‑10) —';
-        updateDropdownOptions();
-        updateAll();
-      });
-      presetMaxBtn.addEventListener('click', () => {
-        positionSelects.forEach((selector, pos) => {
-          setSelectedDriver(pos, null);
+      }
+      if (presetMaxBtn) {
+        presetMaxBtn.addEventListener('click', () => {
+          positionSelects.forEach((selector, pos) => {
+            setSelectedDriver(pos, null);
+          });
+          dnfChecks.forEach(cb=>cb.checked=false);
+          // Preset: VER P1, NOR P4, PIA P2
+          setSelectedDriver(1,'Max Verstappen');
+          setSelectedDriver(2,'Oscar Piastri');
+          setSelectedDriver(4,'Lando Norris');
+          if (fastestLapSel) fastestLapSel.value = 'Max Verstappen';
+          updateDropdownOptions();
+          updateAll();
         });
-        dnfChecks.forEach(cb=>cb.checked=false);
-        // Preset: VER P1, NOR P4, PIA P2
-        setSelectedDriver(1,'Max Verstappen');
-        setSelectedDriver(2,'Oscar Piastri');
-        setSelectedDriver(4,'Lando Norris');
-        fastestLapSel.value = 'Max Verstappen';
-        updateDropdownOptions();
-        updateAll();
-      });
+      }
       }
 
       // Init
