@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function F1SimulatorPage() {
   const initializedRef = useRef(false);
+  const [showCircuitModal, setShowCircuitModal] = useState(false);
 
   useEffect(() => {
     // Prevent double initialization in React Strict Mode
@@ -200,27 +201,48 @@ export default function F1SimulatorPage() {
       function buildDnfList() {
       dnfListWrap.innerHTML = '';
       dnfChecks.clear();
-      const grid = document.createElement('div');
-      grid.className = 'grid2';
+      const list = document.createElement('div');
+      list.className = 'dnf-list';
       for (const name of driverNames) {
         const label = document.createElement('label');
-        label.className = 'flex';
+        label.className = 'dnf-item';
         const cb = document.createElement('input');
         cb.type = 'checkbox';
         cb.dataset.driver = name;
         dnfChecks.set(name, cb);
+        
+        // Add driver profile image
+        const imgPath = getDriverImagePath(name);
+        if (imgPath) {
+          const img = document.createElement('img');
+          img.src = imgPath;
+          img.alt = name;
+          img.className = 'dnf-driver-image';
+          img.onerror = () => {
+            img.style.display = 'none';
+          };
+          label.appendChild(img);
+        } else {
+          const placeholder = document.createElement('div');
+          placeholder.className = 'dnf-driver-image dnf-placeholder';
+          placeholder.textContent = name.split(' ').map(n => n[0]).join('');
+          label.appendChild(placeholder);
+        }
+        
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'dnf-driver-name';
+        nameSpan.textContent = name;
+        label.appendChild(nameSpan);
+        
         const chip = document.createElement('span');
         chip.className = 'chip danger';
         chip.textContent = 'DNF';
         label.appendChild(cb);
         label.appendChild(chip);
-        const nm = document.createElement('span');
-        nm.textContent = name;
-        (nm as HTMLElement).style.flex = '1';
-        label.appendChild(nm);
-        grid.appendChild(label);
+        
+        list.appendChild(label);
       }
-      dnfListWrap.appendChild(grid);
+      dnfListWrap.appendChild(list);
       }
 
       // ==========================
@@ -626,6 +648,83 @@ export default function F1SimulatorPage() {
           padding: 20px; 
           border-bottom: 1px solid var(--border); 
           background: linear-gradient(180deg, #11172a 0%, #0b0f19 100%);
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 20px;
+        }
+        .f1-simulator .header-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .f1-simulator .circuit-image-container {
+          width: auto;
+          max-width: 150px;
+          height: 60px;
+          overflow: hidden;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: transform 0.2s;
+          flex-shrink: 0;
+        }
+        .f1-simulator .circuit-image-container:hover {
+          transform: scale(1.02);
+        }
+        .f1-simulator .circuit-image {
+          height: 100%;
+          width: auto;
+          object-fit: contain;
+          display: block;
+        }
+        .f1-simulator .circuit-modal {
+          display: flex;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.95);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+        .f1-simulator .circuit-modal-content {
+          position: relative;
+          max-width: 90vw;
+          max-height: 90vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .f1-simulator .circuit-modal-image {
+          max-width: 100%;
+          max-height: 90vh;
+          object-fit: contain;
+          border-radius: 8px;
+        }
+        .f1-simulator .circuit-modal-close {
+          position: absolute;
+          top: -40px;
+          right: 0;
+          background: var(--danger);
+          color: white;
+          border: none;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          font-size: 24px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 1;
+          transition: background 0.2s;
+        }
+        .f1-simulator .circuit-modal-close:hover {
+          background: #ff5c52;
         }
         .f1-simulator h1 { 
           margin: 0 0 6px; 
@@ -666,7 +765,11 @@ export default function F1SimulatorPage() {
           font-size: 16px; 
           margin: 0; 
           padding: 12px 14px; 
-          border-bottom: 1px solid var(--border); 
+          border-bottom: 1px solid var(--border);
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 700;
+          font-style: italic;
+          color: #ffffff;
         }
         .f1-simulator .card .content { padding: 12px; }
         .f1-simulator table { width: 100%; border-collapse: collapse; }
@@ -685,6 +788,51 @@ export default function F1SimulatorPage() {
           display: grid; 
           grid-template-columns: repeat(2, 1fr); 
           gap: 10px; 
+        }
+        .f1-simulator .dnf-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .f1-simulator .dnf-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 8px;
+          border-radius: 8px;
+          border: 1px solid var(--border);
+          background: #0f1424;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .f1-simulator .dnf-item:hover {
+          background: #1a1f35;
+        }
+        .f1-simulator .dnf-driver-image {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        .f1-simulator .dnf-driver-image.dnf-placeholder {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: var(--border);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--text);
+        }
+        .f1-simulator .dnf-driver-name {
+          flex: 1;
+          font-size: 13px;
+          color: var(--text);
+        }
+        .f1-simulator .dnf-item input[type="checkbox"] {
+          margin-left: auto;
         }
         .f1-simulator .controls { 
           display: flex; 
@@ -975,9 +1123,45 @@ export default function F1SimulatorPage() {
       `}} />
       <div className="f1-simulator">
       <header>
-        <h1>F1 2025 Abu Dhabi — Scenario Simulator</h1>
-        <div className="sub">Create hypothetical finishing orders (including DNFs & Fastest Lap) and see the updated points table and champion instantly.</div>
+        <div className="circuit-image-container">
+          <img 
+            src="/images/drivers-profiles/Abu_Dhabi_Circuit.avif" 
+            alt="Abu Dhabi Circuit"
+            className="circuit-image"
+            onClick={() => setShowCircuitModal(true)}
+          />
+        </div>
+        <div className="header-content">
+          <h1>F1 2025 Abu Dhabi — Scenario Simulator</h1>
+          <div className="sub">Create hypothetical finishing orders (including DNFs & Fastest Lap) and see the updated points table and champion instantly.</div>
+        </div>
       </header>
+      
+      {/* Circuit Modal */}
+      {showCircuitModal && (
+        <div 
+          className="circuit-modal" 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowCircuitModal(false);
+            }
+          }}
+        >
+          <div className="circuit-modal-content">
+            <button 
+              className="circuit-modal-close"
+              onClick={() => setShowCircuitModal(false)}
+            >
+              ×
+            </button>
+            <img 
+              src="/images/drivers-profiles/Abu_Dhabi_Circuit.avif" 
+              alt="Abu Dhabi Circuit Map"
+              className="circuit-modal-image"
+            />
+          </div>
+        </div>
+      )}
 
       <main>
         {/* Left: Current Points & Leader */}
