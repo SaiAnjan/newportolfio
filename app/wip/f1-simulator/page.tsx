@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 export default function F1SimulatorPage() {
   const initializedRef = useRef(false);
   const [showCircuitModal, setShowCircuitModal] = useState(false);
+  const [mobileStep, setMobileStep] = useState(1); // 1: Finish order, 2: DNF, 3: Race Outcome
 
   useEffect(() => {
     // Prevent double initialization in React Strict Mode
@@ -72,7 +73,7 @@ export default function F1SimulatorPage() {
       }
 
       // ==========================
-      // DOM helpers
+      // DOM helpers - Mobile elements
       // ==========================
       const pointsBody = document.querySelector('#pointsTable tbody');
       const leaderName = document.querySelector('#leaderName');
@@ -81,8 +82,29 @@ export default function F1SimulatorPage() {
       const dnfListWrap = document.querySelector('#dnfList');
       const resetBtn = document.querySelector('#resetBtn');
       const presetMaxBtn = document.querySelector('#presetMaxBtn');
+      const leaderImageContainer = document.querySelector('#leaderImageContainer');
 
-      if (!pointsBody || !leaderName || !fastestLapSel || !positionsWrap || !dnfListWrap || !resetBtn || !presetMaxBtn) {
+      // Desktop elements (optional - may not exist on mobile)
+      const pointsBodyDesktop = document.querySelector('#pointsTableDesktop tbody');
+      const leaderNameDesktop = document.querySelector('#leaderNameDesktop');
+      const fastestLapSelDesktop = document.querySelector('#fastestLapDesktop') as HTMLSelectElement;
+      const positionsWrapDesktop = document.querySelector('#positionsDesktop');
+      const dnfListWrapDesktop = document.querySelector('#dnfListDesktop');
+      const resetBtnDesktop = document.querySelector('#resetBtnDesktop');
+      const presetMaxBtnDesktop = document.querySelector('#presetMaxBtnDesktop');
+      const leaderImageContainerDesktop = document.querySelector('#leaderImageContainerDesktop');
+
+      // Use mobile elements as primary, fallback to desktop if mobile not found
+      const activePointsBody = pointsBody || pointsBodyDesktop;
+      const activeLeaderName = leaderName || leaderNameDesktop;
+      const activeFastestLapSel = fastestLapSel || fastestLapSelDesktop;
+      const activePositionsWrap = positionsWrap || positionsWrapDesktop;
+      const activeDnfListWrap = dnfListWrap || dnfListWrapDesktop;
+      const activeResetBtn = resetBtn || resetBtnDesktop;
+      const activePresetMaxBtn = presetMaxBtn || presetMaxBtnDesktop;
+      const activeLeaderImageContainer = leaderImageContainer || leaderImageContainerDesktop;
+
+      if (!activePointsBody || !activeLeaderName || !activeFastestLapSel || !activePositionsWrap || !activeDnfListWrap || !activeResetBtn || !activePresetMaxBtn) {
         console.warn('F1 Simulator: Some DOM elements not found, retrying...');
         return false;
       }
@@ -91,24 +113,60 @@ export default function F1SimulatorPage() {
 
       // Build fastest lap options (None/Outside Top-10 + all drivers)
       function buildFastestLapOptions() {
-      if (!fastestLapSel) return;
-      fastestLapSel.innerHTML = '';
-      const opts = ['— None (outside Top‑10) —', ...driverNames];
-      for (const name of opts) {
-        const o = document.createElement('option');
-        o.value = name;
-        o.textContent = name;
-        fastestLapSel.appendChild(o);
-      }
+      if (fastestLapSel) {
+        fastestLapSel.innerHTML = '';
+        const opts = ['— None (outside Top‑10) —', ...driverNames];
+        for (const name of opts) {
+          const o = document.createElement('option');
+          o.value = name;
+          o.textContent = name;
+          fastestLapSel.appendChild(o);
+        }
         fastestLapSel.value = '— None (outside Top‑10) —';
+      }
+      if (fastestLapSelDesktop) {
+        fastestLapSelDesktop.innerHTML = '';
+        const opts = ['— None (outside Top‑10) —', ...driverNames];
+        for (const name of opts) {
+          const o = document.createElement('option');
+          o.value = name;
+          o.textContent = name;
+          fastestLapSelDesktop.appendChild(o);
+        }
+        fastestLapSelDesktop.value = '— None (outside Top‑10) —';
+      }
       }
 
       // Build positions editor (P1..P20) with card-based selectors
+      // Use single shared state for both mobile and desktop
       const positionSelects: Map<number, { container: HTMLElement; selectedDriver: string | null; cards: Map<string, HTMLElement> }> = new Map();
+      const positionSelectsDesktop: Map<number, { container: HTMLElement; selectedDriver: string | null; cards: Map<string, HTMLElement> }> = new Map();
+      
+      // Helper to get all position selects (mobile + desktop)
+      function getAllPositionSelects(): Array<{ container: HTMLElement; selectedDriver: string | null; cards: Map<string, HTMLElement> }> {
+        const all: Array<{ container: HTMLElement; selectedDriver: string | null; cards: Map<string, HTMLElement> }> = [];
+        positionSelects.forEach(sel => all.push(sel));
+        positionSelectsDesktop.forEach(sel => all.push(sel));
+        return all;
+      }
+      
       function buildPositions() {
-      if (!positionsWrap) return;
-      positionsWrap.innerHTML = '';
-      positionSelects.clear();
+      if (!activePositionsWrap) return;
+      
+      // Build for mobile
+      if (positionsWrap) {
+        buildPositionsForContainer(positionsWrap, positionSelects);
+      }
+      
+      // Build for desktop
+      if (positionsWrapDesktop) {
+        buildPositionsForContainer(positionsWrapDesktop, positionSelectsDesktop);
+      }
+      }
+      
+      function buildPositionsForContainer(container: HTMLElement, selectsMap: Map<number, { container: HTMLElement; selectedDriver: string | null; cards: Map<string, HTMLElement> }>) {
+      container.innerHTML = '';
+      selectsMap.clear();
       for (let p=1; p<=20; p++) {
         const row = document.createElement('div');
         row.className = 'row';
@@ -192,18 +250,31 @@ export default function F1SimulatorPage() {
         row.appendChild(posBox);
         row.appendChild(selectorContainer);
         row.appendChild(ptsBox);
-        if (positionsWrap) positionsWrap.appendChild(row);
+        container.appendChild(row);
         
-        positionSelects.set(p, { container: selectorContainer, selectedDriver: null, cards });
+        selectsMap.set(p, { container: selectorContainer, selectedDriver: null, cards });
       }
       }
 
       // Build DNF list (checkboxes)
       const dnfChecks = new Map<string, HTMLInputElement>();
+      const dnfChecksDesktop = new Map<string, HTMLInputElement>();
+      
       function buildDnfList() {
-      if (!dnfListWrap) return;
-      dnfListWrap.innerHTML = '';
-      dnfChecks.clear();
+      // Build for mobile
+      if (dnfListWrap) {
+        buildDnfListForContainer(dnfListWrap, dnfChecks);
+      }
+      // Build for desktop
+      if (dnfListWrapDesktop) {
+        buildDnfListForContainer(dnfListWrapDesktop, dnfChecksDesktop);
+      }
+      }
+      
+      function buildDnfListForContainer(container: HTMLElement, checksMap: Map<string, HTMLInputElement>) {
+      if (!container) return;
+      container.innerHTML = '';
+      checksMap.clear();
       const list = document.createElement('div');
       list.className = 'dnf-list';
       for (const name of driverNames) {
@@ -245,7 +316,7 @@ export default function F1SimulatorPage() {
         
         list.appendChild(label);
       }
-      if (dnfListWrap) dnfListWrap.appendChild(list);
+      container.appendChild(list);
       }
 
       // ==========================
@@ -264,14 +335,23 @@ export default function F1SimulatorPage() {
 
       function getAssignments(): Assignments {
         const finishOrder: FinishOrder[] = [];
+        // Check mobile first, then desktop (they should be in sync)
         positionSelects.forEach((selector, pos) => {
           if (selector.selectedDriver) {
             finishOrder.push({pos, driver: selector.selectedDriver});
           }
         });
+        // Also check desktop (in case mobile doesn't have it)
+        positionSelectsDesktop.forEach((selector, pos) => {
+          if (selector.selectedDriver && !finishOrder.find(fo => fo.pos === pos)) {
+            finishOrder.push({pos, driver: selector.selectedDriver});
+          }
+        });
         const dnfs = new Set<string>();
         dnfChecks.forEach((cb, name)=>{ if (cb.checked) dnfs.add(name); });
-        return {finishOrder, dnfs, fastestLap: fastestLapSel?.value || '— None (outside Top‑10) —'};
+        dnfChecksDesktop.forEach((cb, name)=>{ if (cb.checked) dnfs.add(name); });
+        const flValue = fastestLapSel?.value || fastestLapSelDesktop?.value || '— None (outside Top‑10) —';
+        return {finishOrder, dnfs, fastestLap: flValue};
       }
 
       function validateAssignments(assignments: Assignments): string[] {
@@ -320,7 +400,18 @@ export default function F1SimulatorPage() {
       }
 
       function renderPoints(rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
-      if (!pointsBody) return;
+      // Render for mobile
+      if (pointsBody) {
+        renderPointsForTable(pointsBody, rows);
+      }
+      // Render for desktop
+      if (pointsBodyDesktop) {
+        renderPointsForTable(pointsBodyDesktop, rows);
+      }
+      }
+      
+      function renderPointsForTable(tbody: HTMLElement, rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
+      if (!tbody) return;
       pointsBody.innerHTML = '';
       for (const r of rows) {
         const tr = document.createElement('tr');
@@ -349,41 +440,45 @@ export default function F1SimulatorPage() {
       }
 
       function renderLeader(rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
-      // Detect ties among top
-      const leaderBox = document.querySelector('#leaderBox');
-      const leaderImageContainer = document.querySelector('#leaderImageContainer');
+      // Render for mobile
+      renderLeaderForElements(leaderName, document.querySelector('#leaderBox'), leaderImageContainer, rows);
+      // Render for desktop
+      renderLeaderForElements(leaderNameDesktop, document.querySelector('#leaderBoxDesktop'), leaderImageContainerDesktop, rows);
+      }
       
+      function renderLeaderForElements(nameEl: HTMLElement | null, boxEl: Element | null, imageContainer: Element | null, rows: Array<{name: string; team: string; base: number; delta: number; total: number}>) {
+      // Detect ties among top
       if (rows.length === 0) { 
-        if (leaderName) leaderName.textContent = '—'; 
-        if (leaderImageContainer) leaderImageContainer.innerHTML = '';
+        if (nameEl) nameEl.textContent = '—'; 
+        if (imageContainer) (imageContainer as HTMLElement).innerHTML = '';
         return; 
       }
       const topTotal = rows[0].total;
       const tied = rows.filter(r=>r.total===topTotal);
-      const badge = leaderName?.parentElement?.querySelector('.badge');
+      const badge = nameEl?.parentElement?.querySelector('.badge');
       
       if (tied.length>1) {
-        if (leaderName) leaderName.textContent = `TIE on ${topTotal} pts — countback required`;
+        if (nameEl) nameEl.textContent = `TIE on ${topTotal} pts — countback required`;
         if (badge) badge.classList.remove('champ');
-        if (leaderImageContainer) leaderImageContainer.innerHTML = '';
+        if (imageContainer) (imageContainer as HTMLElement).innerHTML = '';
       } else {
         const leader = rows[0];
-        if (leaderName) {
+        if (nameEl) {
           const nameSpan = document.createElement('span');
           nameSpan.textContent = leader.name;
           const pointsSpan = document.createElement('span');
           pointsSpan.className = 'number-font';
           pointsSpan.textContent = ` (${leader.total} pts)`;
-          leaderName.innerHTML = '';
-          leaderName.appendChild(nameSpan);
-          leaderName.appendChild(pointsSpan);
+          nameEl.innerHTML = '';
+          nameEl.appendChild(nameSpan);
+          nameEl.appendChild(pointsSpan);
         }
         if (badge) badge.classList.add('champ');
         
         // Update leader image
-        if (leaderImageContainer) {
+        if (imageContainer) {
           const imgPath = getDriverImagePath(leader.name);
-          leaderImageContainer.innerHTML = '';
+          (imageContainer as HTMLElement).innerHTML = '';
           const numberBg = document.createElement('div');
           numberBg.className = 'leader-number-bg number-font';
           numberBg.textContent = '1';
@@ -395,14 +490,14 @@ export default function F1SimulatorPage() {
             img.onerror = () => {
               img.style.display = 'none';
             };
-            leaderImageContainer.appendChild(numberBg);
-            leaderImageContainer.appendChild(img);
+            (imageContainer as HTMLElement).appendChild(numberBg);
+            (imageContainer as HTMLElement).appendChild(img);
           } else {
             const placeholder = document.createElement('div');
             placeholder.className = 'leader-image leader-placeholder';
             placeholder.textContent = leader.name.split(' ').map(n => n[0]).join('');
-            leaderImageContainer.appendChild(numberBg);
-            leaderImageContainer.appendChild(placeholder);
+            (imageContainer as HTMLElement).appendChild(numberBg);
+            (imageContainer as HTMLElement).appendChild(placeholder);
           }
         }
       }
@@ -422,17 +517,29 @@ export default function F1SimulatorPage() {
         renderLeader(rows);
       }
 
-      // Function to get selected driver for a position
+      // Function to get selected driver for a position (checks both mobile and desktop)
       function getSelectedDriver(position: number): string | null {
-        const selector = positionSelects.get(position);
+        const selector = positionSelects.get(position) || positionSelectsDesktop.get(position);
         return selector?.selectedDriver || null;
       }
 
-      // Function to set selected driver for a position
+      // Function to set selected driver for a position (updates both mobile and desktop)
       function setSelectedDriver(position: number, driverName: string | null) {
         const selector = positionSelects.get(position);
-        if (!selector) return;
+        const selectorDesktop = positionSelectsDesktop.get(position);
         
+        // Update mobile
+        if (selector) {
+          updateSelectorUI(selector, driverName);
+        }
+        
+        // Update desktop
+        if (selectorDesktop) {
+          updateSelectorUI(selectorDesktop, driverName);
+        }
+      }
+      
+      function updateSelectorUI(selector: { container: HTMLElement; selectedDriver: string | null; cards: Map<string, HTMLElement> }, driverName: string | null) {
         selector.selectedDriver = driverName;
         const selectedDisplay = selector.container.querySelector('.selected-driver-display');
         const cardsContainer = selector.container.querySelector('.driver-cards-grid') as HTMLElement;
@@ -477,24 +584,47 @@ export default function F1SimulatorPage() {
 
       // Function to update card visibility - remove selected drivers from other selectors
       function updateDropdownOptions() {
-        // Get all currently selected drivers (excluding empty selections)
+        // Get all currently selected drivers (excluding empty selections) from both mobile and desktop
         const selectedDrivers = new Set<string>();
         positionSelects.forEach((selector, pos) => {
           if (selector.selectedDriver) {
             selectedDrivers.add(selector.selectedDriver);
           }
         });
+        positionSelectsDesktop.forEach((selector, pos) => {
+          if (selector.selectedDriver) {
+            selectedDrivers.add(selector.selectedDriver);
+          }
+        });
 
-        // Get all DNF drivers
+        // Get all DNF drivers from both mobile and desktop
         const dnfDrivers = new Set<string>();
         dnfChecks.forEach((cb, name) => {
           if (cb.checked) {
             dnfDrivers.add(name);
           }
         });
+        dnfChecksDesktop.forEach((cb, name) => {
+          if (cb.checked) {
+            dnfDrivers.add(name);
+          }
+        });
 
-        // Update each selector to show/hide cards based on selections and DNFs
+        // Update each selector to show/hide cards based on selections and DNFs (both mobile and desktop)
         positionSelects.forEach((selector, pos) => {
+          const currentDriver = selector.selectedDriver;
+          selector.cards.forEach((card, driverName) => {
+            // Hide this card if:
+            // 1. It's selected in another position (but not in this one), OR
+            // 2. It's marked as DNF
+            if ((selectedDrivers.has(driverName) && currentDriver !== driverName) || dnfDrivers.has(driverName)) {
+              card.style.display = 'none';
+            } else {
+              card.style.display = '';
+            }
+          });
+        });
+        positionSelectsDesktop.forEach((selector, pos) => {
           const currentDriver = selector.selectedDriver;
           selector.cards.forEach((card, driverName) => {
             // Hide this card if:
@@ -512,8 +642,9 @@ export default function F1SimulatorPage() {
       // Event wiring: change → recompute
       function wireEvents() {
       if (fastestLapSel) fastestLapSel.addEventListener('change', updateAll);
+      if (fastestLapSelDesktop) fastestLapSelDesktop.addEventListener('change', updateAll);
       
-      // Wire up card-based selectors
+      // Wire up card-based selectors (mobile)
       positionSelects.forEach((selector, pos) => {
         const selectedDisplay = selector.container.querySelector('.selected-driver-display');
         const cardsContainer = selector.container.querySelector('.driver-cards-grid') as HTMLElement;
@@ -524,8 +655,69 @@ export default function F1SimulatorPage() {
             e.stopPropagation();
             if (cardsContainer) {
               const isVisible = cardsContainer.style.display !== 'none';
-              // Close all other selectors
+              // Close all other selectors (mobile and desktop)
               positionSelects.forEach((otherSelector, otherPos) => {
+                if (otherPos !== pos) {
+                  const otherCards = otherSelector.container.querySelector('.driver-cards-grid') as HTMLElement;
+                  if (otherCards) otherCards.style.display = 'none';
+                }
+              });
+              positionSelectsDesktop.forEach((otherSelector, otherPos) => {
+                const otherCards = otherSelector.container.querySelector('.driver-cards-grid') as HTMLElement;
+                if (otherCards) otherCards.style.display = 'none';
+              });
+              // Toggle this selector
+              cardsContainer.style.display = isVisible ? 'none' : 'grid';
+            }
+          });
+        }
+        
+        // Handle card selection
+        selector.cards.forEach((card, driverName) => {
+          card.addEventListener('click', () => {
+            const chosen = driverName;
+            // Clear this driver from other positions (mobile and desktop)
+            positionSelects.forEach((otherSelector, otherPos) => {
+              if (otherPos !== pos && otherSelector.selectedDriver === chosen) {
+                setSelectedDriver(otherPos, null);
+              }
+            });
+            positionSelectsDesktop.forEach((otherSelector, otherPos) => {
+              if (otherPos !== pos && otherSelector.selectedDriver === chosen) {
+                setSelectedDriver(otherPos, null);
+              }
+            });
+            // Set this position
+            setSelectedDriver(pos, chosen);
+            // Unmark DNF if this driver is selected (mobile and desktop)
+            const cb = dnfChecks.get(chosen);
+            if (cb) cb.checked = false;
+            const cbDesktop = dnfChecksDesktop.get(chosen);
+            if (cbDesktop) cbDesktop.checked = false;
+            // Update visibility and recompute
+            updateDropdownOptions();
+            updateAll();
+          });
+        });
+      });
+      
+      // Wire up card-based selectors (desktop)
+      positionSelectsDesktop.forEach((selector, pos) => {
+        const selectedDisplay = selector.container.querySelector('.selected-driver-display');
+        const cardsContainer = selector.container.querySelector('.driver-cards-grid') as HTMLElement;
+        
+        // Toggle cards visibility on click
+        if (selectedDisplay) {
+          selectedDisplay.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (cardsContainer) {
+              const isVisible = cardsContainer.style.display !== 'none';
+              // Close all other selectors (mobile and desktop)
+              positionSelects.forEach((otherSelector, otherPos) => {
+                const otherCards = otherSelector.container.querySelector('.driver-cards-grid') as HTMLElement;
+                if (otherCards) otherCards.style.display = 'none';
+              });
+              positionSelectsDesktop.forEach((otherSelector, otherPos) => {
                 if (otherPos !== pos) {
                   const otherCards = otherSelector.container.querySelector('.driver-cards-grid') as HTMLElement;
                   if (otherCards) otherCards.style.display = 'none';
@@ -541,17 +733,24 @@ export default function F1SimulatorPage() {
         selector.cards.forEach((card, driverName) => {
           card.addEventListener('click', () => {
             const chosen = driverName;
-            // Clear this driver from other positions
+            // Clear this driver from other positions (mobile and desktop)
             positionSelects.forEach((otherSelector, otherPos) => {
+              if (otherPos !== pos && otherSelector.selectedDriver === chosen) {
+                setSelectedDriver(otherPos, null);
+              }
+            });
+            positionSelectsDesktop.forEach((otherSelector, otherPos) => {
               if (otherPos !== pos && otherSelector.selectedDriver === chosen) {
                 setSelectedDriver(otherPos, null);
               }
             });
             // Set this position
             setSelectedDriver(pos, chosen);
-            // Unmark DNF if this driver is selected
+            // Unmark DNF if this driver is selected (mobile and desktop)
             const cb = dnfChecks.get(chosen);
             if (cb) cb.checked = false;
+            const cbDesktop = dnfChecksDesktop.get(chosen);
+            if (cbDesktop) cbDesktop.checked = false;
             // Update visibility and recompute
             updateDropdownOptions();
             updateAll();
@@ -566,13 +765,51 @@ export default function F1SimulatorPage() {
             const cardsContainer = selector.container.querySelector('.driver-cards-grid') as HTMLElement;
             if (cardsContainer) cardsContainer.style.display = 'none';
           });
+          positionSelectsDesktop.forEach((selector) => {
+            const cardsContainer = selector.container.querySelector('.driver-cards-grid') as HTMLElement;
+            if (cardsContainer) cardsContainer.style.display = 'none';
+          });
         }
       });
       dnfChecks.forEach((cb,name)=>{
         cb.addEventListener('change', () => {
+          // Sync desktop checkbox
+          const cbDesktop = dnfChecksDesktop.get(name);
+          if (cbDesktop) cbDesktop.checked = cb.checked;
+          
           if (cb.checked) {
-            // clear any finishing assignment for this driver
+            // clear any finishing assignment for this driver (mobile and desktop)
             positionSelects.forEach((selector, pos) => {
+              if (selector.selectedDriver === name) {
+                setSelectedDriver(pos, null);
+              }
+            });
+            positionSelectsDesktop.forEach((selector, pos) => {
+              if (selector.selectedDriver === name) {
+                setSelectedDriver(pos, null);
+              }
+            });
+            // if this driver currently selected for FL, keep it; FL point will not apply if not classified top‑10
+          }
+          // Update dropdown options when DNF status changes
+          updateDropdownOptions();
+          updateAll();
+        });
+      });
+      dnfChecksDesktop.forEach((cb,name)=>{
+        cb.addEventListener('change', () => {
+          // Sync mobile checkbox
+          const cbMobile = dnfChecks.get(name);
+          if (cbMobile) cbMobile.checked = cb.checked;
+          
+          if (cb.checked) {
+            // clear any finishing assignment for this driver (mobile and desktop)
+            positionSelects.forEach((selector, pos) => {
+              if (selector.selectedDriver === name) {
+                setSelectedDriver(pos, null);
+              }
+            });
+            positionSelectsDesktop.forEach((selector, pos) => {
               if (selector.selectedDriver === name) {
                 setSelectedDriver(pos, null);
               }
@@ -590,7 +827,22 @@ export default function F1SimulatorPage() {
             setSelectedDriver(pos, null);
           });
           dnfChecks.forEach(cb=>cb.checked=false);
+          dnfChecksDesktop.forEach(cb=>cb.checked=false);
           if (fastestLapSel) fastestLapSel.value = '— None (outside Top‑10) —';
+          if (fastestLapSelDesktop) fastestLapSelDesktop.value = '— None (outside Top‑10) —';
+          updateDropdownOptions();
+          updateAll();
+        });
+      }
+      if (resetBtnDesktop) {
+        resetBtnDesktop.addEventListener('click', () => {
+          positionSelects.forEach((selector, pos) => {
+            setSelectedDriver(pos, null);
+          });
+          dnfChecks.forEach(cb=>cb.checked=false);
+          dnfChecksDesktop.forEach(cb=>cb.checked=false);
+          if (fastestLapSel) fastestLapSel.value = '— None (outside Top‑10) —';
+          if (fastestLapSelDesktop) fastestLapSelDesktop.value = '— None (outside Top‑10) —';
           updateDropdownOptions();
           updateAll();
         });
@@ -601,11 +853,30 @@ export default function F1SimulatorPage() {
             setSelectedDriver(pos, null);
           });
           dnfChecks.forEach(cb=>cb.checked=false);
+          dnfChecksDesktop.forEach(cb=>cb.checked=false);
           // Preset: VER P1, NOR P4, PIA P2
           setSelectedDriver(1,'Max Verstappen');
           setSelectedDriver(2,'Oscar Piastri');
           setSelectedDriver(4,'Lando Norris');
           if (fastestLapSel) fastestLapSel.value = 'Max Verstappen';
+          if (fastestLapSelDesktop) fastestLapSelDesktop.value = 'Max Verstappen';
+          updateDropdownOptions();
+          updateAll();
+        });
+      }
+      if (presetMaxBtnDesktop) {
+        presetMaxBtnDesktop.addEventListener('click', () => {
+          positionSelects.forEach((selector, pos) => {
+            setSelectedDriver(pos, null);
+          });
+          dnfChecks.forEach(cb=>cb.checked=false);
+          dnfChecksDesktop.forEach(cb=>cb.checked=false);
+          // Preset: VER P1, NOR P4, PIA P2
+          setSelectedDriver(1,'Max Verstappen');
+          setSelectedDriver(2,'Oscar Piastri');
+          setSelectedDriver(4,'Lando Norris');
+          if (fastestLapSel) fastestLapSel.value = 'Max Verstappen';
+          if (fastestLapSelDesktop) fastestLapSelDesktop.value = 'Max Verstappen';
           updateDropdownOptions();
           updateAll();
         });
@@ -771,6 +1042,78 @@ export default function F1SimulatorPage() {
         @media (max-width: 768px) {
           .f1-simulator main {
             grid-template-columns: 1fr;
+          }
+          /* Hide desktop layout on mobile */
+          .f1-simulator .desktop-layout {
+            display: none !important;
+          }
+          /* Show only active mobile step */
+          .f1-simulator .mobile-step {
+            display: none;
+          }
+          .f1-simulator .mobile-step.mobile-step-1[style*="block"],
+          .f1-simulator .mobile-step.mobile-step-2[style*="block"],
+          .f1-simulator .mobile-step.mobile-step-3[style*="block"] {
+            display: block !important;
+          }
+          /* Mobile navigation */
+          .f1-simulator .mobile-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--panel);
+            border-top: 1px solid var(--border);
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+            gap: 12px;
+          }
+          .f1-simulator .mobile-nav button {
+            flex: 1;
+            padding: 12px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'Stack Sans Text', sans-serif;
+          }
+          .f1-simulator .mobile-nav button:hover:not(:disabled) {
+            background: #1a4dff;
+          }
+          .f1-simulator .mobile-nav button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+          .f1-simulator .mobile-nav .step-indicator {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+          }
+          .f1-simulator .mobile-nav .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: background 0.2s;
+          }
+          .f1-simulator .mobile-nav .step-dot.active {
+            background: var(--accent);
+          }
+        }
+        @media (min-width: 769px) {
+          .f1-simulator .mobile-step {
+            display: none !important;
+          }
+          .f1-simulator .mobile-nav {
+            display: none !important;
+          }
+          .f1-simulator .desktop-layout {
+            display: block;
           }
         }
         .f1-simulator .main-right {
@@ -1191,9 +1534,37 @@ export default function F1SimulatorPage() {
       )}
 
       <main>
-        {/* Left: Current Points & Leader */}
-        <section className="card" aria-labelledby="pointsTitle">
-          <h2 id="pointsTitle">Current points (pre‑race)</h2>
+        {/* Mobile Step 1: Finish order editor */}
+        <section className="card mobile-step" data-step="1" style={{ display: mobileStep === 1 ? 'block' : 'none' }} aria-labelledby="editorTitle">
+          <h2 id="editorTitle">Finish order editor (P1–P20)</h2>
+          <div className="content">
+            <div className="controls">
+              <div style={{flex:1}}>
+                <label htmlFor="fastestLap">Fastest Lap</label>
+                <select id="fastestLap"></select>
+              </div>
+              <button id="resetBtn" title="Reset finishers & DNFs to blank">Reset</button>
+              <button id="presetMaxBtn" title="Quick preset: Max P1, Lando P4, Oscar P2">Preset: VER P1 / NOR P4 / PIA P2</button>
+            </div>
+            <div className="note" style={{marginTop:6}}>Assign each finishing position to a driver. Mark any DNFs on the right — DNFs cannot also occupy a finishing slot.</div>
+            <div id="positions"></div>
+
+            <div style={{marginTop:14}} className="leader" id="leaderBox">
+              <span className="badge">Final Leader</span>
+              <span className="name" id="leaderName">—</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Mobile Step 2: DNF Section */}
+        <section className="card mobile-step" data-step="2" style={{ display: mobileStep === 2 ? 'block' : 'none' }}>
+          <h2>DNF / Unclassified</h2>
+          <div className="content" id="dnfList" aria-label="DNF list"></div>
+        </section>
+
+        {/* Mobile Step 3: Race Outcome */}
+        <section className="card mobile-step" data-step="3" style={{ display: mobileStep === 3 ? 'block' : 'none' }} aria-labelledby="pointsTitle">
+          <h2 id="pointsTitle">Race Outcome</h2>
           <div className="content">
             <div id="leaderImageContainer" className="leader-image-container"></div>
             <table id="pointsTable" aria-label="Points table">
@@ -1213,26 +1584,48 @@ export default function F1SimulatorPage() {
           </div>
         </section>
 
-        {/* Right: Positions + DNF */}
-        <div className="main-right">
+        {/* Desktop: Left: Current Points & Leader */}
+        <section className="card desktop-layout" aria-labelledby="pointsTitleDesktop">
+          <h2 id="pointsTitleDesktop">Current points (pre‑race)</h2>
+          <div className="content">
+            <div id="leaderImageContainerDesktop" className="leader-image-container"></div>
+            <table id="pointsTableDesktop" aria-label="Points table">
+              <thead>
+                <tr><th>Driver</th><th>Team</th><th>Points</th><th>∆ Race</th><th>Total</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <div className="legend">
+              <span className="chip">Race points: <span className="number-font">25‑18‑15‑12‑10‑8‑6‑4‑2‑1</span></span>
+              <span className="chip">FL: <span className="number-font">+1</span> (only if classified Top‑10)</span>
+              <span className="chip warning">Ties shown as <strong>TIE</strong> — FIA countback applies</span>
+            </div>
+          </div>
+          <div className="footer">
+            Seeds taken from latest standings (ESPN/PlanetF1). Fastest Lap must be among classified top‑10 to earn +1.
+          </div>
+        </section>
+
+        {/* Desktop: Right: Positions + DNF */}
+        <div className="main-right desktop-layout">
           {/* Positions Editor */}
-          <section className="card" aria-labelledby="editorTitle">
-            <h2 id="editorTitle">Finish order editor (P1–P20)</h2>
+          <section className="card" aria-labelledby="editorTitleDesktop">
+            <h2 id="editorTitleDesktop">Finish order editor (P1–P20)</h2>
             <div className="content">
               <div className="controls">
                 <div style={{flex:1}}>
-                  <label htmlFor="fastestLap">Fastest Lap</label>
-                  <select id="fastestLap"></select>
+                  <label htmlFor="fastestLapDesktop">Fastest Lap</label>
+                  <select id="fastestLapDesktop"></select>
                 </div>
-                <button id="resetBtn" title="Reset finishers & DNFs to blank">Reset</button>
-                <button id="presetMaxBtn" title="Quick preset: Max P1, Lando P4, Oscar P2">Preset: VER P1 / NOR P4 / PIA P2</button>
+                <button id="resetBtnDesktop" title="Reset finishers & DNFs to blank">Reset</button>
+                <button id="presetMaxBtnDesktop" title="Quick preset: Max P1, Lando P4, Oscar P2">Preset: VER P1 / NOR P4 / PIA P2</button>
               </div>
               <div className="note" style={{marginTop:6}}>Assign each finishing position to a driver. Mark any DNFs on the right — DNFs cannot also occupy a finishing slot.</div>
-              <div id="positions"></div>
+              <div id="positionsDesktop"></div>
 
-              <div style={{marginTop:14}} className="leader" id="leaderBox">
+              <div style={{marginTop:14}} className="leader" id="leaderBoxDesktop">
                 <span className="badge">Final Leader</span>
-                <span className="name" id="leaderName">—</span>
+                <span className="name" id="leaderNameDesktop">—</span>
               </div>
             </div>
           </section>
@@ -1240,10 +1633,31 @@ export default function F1SimulatorPage() {
           {/* DNF Section */}
           <section className="card">
             <h2>DNF / Unclassified</h2>
-            <div className="content" id="dnfList" aria-label="DNF list"></div>
+            <div className="content" id="dnfListDesktop" aria-label="DNF list"></div>
           </section>
         </div>
       </main>
+
+      {/* Mobile Navigation */}
+      <div className="mobile-nav">
+        <button 
+          onClick={() => setMobileStep(Math.max(1, mobileStep - 1))}
+          disabled={mobileStep === 1}
+        >
+          Previous
+        </button>
+        <div className="step-indicator">
+          <div className={`step-dot ${mobileStep === 1 ? 'active' : ''}`}></div>
+          <div className={`step-dot ${mobileStep === 2 ? 'active' : ''}`}></div>
+          <div className={`step-dot ${mobileStep === 3 ? 'active' : ''}`}></div>
+        </div>
+        <button 
+          onClick={() => setMobileStep(Math.min(3, mobileStep + 1))}
+          disabled={mobileStep === 3}
+        >
+          Next
+        </button>
+      </div>
       </div>
     </>
   );
