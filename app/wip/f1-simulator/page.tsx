@@ -1,11 +1,21 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import EventSimulator from '@/components/EventSimulator';
+import { useSimStore } from '@/store/simStore';
+import type { RaceState } from '@/lib/simEngine';
 
 export default function F1SimulatorPage() {
   const initializedRef = useRef(false);
   const [showCircuitModal, setShowCircuitModal] = useState(false);
   const [mobileStep, setMobileStep] = useState(1); // 1: Finish order, 2: DNF, 3: Race Outcome
+  const [driverNames, setDriverNames] = useState<string[]>([]);
+  const { 
+    setState: setSimState, 
+    outcome: simOutcome, 
+    recompute: recomputeSim,
+    setPositionUpdateCallback 
+  } = useSimStore();
 
   useEffect(() => {
     // Prevent double initialization in React Strict Mode
@@ -43,6 +53,7 @@ export default function F1SimulatorPage() {
       ];
 
       const driverNames = drivers.map(d=>d.name);
+      setDriverNames(driverNames);
 
       // Function to get driver profile image path
       function getDriverImagePath(name: string): string {
@@ -512,6 +523,29 @@ export default function F1SimulatorPage() {
         if (badge) badge.classList.remove('champ');
         return;
       }
+      
+      // Sync state with event simulator store
+      const raceState: RaceState = {
+        drivers: drivers.map(d => ({ name: d.name, team: d.team, basePoints: d.points })),
+        grid: (() => {
+          const grid: { [position: number]: string | null } = {};
+          for (let i = 1; i <= 20; i++) grid[i] = null;
+          asg.finishOrder.forEach(({ pos, driver }) => {
+            grid[pos] = driver;
+          });
+          return grid;
+        })(),
+        dnfs: new Set(asg.dnfs),
+        fastestLap: asg.fastestLap !== '— None (outside Top‑10) —' ? asg.fastestLap : null,
+        rules: {
+          pointsMap: positionPoints,
+          fastestLapEligibleTop10Only: true,
+        },
+      };
+      
+      // Update store and recompute if events exist
+      setSimState(raceState);
+      
       const rows = computeTotals(asg);
         renderPoints(rows);
         renderLeader(rows);
@@ -888,6 +922,42 @@ export default function F1SimulatorPage() {
       buildPositions();
       buildDnfList();
       wireEvents();
+      
+      // Register callback to update positions when events are applied
+      setPositionUpdateCallback((grid: { [position: number]: string | null }, dnfs: Set<string>) => {
+        // Clear all positions first
+        positionSelects.forEach((_, pos) => {
+          setSelectedDriver(pos, null);
+        });
+        positionSelectsDesktop.forEach((_, pos) => {
+          setSelectedDriver(pos, null);
+        });
+        
+        // Clear all DNFs
+        dnfChecks.forEach((cb) => { cb.checked = false; });
+        dnfChecksDesktop.forEach((cb) => { cb.checked = false; });
+        
+        // Apply new positions from event-modified grid
+        for (let pos = 1; pos <= 20; pos++) {
+          const driver = grid[pos];
+          if (driver) {
+            setSelectedDriver(pos, driver);
+          }
+        }
+        
+        // Apply DNFs
+        dnfs.forEach((driverName) => {
+          const cb = dnfChecks.get(driverName);
+          if (cb) cb.checked = true;
+          const cbDesktop = dnfChecksDesktop.get(driverName);
+          if (cbDesktop) cbDesktop.checked = true;
+        });
+        
+        // Update dropdown options and recompute
+        updateDropdownOptions();
+        updateAll();
+      });
+      
       // Initial dropdown update (no drivers selected yet, so all should be visible)
       updateDropdownOptions();
       // First render
@@ -1635,6 +1705,9 @@ export default function F1SimulatorPage() {
             <h2>DNF / Unclassified</h2>
             <div className="content" id="dnfListDesktop" aria-label="DNF list"></div>
           </section>
+
+          {/* Event Simulator */}
+          <EventSimulator driverNames={driverNames} />
         </div>
       </main>
 
