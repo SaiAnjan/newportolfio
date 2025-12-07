@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import EventSimulator from '@/components/EventSimulator';
+import EventPresetDropdown from '@/components/EventPresetDropdown';
+import PositionPresetDropdown from '@/components/PositionPresetDropdown';
 import F1PredictionStats from '@/components/F1PredictionStats';
 import F1PredictionComparison from '@/components/F1PredictionComparison';
 import { useSimStore } from '@/store/simStore';
@@ -104,7 +106,6 @@ export default function F1SimulatorPage() {
       const positionsWrap = document.querySelector('#positions') as HTMLElement | null;
       const dnfListWrap = document.querySelector('#dnfList') as HTMLElement | null;
       const resetBtn = document.querySelector('#resetBtn') as HTMLButtonElement | null;
-      const presetMaxBtn = document.querySelector('#presetMaxBtn') as HTMLButtonElement | null;
       const leaderImageContainer = document.querySelector('#leaderImageContainer') as HTMLElement | null;
 
       // Desktop elements (optional - may not exist on mobile)
@@ -114,7 +115,6 @@ export default function F1SimulatorPage() {
       const positionsWrapDesktop = document.querySelector('#positionsDesktop') as HTMLElement | null;
       const dnfListWrapDesktop = document.querySelector('#dnfListDesktop') as HTMLElement | null;
       const resetBtnDesktop = document.querySelector('#resetBtnDesktop') as HTMLButtonElement | null;
-      const presetMaxBtnDesktop = document.querySelector('#presetMaxBtnDesktop') as HTMLButtonElement | null;
       const leaderImageContainerDesktop = document.querySelector('#leaderImageContainerDesktop') as HTMLElement | null;
 
       // Use mobile elements as primary, fallback to desktop if mobile not found
@@ -124,10 +124,9 @@ export default function F1SimulatorPage() {
       const activePositionsWrap = positionsWrap || positionsWrapDesktop;
       const activeDnfListWrap = dnfListWrap || dnfListWrapDesktop;
       const activeResetBtn = resetBtn || resetBtnDesktop;
-      const activePresetMaxBtn = presetMaxBtn || presetMaxBtnDesktop;
       const activeLeaderImageContainer = leaderImageContainer || leaderImageContainerDesktop;
 
-      if (!activePointsBody || !activeLeaderName || !activeFastestLapSel || !activePositionsWrap || !activeDnfListWrap || !activeResetBtn || !activePresetMaxBtn) {
+      if (!activePointsBody || !activeLeaderName || !activeFastestLapSel || !activePositionsWrap || !activeDnfListWrap || !activeResetBtn) {
         console.warn('F1 Simulator: Some DOM elements not found, retrying...');
         return false;
       }
@@ -915,40 +914,17 @@ export default function F1SimulatorPage() {
           updateAll();
         });
       }
-      if (presetMaxBtn) {
-        presetMaxBtn.addEventListener('click', () => {
-          positionSelects.forEach((selector, pos) => {
-            setSelectedDriver(pos, null);
-          });
-          dnfChecks.forEach(cb=>cb.checked=false);
-          dnfChecksDesktop.forEach(cb=>cb.checked=false);
-          // Preset: VER P1, NOR P4, PIA P2
-          setSelectedDriver(1,'Max Verstappen');
-          setSelectedDriver(2,'Oscar Piastri');
-          setSelectedDriver(4,'Lando Norris');
-          if (fastestLapSel) fastestLapSel.value = 'Max Verstappen';
-          if (fastestLapSelDesktop) fastestLapSelDesktop.value = 'Max Verstappen';
-          updateDropdownOptions();
-          updateAll();
-        });
-      }
-      if (presetMaxBtnDesktop) {
-        presetMaxBtnDesktop.addEventListener('click', () => {
-          positionSelects.forEach((selector, pos) => {
-            setSelectedDriver(pos, null);
-          });
-          dnfChecks.forEach(cb=>cb.checked=false);
-          dnfChecksDesktop.forEach(cb=>cb.checked=false);
-          // Preset: VER P1, NOR P4, PIA P2
-          setSelectedDriver(1,'Max Verstappen');
-          setSelectedDriver(2,'Oscar Piastri');
-          setSelectedDriver(4,'Lando Norris');
-          if (fastestLapSel) fastestLapSel.value = 'Max Verstappen';
-          if (fastestLapSelDesktop) fastestLapSelDesktop.value = 'Max Verstappen';
-          updateDropdownOptions();
-          updateAll();
-        });
-      }
+      // Expose setSelectedDriver globally for preset dropdown
+      (window as any).f1SimulatorSetSelectedDriver = setSelectedDriver;
+      (window as any).f1SimulatorUpdateDropdownOptions = updateDropdownOptions;
+      (window as any).f1SimulatorUpdateAll = updateAll;
+      (window as any).f1SimulatorFastestLapSel = fastestLapSel;
+      (window as any).f1SimulatorFastestLapSelDesktop = fastestLapSelDesktop;
+      (window as any).f1SimulatorDnfChecks = dnfChecks;
+      (window as any).f1SimulatorDnfChecksDesktop = dnfChecksDesktop;
+      (window as any).f1SimulatorPositionSelects = positionSelects;
+
+      // Preset button removed - using PositionPresetDropdown component instead
       }
 
       // Init
@@ -1998,10 +1974,13 @@ export default function F1SimulatorPage() {
                 <select id="fastestLap"></select>
               </div>
               <button id="resetBtn" title="Reset finishers & DNFs to blank">Reset</button>
-              <button id="presetMaxBtn" title="Quick preset: Max P1, Lando P4, Oscar P2">Preset: VER P1 / NOR P4 / PIA P2</button>
             </div>
+            <PositionPresetDropdown />
             <div className="note" style={{marginTop:6}}>Assign each finishing position to a driver. Mark any DNFs on the right — DNFs cannot also occupy a finishing slot.</div>
             <div id="positions"></div>
+
+            {/* Event Preset Dropdown - Mobile */}
+            <EventPresetDropdown />
 
             <div style={{marginTop:14}} className="leader" id="leaderBox">
               <span className="badge">Final Leader</span>
@@ -2086,8 +2065,8 @@ export default function F1SimulatorPage() {
                   <select id="fastestLapDesktop"></select>
                 </div>
                 <button id="resetBtnDesktop" title="Reset finishers & DNFs to blank">Reset</button>
-                <button id="presetMaxBtnDesktop" title="Quick preset: Max P1, Lando P4, Oscar P2">Preset: VER P1 / NOR P4 / PIA P2</button>
               </div>
+              <PositionPresetDropdown />
               <div className="note" style={{marginTop:6}}>Assign each finishing position to a driver. Mark any DNFs on the right — DNFs cannot also occupy a finishing slot.</div>
               <div id="positionsDesktop"></div>
 
@@ -2095,6 +2074,10 @@ export default function F1SimulatorPage() {
                 <span className="badge">Final Leader</span>
                 <span className="name" id="leaderNameDesktop">—</span>
               </div>
+              
+              {/* Event Preset Dropdown */}
+              <EventPresetDropdown />
+              
               {userPrediction && (
                 <button
                   onClick={() => setShowComparison(!showComparison)}
