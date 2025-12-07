@@ -2,14 +2,25 @@
 
 import { useEffect, useRef, useState } from 'react';
 import EventSimulator from '@/components/EventSimulator';
+import F1PredictionStats from '@/components/F1PredictionStats';
+import F1PredictionComparison from '@/components/F1PredictionComparison';
 import { useSimStore } from '@/store/simStore';
 import type { RaceState } from '@/lib/simEngine';
 
 export default function F1SimulatorPage() {
   const initializedRef = useRef(false);
   const [showCircuitModal, setShowCircuitModal] = useState(false);
-  const [mobileStep, setMobileStep] = useState(1); // 1: Finish order, 2: DNF, 3: Race Outcome
+  const [mobileStep, setMobileStep] = useState(1); // 1: Finish order, 2: DNF, 3: Race Outcome, 4: Comparison
   const [driverNames, setDriverNames] = useState<string[]>([]);
+  const predictionSavedRef = useRef(false); // Track if prediction has been saved in this session
+  const [userPrediction, setUserPrediction] = useState<{
+    finishOrder: Array<{ position: number; driver: string }>;
+    dnfs: string[];
+    fastestLap: string | null;
+    finalLeader: string;
+    finalLeaderPoints: number;
+    isTie: boolean;
+  } | null>(null);
   const { 
     setState: setSimState, 
     outcome: simOutcome, 
@@ -982,6 +993,153 @@ export default function F1SimulatorPage() {
     };
   }, []);
 
+  // Save prediction and store it when user reaches final outcome page (step 3)
+  useEffect(() => {
+    if (mobileStep !== 3 || predictionSavedRef.current) return;
+
+    // Function to extract current prediction data
+    const extractPredictionData = () => {
+      try {
+        // Try to use simStore state first (more reliable)
+        // Access the store directly (outside of React hook)
+        const storeState = useSimStore.getState();
+        const { state } = storeState;
+        
+        let finishOrder: Array<{ position: number; driver: string }> = [];
+        let dnfs: string[] = [];
+        let fastestLap: string | null = null;
+        let finalLeader = '';
+        let finalLeaderPoints = 0;
+        let isTie = false;
+
+        // Use simStore state if available
+        if (state) {
+          // Extract finish order from grid
+          Object.entries(state.grid).forEach(([posStr, driver]) => {
+            if (driver && !state.dnfs.has(driver)) {
+              finishOrder.push({ position: parseInt(posStr), driver });
+            }
+          });
+          finishOrder.sort((a, b) => a.position - b.position);
+
+          // Extract DNFs
+          dnfs = Array.from(state.dnfs);
+
+          // Extract fastest lap
+          fastestLap = state.fastestLap;
+
+          // Use simOutcome for final leader if available
+          if (simOutcome) {
+            finalLeader = simOutcome.leader.name;
+            finalLeaderPoints = simOutcome.leader.total;
+            isTie = simOutcome.leader.tie;
+          }
+        } else {
+          // Fallback to DOM extraction
+          // Get finish order from position selects
+          for (let pos = 1; pos <= 20; pos++) {
+            const selector = document.querySelector(`[data-position="${pos}"]`) as HTMLSelectElement;
+            if (selector && selector.value && selector.value !== '— Select driver —') {
+              finishOrder.push({ position: pos, driver: selector.value });
+            }
+          }
+
+          // Get DNFs from checkboxes
+          const dnfCheckboxes = document.querySelectorAll('input[type="checkbox"][data-driver]');
+          dnfCheckboxes.forEach((cb) => {
+            if ((cb as HTMLInputElement).checked) {
+              const driver = (cb as HTMLInputElement).dataset.driver;
+              if (driver) dnfs.push(driver);
+            }
+          });
+
+          // Get fastest lap
+          const fastestLapSelect = document.querySelector('#fastestLap, #fastestLapDesktop') as HTMLSelectElement;
+          fastestLap = fastestLapSelect?.value && fastestLapSelect.value !== '— None (outside Top‑10) —' 
+            ? fastestLapSelect.value 
+            : null;
+
+          // Get final leader from the leader display
+          const leaderNameEl = document.querySelector('#leaderName, #leaderNameDesktop');
+          const leaderText = leaderNameEl?.textContent || '';
+
+          if (leaderText.includes('TIE')) {
+            isTie = true;
+            const tieMatch = leaderText.match(/TIE on (\d+) pts/);
+            if (tieMatch) {
+              finalLeaderPoints = parseInt(tieMatch[1]);
+              finalLeader = 'TIE';
+            }
+          } else {
+            const leaderMatch = leaderText.match(/(.+?)\s*\((\d+)\s*pts\)/);
+            if (leaderMatch) {
+              finalLeader = leaderMatch[1].trim();
+              finalLeaderPoints = parseInt(leaderMatch[2]);
+            } else if (simOutcome) {
+              finalLeader = simOutcome.leader.name;
+              finalLeaderPoints = simOutcome.leader.total;
+              isTie = simOutcome.leader.tie;
+            }
+          }
+        }
+
+        // Validate we have enough data
+        if (finishOrder.length === 0 && dnfs.length === 0) {
+          return null; // No prediction to save
+        }
+
+        if (!finalLeader) {
+          return null; // Can't save without a final leader
+        }
+
+        return {
+          finishOrder,
+          dnfs,
+          fastestLap,
+          finalLeader,
+          finalLeaderPoints,
+          isTie,
+        };
+      } catch (error) {
+        console.error('Error extracting prediction data:', error);
+        return null;
+      }
+    };
+
+    // Small delay to ensure state is updated
+    const timer = setTimeout(() => {
+      const predictionData = extractPredictionData();
+      
+      if (predictionData && predictionData.finalLeader) {
+        // Store prediction for comparison on step 4
+        setUserPrediction(predictionData);
+        
+        // Save prediction to database
+        fetch('/api/f1-predictions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(predictionData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              predictionSavedRef.current = true;
+              console.log('Prediction saved successfully');
+            } else {
+              console.error('Failed to save prediction:', data.error);
+            }
+          })
+          .catch((error) => {
+            console.error('Error saving prediction:', error);
+          });
+      }
+    }, 1000); // Increased delay to ensure state is fully updated
+
+    return () => clearTimeout(timer);
+  }, [mobileStep, simOutcome]);
+
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1123,7 +1281,8 @@ export default function F1SimulatorPage() {
           }
           .f1-simulator .mobile-step.mobile-step-1[style*="block"],
           .f1-simulator .mobile-step.mobile-step-2[style*="block"],
-          .f1-simulator .mobile-step.mobile-step-3[style*="block"] {
+          .f1-simulator .mobile-step.mobile-step-3[style*="block"],
+          .f1-simulator .mobile-step.mobile-step-4[style*="block"] {
             display: block !important;
           }
           /* Mobile navigation */
@@ -1654,6 +1813,20 @@ export default function F1SimulatorPage() {
           </div>
         </section>
 
+        {/* Mobile Step 4: Prediction Comparison */}
+        <section className="card mobile-step" data-step="4" style={{ display: mobileStep === 4 ? 'block' : 'none' }} aria-labelledby="comparisonTitle">
+          <h2 id="comparisonTitle">Your Prediction Results</h2>
+          <div className="content">
+            {userPrediction ? (
+              <F1PredictionComparison userPrediction={userPrediction} />
+            ) : (
+              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--muted, #97a6c1)', fontSize: '13px' }}>
+                Complete your prediction and view the race outcome to see how you compare with the community!
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* Desktop: Left: Current Points & Leader */}
         <section className="card desktop-layout" aria-labelledby="pointsTitleDesktop">
           <h2 id="pointsTitleDesktop">Current points (pre‑race)</h2>
@@ -1708,6 +1881,14 @@ export default function F1SimulatorPage() {
 
           {/* Event Simulator */}
           <EventSimulator driverNames={driverNames} />
+
+          {/* Community Predictions Stats */}
+          <F1PredictionStats />
+
+          {/* User Prediction Comparison */}
+          {userPrediction && (
+            <F1PredictionComparison userPrediction={userPrediction} />
+          )}
         </div>
       </main>
 
@@ -1723,10 +1904,11 @@ export default function F1SimulatorPage() {
           <div className={`step-dot ${mobileStep === 1 ? 'active' : ''}`}></div>
           <div className={`step-dot ${mobileStep === 2 ? 'active' : ''}`}></div>
           <div className={`step-dot ${mobileStep === 3 ? 'active' : ''}`}></div>
+          <div className={`step-dot ${mobileStep === 4 ? 'active' : ''}`}></div>
         </div>
         <button 
-          onClick={() => setMobileStep(Math.min(3, mobileStep + 1))}
-          disabled={mobileStep === 3}
+          onClick={() => setMobileStep(Math.min(4, mobileStep + 1))}
+          disabled={mobileStep === 4}
         >
           Next
         </button>
