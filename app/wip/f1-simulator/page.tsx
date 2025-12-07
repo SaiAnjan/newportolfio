@@ -72,29 +72,29 @@ export default function F1SimulatorPage() {
       // Function to get driver profile image path
       function getDriverImagePath(name: string): string {
         const nameMap: Record<string, string> = {
-          'Lando Norris': 'lando-norris-f1-driver-profile-picture.webp',
-          'Max Verstappen': 'max-verstappen-f1-driver-profile-picture.webp',
-          'Oscar Piastri': 'oscar-piastri-f1-driver-profile-picture.webp',
-          'George Russell': 'george-russell-f1-driver-profile-picture.webp',
-          'Charles Leclerc': 'charles-leclerc-f1-driver-profile-picture.webp',
-          'Lewis Hamilton': 'lewis-hamilton-f1-driver-profile-picture.webp',
-          'Kimi Antonelli': 'kimi-antonelli-f1-driver-profile-picture.webp',
-          'Alexander Albon': 'alexander-albon-f1-driver-profile-picture.webp',
-          'Carlos Sainz': 'carlos-sainz-f1-driver-profile-picture.webp',
-          'Isack Hadjar': 'isack-hadjar-f1-driver-profile-picture.webp',
-          'Nico Hülkenberg': 'nico-hulkenberg-f1-driver-profile-picture.webp',
-          'Fernando Alonso': 'fernando-alonso-f1-driver-profile-picture.webp',
-          'Oliver Bearman': 'oliver-bearman-f1-driver-profile-picture.webp',
-          'Liam Lawson': 'liam-lawson-f1-driver-profile-picture.webp',
-          'Yuki Tsunoda': 'yuki-tsunoda-f1-driver-profile-picture.webp',
-          'Esteban Ocon': 'esteban-ocon-f1-driver-profile-picture.webp',
-          'Lance Stroll': 'lance-stroll-f1-driver-profile-picture.webp',
-          'Pierre Gasly': 'pierre-gasly-f1-driver-profile-picture.webp',
-          'Gabriel Bortoleto': 'gabriel-bortoleto-f1-driver-profile-picture.webp',
-          'Franco Colapinto': 'franco-colapinto-f1-driver-profile-picture.webp'
+          'Lando Norris': '2025mclarenlannor01right.avif',
+          'Max Verstappen': '2025redbullracingmaxver01right.avif',
+          'Oscar Piastri': '2025mclarenoscpia01right.avif',
+          'George Russell': '2025mercedesgeorus01right.avif',
+          'Charles Leclerc': '2025ferrarichalec01right.avif',
+          'Lewis Hamilton': '2025ferrarilewham01right.avif',
+          'Kimi Antonelli': '2025mercedesandant01right.avif',
+          'Alexander Albon': '2025williamsalealb01right.avif',
+          'Carlos Sainz': '2025williamscarsai01right.avif',
+          'Isack Hadjar': '2025racingbullsisahad01right.avif',
+          'Nico Hülkenberg': '2025kicksaubernichul01right.avif',
+          'Fernando Alonso': '2025astonmartinferalo01right.avif',
+          'Oliver Bearman': '2025haasf1teamolibea01right.avif',
+          'Liam Lawson': '2025racingbullslialaw01right.avif',
+          'Yuki Tsunoda': '2025redbullracingyuktsu01right.avif',
+          'Esteban Ocon': '2025haasf1teamestoco01right.avif',
+          'Lance Stroll': '2025astonmartinlanstr01right.avif',
+          'Pierre Gasly': '2025alpinepiegas01right.avif',
+          'Gabriel Bortoleto': '2025kicksaubergabbor01right.avif',
+          'Franco Colapinto': '2025alpinefracol01right.avif'
         };
         const filename = nameMap[name];
-        return filename ? `/images/drivers-profiles/${filename}` : '';
+        return filename ? `/images/new-driver-profiles/${filename}` : '';
       }
 
       // ==========================
@@ -1528,6 +1528,22 @@ export default function F1SimulatorPage() {
           .f1-simulator .mobile-step.mobile-step-3[style*="block"],
           .f1-simulator .mobile-step.mobile-step-4[style*="block"] {
             display: block !important;
+          }
+          /* Mobile table styles */
+          .f1-simulator .card .content {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+          .f1-simulator table {
+            min-width: 600px;
+          }
+          .f1-simulator th, .f1-simulator td {
+            padding: 8px 10px;
+            font-size: 12px;
+          }
+          .f1-simulator th {
+            font-size: 10px;
+            padding: 8px 10px;
           }
           /* Mobile navigation */
           .f1-simulator .mobile-nav {
