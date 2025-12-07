@@ -1556,6 +1556,11 @@ export default function F1SimulatorPage() {
         @media (max-width: 768px) {
           .f1-simulator main {
             grid-template-columns: 1fr;
+            padding: 12px;
+            gap: 12px;
+            width: 100%;
+            max-width: 100vw;
+            box-sizing: border-box;
           }
           /* Hide desktop layout on mobile */
           .f1-simulator .desktop-layout {
@@ -1572,20 +1577,32 @@ export default function F1SimulatorPage() {
             display: block !important;
           }
           /* Mobile table styles */
+          .f1-simulator .card {
+            overflow: visible;
+          }
           .f1-simulator .card .content {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            width: 100%;
+            max-width: 100vw;
+            padding: 12px;
+            box-sizing: border-box;
           }
           .f1-simulator table {
-            min-width: 600px;
+            min-width: 500px;
+            width: 100%;
           }
           .f1-simulator th, .f1-simulator td {
-            padding: 8px 10px;
-            font-size: 12px;
+            padding: 6px 8px;
+            font-size: 11px;
+            white-space: nowrap;
           }
           .f1-simulator th {
-            font-size: 10px;
-            padding: 8px 10px;
+            font-size: 9px;
+            padding: 6px 8px;
+          }
+          .f1-simulator td:first-child {
+            min-width: 120px;
           }
           /* Mobile navigation */
           .f1-simulator .mobile-nav {
