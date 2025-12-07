@@ -1746,6 +1746,7 @@ export default function F1SimulatorPage() {
           height: 40px;
           border-radius: 50%;
           object-fit: cover;
+          object-position: top center;
         }
         .f1-simulator .dnf-driver-image.dnf-placeholder {
           width: 40px;
@@ -1846,6 +1847,7 @@ export default function F1SimulatorPage() {
           height: 120px;
           border-radius: 50%;
           object-fit: cover;
+          object-position: top center;
           z-index: 2;
           border: 3px solid var(--accent);
         }
@@ -1966,6 +1968,7 @@ export default function F1SimulatorPage() {
           height: 32px;
           border-radius: 50%;
           object-fit: cover;
+          object-position: top center;
         }
         .f1-simulator .driver-cards-grid {
           position: absolute;
@@ -2006,6 +2009,7 @@ export default function F1SimulatorPage() {
           height: 60px;
           border-radius: 50%;
           object-fit: cover;
+          object-position: top center;
         }
         .f1-simulator .driver-card-placeholder {
           width: 60px;
