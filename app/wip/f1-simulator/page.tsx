@@ -437,8 +437,22 @@ export default function F1SimulatorPage() {
       tbody.innerHTML = '';
       for (const r of rows) {
         const tr = document.createElement('tr');
-        const name = document.createElement('td'); name.textContent = r.name; tr.appendChild(name);
-        const team = document.createElement('td'); team.textContent = r.team; tr.appendChild(team);
+        const name = document.createElement('td');
+        const nameContainer = document.createElement('div');
+        nameContainer.style.display = 'flex';
+        nameContainer.style.flexDirection = 'column';
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = r.name;
+        nameSpan.style.fontWeight = '600';
+        const teamSpan = document.createElement('span');
+        teamSpan.textContent = r.team;
+        teamSpan.style.fontSize = '12px';
+        teamSpan.style.color = 'var(--muted)';
+        teamSpan.style.marginTop = '2px';
+        nameContainer.appendChild(nameSpan);
+        nameContainer.appendChild(teamSpan);
+        name.appendChild(nameContainer);
+        tr.appendChild(name);
         const base = document.createElement('td'); 
         const baseSpan = document.createElement('span');
         baseSpan.className = 'number-font';
@@ -1247,8 +1261,22 @@ export default function F1SimulatorPage() {
         pointsBody.innerHTML = '';
         rows.forEach((r) => {
           const tr = document.createElement('tr');
-          const name = document.createElement('td'); name.textContent = r.name; tr.appendChild(name);
-          const team = document.createElement('td'); team.textContent = r.team; tr.appendChild(team);
+          const name = document.createElement('td');
+          const nameContainer = document.createElement('div');
+          nameContainer.style.display = 'flex';
+          nameContainer.style.flexDirection = 'column';
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = r.name;
+          nameSpan.style.fontWeight = '600';
+          const teamSpan = document.createElement('span');
+          teamSpan.textContent = r.team;
+          teamSpan.style.fontSize = '12px';
+          teamSpan.style.color = 'var(--muted)';
+          teamSpan.style.marginTop = '2px';
+          nameContainer.appendChild(nameSpan);
+          nameContainer.appendChild(teamSpan);
+          name.appendChild(nameContainer);
+          tr.appendChild(name);
           const base = document.createElement('td');
           const baseSpan = document.createElement('span');
           baseSpan.className = 'number-font';
@@ -1275,8 +1303,22 @@ export default function F1SimulatorPage() {
         pointsBodyDesktop.innerHTML = '';
         rows.forEach((r) => {
           const tr = document.createElement('tr');
-          const name = document.createElement('td'); name.textContent = r.name; tr.appendChild(name);
-          const team = document.createElement('td'); team.textContent = r.team; tr.appendChild(team);
+          const name = document.createElement('td');
+          const nameContainer = document.createElement('div');
+          nameContainer.style.display = 'flex';
+          nameContainer.style.flexDirection = 'column';
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = r.name;
+          nameSpan.style.fontWeight = '600';
+          const teamSpan = document.createElement('span');
+          teamSpan.textContent = r.team;
+          teamSpan.style.fontSize = '12px';
+          teamSpan.style.color = 'var(--muted)';
+          teamSpan.style.marginTop = '2px';
+          nameContainer.appendChild(nameSpan);
+          nameContainer.appendChild(teamSpan);
+          name.appendChild(nameContainer);
+          tr.appendChild(name);
           const base = document.createElement('td');
           const baseSpan = document.createElement('span');
           baseSpan.className = 'number-font';
@@ -1503,7 +1545,7 @@ export default function F1SimulatorPage() {
         .f1-simulator .sub { color: var(--muted); font-size: 13px; }
         .f1-simulator main { 
           display: grid; 
-          grid-template-columns: 560px 1fr; 
+          grid-template-columns: minmax(400px, 560px) 1fr; 
           gap: 18px; 
           padding: 18px;
           width: 100%;
@@ -1659,6 +1701,9 @@ export default function F1SimulatorPage() {
           padding: 12px 16px; 
           border-bottom: 1px solid var(--border); 
           font-size: 14px; 
+        }
+        .f1-simulator td:first-child {
+          min-width: 150px;
         }
         .f1-simulator th { 
           text-align: left; 
@@ -2104,7 +2149,7 @@ export default function F1SimulatorPage() {
             <div id="leaderImageContainer" className="leader-image-container"></div>
             <table id="pointsTable" aria-label="Points table">
               <thead>
-                <tr><th>Driver</th><th>Team</th><th>Points</th><th>∆ Race</th><th>Total</th></tr>
+                <tr><th>Driver</th><th>Points</th><th>∆ Race</th><th>Total</th></tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -2140,7 +2185,7 @@ export default function F1SimulatorPage() {
             <div id="leaderImageContainerDesktop" className="leader-image-container"></div>
             <table id="pointsTableDesktop" aria-label="Points table">
               <thead>
-                <tr><th>Driver</th><th>Team</th><th>Points</th><th>∆ Race</th><th>Total</th></tr>
+                <tr><th>Driver</th><th>Points</th><th>∆ Race</th><th>Total</th></tr>
               </thead>
               <tbody></tbody>
             </table>
