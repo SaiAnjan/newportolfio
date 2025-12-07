@@ -1345,40 +1345,79 @@ export default function F1SimulatorPage() {
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Orbitron:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Michroma&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet" />
       <style dangerouslySetInnerHTML={{__html: `
         :root {
-          --bg: #0b0f19;
-          --panel: #12182b;
-          --accent: #ff6a00;
-          --text: #e6eefc;
-          --muted: #97a6c1;
-          --success: #21c07a;
-          --warning: #ffbf00;
-          --danger: #ff3b30;
-          --border: #1f2742;
+          --bg: #ED1131;
+          --panel: #1e1e28;
+          --accent: #E10600;
+          --accent-hover: #ff1a0d;
+          --text: #ffffff;
+          --muted: #8d8d96;
+          --success: #00d2be;
+          --warning: #ff9800;
+          --danger: #E10600;
+          --border: #2d2d3a;
+          --border-light: #3a3a4a;
+          --f1-accessible-colour: #710006;
         }
         .f1-simulator {
-          font-family: 'Stack Sans Text', Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans';
+          font-family: 'Michroma', 'Stack Sans Text', Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans';
           margin: 0;
+          padding: 0;
           background: var(--bg);
           color: var(--text);
           min-height: 100vh;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          position: relative;
+        }
+        .f1-simulator::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url('/images/abstract-gray-dotted-pattern-background_1035-18653.avif');
+          background-size: cover;
+          background-repeat: repeat;
+          background-position: center;
+          mix-blend-mode: multiply;
+          pointer-events: none;
+          z-index: 0;
+        }
+        .f1-simulator::after {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom, var(--f1-accessible-colour) 25.1%, rgb(from var(--f1-accessible-colour) r g b / 0) 74.88%);
+          pointer-events: none;
+          z-index: 0;
+        }
+        .f1-simulator > * {
+          position: relative;
+          z-index: 1;
         }
         .f1-simulator .number-font {
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 600;
-          font-style: italic;
+          font-family: 'Audiowide', sans-serif;
+          font-weight: 400;
+          font-style: normal;
         }
         .f1-simulator * { box-sizing: border-box; }
         .f1-simulator header { 
-          padding: 20px; 
-          border-bottom: 1px solid var(--border); 
-          background: linear-gradient(180deg, #11172a 0%, #0b0f19 100%);
+          padding: 24px 32px; 
+          border-bottom: 2px solid var(--border); 
+          background: #15151e;
           display: flex;
           flex-direction: row;
           align-items: center;
-          gap: 20px;
+          gap: 24px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .f1-simulator .header-content {
           flex: 1;
@@ -1455,18 +1494,22 @@ export default function F1SimulatorPage() {
         }
         .f1-simulator h1 { 
           margin: 0 0 6px; 
-          font-size: 22px; 
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 700;
-          font-style: italic;
+          font-size: 32px; 
+          font-family: 'Audiowide', sans-serif;
+          font-weight: 400;
+          font-style: normal;
           color: #ff3b30;
         }
         .f1-simulator .sub { color: var(--muted); font-size: 13px; }
         .f1-simulator main { 
           display: grid; 
-          grid-template-columns: 400px 1fr; 
+          grid-template-columns: 560px 1fr; 
           gap: 18px; 
-          padding: 18px; 
+          padding: 18px;
+          width: 100%;
+          max-width: 100vw;
+          box-sizing: border-box;
+          margin: 0;
         }
         @media (max-width: 768px) {
           .f1-simulator main {
@@ -1492,7 +1535,7 @@ export default function F1SimulatorPage() {
             justify-content: space-between;
             align-items: center;
             padding: 16px;
-            background: var(--panel);
+            background: rgba(30, 30, 40, 0.85);
             border-top: 1px solid var(--border);
             position: sticky;
             bottom: 0;
@@ -1510,10 +1553,10 @@ export default function F1SimulatorPage() {
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
-            font-family: 'Stack Sans Text', sans-serif;
+            font-family: 'Michroma', 'Stack Sans Text', sans-serif;
           }
           .f1-simulator .mobile-nav button:hover:not(:disabled) {
-            background: #1a4dff;
+            background: rgba(30, 30, 40, 0.9);
           }
           .f1-simulator .mobile-nav button:disabled {
             opacity: 0.5;
@@ -1557,31 +1600,60 @@ export default function F1SimulatorPage() {
           }
         }
         .f1-simulator .card { 
-          background: var(--panel); 
+          background: rgba(30, 30, 40, 0.85); 
           border: 1px solid var(--border); 
-          border-radius: 12px; 
+          border-radius: 16px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+          transition: box-shadow 0.2s ease;
+        }
+        .f1-simulator .card:hover {
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
         .f1-simulator .card h2 { 
           font-size: 16px; 
           margin: 0; 
           padding: 12px 14px; 
           border-bottom: 1px solid var(--border);
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 700;
-          font-style: italic;
+          font-family: 'Audiowide', sans-serif;
+          font-weight: 400;
+          font-style: normal;
           color: #ffffff;
         }
         .f1-simulator .card .content { padding: 12px; }
+        #positions, #positionsDesktop {
+          max-height: none;
+          overflow: visible;
+          padding: 4px 0 !important;
+          margin: -4px 0 !important;
+        }
+        #positions .row, #positionsDesktop .row {
+          margin-bottom: 0 !important;
+          margin-top: 0 !important;
+          padding: 0 !important;
+          gap: 4px !important;
+        }
+        #positions .row:first-child, #positionsDesktop .row:first-child {
+          margin-top: 0 !important;
+        }
+        #positions .row:last-child, #positionsDesktop .row:last-child {
+          margin-bottom: 0 !important;
+        }
         .f1-simulator table { width: 100%; border-collapse: collapse; }
         .f1-simulator th, .f1-simulator td { 
-          padding: 8px 10px; 
+          padding: 12px 16px; 
           border-bottom: 1px solid var(--border); 
-          font-size: 13px; 
+          font-size: 14px; 
         }
         .f1-simulator th { 
           text-align: left; 
           color: var(--muted); 
-          font-weight: 600; 
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          font-size: 12px;
+        }
+        .f1-simulator tr:hover {
+          background: rgba(225, 6, 0, 0.05);
         }
         .f1-simulator tr:last-child td { border-bottom: none; }
         .f1-simulator .grid2 { 
@@ -1601,12 +1673,12 @@ export default function F1SimulatorPage() {
           padding: 8px;
           border-radius: 8px;
           border: 1px solid var(--border);
-          background: #0f1424;
+          background: rgba(30, 30, 40, 0.85);
           cursor: pointer;
           transition: background 0.2s;
         }
         .f1-simulator .dnf-item:hover {
-          background: #1a1f35;
+          background: rgba(30, 30, 40, 0.95);
         }
         .f1-simulator .dnf-driver-image {
           width: 40px;
@@ -1643,39 +1715,49 @@ export default function F1SimulatorPage() {
         .f1-simulator select, .f1-simulator input[type="checkbox"] { accent-color: var(--accent); }
         .f1-simulator select { 
           width: 100%; 
-          padding: 8px 10px; 
+          padding: 10px 12px; 
           border-radius: 8px; 
           border: 1px solid var(--border); 
-          background: #0f1424; 
-          color: var(--text); 
+          background: rgba(30, 30, 40, 0.85); 
+          color: var(--text);
+          transition: all 0.2s ease;
+        }
+        .f1-simulator select:focus {
+          outline: none;
+          border-color: var(--accent);
+          box-shadow: 0 0 0 2px rgba(225, 6, 0, 0.2);
         }
         .f1-simulator button {
           padding: 8px 14px;
           border-radius: 8px;
           border: 1px solid var(--border);
-          background: #0f1424;
+          background: rgba(30, 30, 40, 0.85);
           color: var(--text);
           cursor: pointer;
           transition: background 0.2s;
         }
         .f1-simulator button:hover {
-          background: #1a1f35;
+          background: rgba(30, 30, 40, 0.95);
         }
         .f1-simulator .row { 
           display: grid; 
-          grid-template-columns: 80px 1fr 90px; 
-          gap: 10px; 
-          align-items: center; 
+          grid-template-columns: 55px 1fr 65px; 
+          gap: 5px; 
+          align-items: center;
+          margin-bottom: 1px;
+          padding: 0;
         }
         .f1-simulator .position { 
-          background: #0f1424; 
+          background: rgba(30, 30, 40, 0.85); 
           border: 1px solid var(--border); 
-          border-radius: 8px; 
-          padding: 6px 10px; 
+          border-radius: 4px; 
+          padding: 3px 6px; 
           text-align: center;
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 600;
-          font-style: italic;
+          font-family: 'Audiowide', sans-serif;
+          font-weight: 400;
+          font-style: normal;
+          font-size: 11px;
+          line-height: 1.2;
         }
         .f1-simulator .leader-image-container {
           position: relative;
@@ -1693,9 +1775,9 @@ export default function F1SimulatorPage() {
           left: 50%;
           transform: translate(-50%, -50%);
           pointer-events: none;
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 700;
-          font-style: italic;
+          font-family: 'Audiowide', sans-serif;
+          font-weight: 400;
+          font-style: normal;
         }
         .f1-simulator .leader-image {
           position: relative;
@@ -1730,14 +1812,15 @@ export default function F1SimulatorPage() {
         .f1-simulator .leader .badge { 
           padding: 4px 8px; 
           border-radius: 999px; 
-          background: #14203e; 
+          background: rgba(30, 30, 40, 0.85); 
           color: var(--muted); 
           border: 1px solid var(--border); 
         }
         .f1-simulator .leader .badge.champ { 
-          background: var(--success); 
-          color: #07130d; 
-          border: none; 
+          background: var(--accent); 
+          color: white; 
+          border: none;
+          box-shadow: 0 0 12px rgba(225, 6, 0, 0.4);
         }
         .f1-simulator .legend { 
           display:flex; 
@@ -1746,31 +1829,33 @@ export default function F1SimulatorPage() {
           margin-top:8px; 
         }
         .f1-simulator .chip { 
-          padding: 4px 8px; 
-          border-radius: 999px; 
-          background: #14203e; 
+          padding: 6px 12px; 
+          border-radius: 20px; 
+          background: rgba(30, 30, 40, 0.85); 
           color: var(--muted); 
           border: 1px solid var(--border); 
+          font-size: 12px;
+          font-weight: 500;
         }
         .f1-simulator .chip .number-font {
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 600;
-          font-style: italic;
+          font-family: 'Audiowide', sans-serif;
+          font-weight: 400;
+          font-style: normal;
         }
         .f1-simulator .chip.danger { 
-          background: #2a1010; 
-          color: #ffc7c7; 
-          border-color: #512020; 
+          background: rgba(225, 6, 0, 0.15); 
+          color: #ff6b6b; 
+          border-color: rgba(225, 6, 0, 0.3); 
         }
         .f1-simulator .chip.warning { 
-          background: #2a230f; 
-          color: #ffe7a6; 
-          border-color: #49401b; 
+          background: rgba(255, 152, 0, 0.15); 
+          color: #ffb74d; 
+          border-color: rgba(255, 152, 0, 0.3); 
         }
         .f1-simulator .chip.success { 
-          background: #102a1f; 
-          color: #baf3d2; 
-          border-color: #1e563d; 
+          background: rgba(0, 210, 190, 0.15); 
+          color: #4dd0e1; 
+          border-color: rgba(0, 210, 190, 0.3); 
         }
         .f1-simulator .footer { 
           padding: 12px; 
@@ -1797,7 +1882,7 @@ export default function F1SimulatorPage() {
           padding: 8px 10px;
           border-radius: 8px;
           border: 1px solid var(--border);
-          background: #0f1424;
+          background: rgba(30, 30, 40, 0.85);
           color: var(--text);
           cursor: pointer;
           display: flex;
@@ -1807,7 +1892,7 @@ export default function F1SimulatorPage() {
           transition: background 0.2s;
         }
         .f1-simulator .selected-driver-display:hover {
-          background: #1a1f35;
+          background: rgba(30, 30, 40, 0.95);
         }
         .f1-simulator .selected-driver-display .placeholder {
           color: var(--muted);
@@ -1827,7 +1912,7 @@ export default function F1SimulatorPage() {
           left: 0;
           width: 320px;
           margin-top: 4px;
-          background: var(--panel);
+          background: rgba(30, 30, 40, 0.85);
           border: 1px solid var(--border);
           border-radius: 12px;
           padding: 12px;
@@ -1845,13 +1930,13 @@ export default function F1SimulatorPage() {
           padding: 8px;
           border-radius: 8px;
           border: 1px solid var(--border);
-          background: #0f1424;
+          background: rgba(30, 30, 40, 0.85);
           cursor: pointer;
           transition: all 0.2s;
           gap: 4px;
         }
         .f1-simulator .driver-card:hover {
-          background: #1a1f35;
+          background: rgba(30, 30, 40, 0.95);
           border-color: var(--accent);
           transform: translateY(-2px);
         }
@@ -1915,10 +2000,11 @@ export default function F1SimulatorPage() {
         }
         .f1-simulator .row {
           display: grid;
-          grid-template-columns: 80px 1fr 90px;
-          gap: 10px;
+          grid-template-columns: 55px 1fr 65px;
+          gap: 5px;
           align-items: center;
-          margin-bottom: 8px;
+          margin-bottom: 1px;
+          padding: 0;
         }
       `}} />
       <div className="f1-simulator">
@@ -2024,7 +2110,7 @@ export default function F1SimulatorPage() {
             {userPrediction ? (
               <F1PredictionComparison userPrediction={userPrediction} />
             ) : (
-              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--muted, #97a6c1)', fontSize: '13px' }}>
+              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--muted, #8d8d96)', fontSize: '13px' }}>
                 Complete your prediction and view the race outcome to see how you compare with the community!
               </div>
             )}
@@ -2085,9 +2171,9 @@ export default function F1SimulatorPage() {
                     marginTop: '14px',
                     width: '100%',
                     padding: '10px',
-                    background: showComparison ? '#1a1f35' : 'var(--accent, #ff6a00)',
+                    background: showComparison ? 'rgba(30, 30, 40, 0.95)' : 'var(--accent, #ff6a00)',
                     color: 'white',
-                    border: '1px solid var(--border, #1f2742)',
+                    border: '1px solid var(--border, #2d2d3a)',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     fontSize: '13px',
