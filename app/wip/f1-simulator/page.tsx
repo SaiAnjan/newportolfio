@@ -13,6 +13,7 @@ export default function F1SimulatorPage() {
   const [mobileStep, setMobileStep] = useState(1); // 1: Finish order, 2: DNF, 3: Race Outcome, 4: Comparison
   const [driverNames, setDriverNames] = useState<string[]>([]);
   const predictionSavedRef = useRef(false); // Track if prediction has been saved in this session
+  const [showComparison, setShowComparison] = useState(false); // Desktop: toggle comparison view
   const [userPrediction, setUserPrediction] = useState<{
     finishOrder: Array<{ position: number; driver: string }>;
     dnfs: string[];
@@ -557,9 +558,31 @@ export default function F1SimulatorPage() {
       // Update store and recompute if events exist
       setSimState(raceState);
       
-      const rows = computeTotals(asg);
-        renderPoints(rows);
-        renderLeader(rows);
+      // Check if we have events - if so, use the outcome from store (which includes event effects)
+      // Since recompute() is called synchronously in setState, we can get the outcome immediately
+      const storeStateAfterUpdate = useSimStore.getState();
+      const hasEvents = storeStateAfterUpdate.events && storeStateAfterUpdate.events.length > 0;
+      
+      let rows: Array<{name: string; team: string; base: number; delta: number; total: number}>;
+      
+      if (hasEvents && storeStateAfterUpdate.outcome) {
+        // Use outcome from store (includes event effects)
+        rows = Object.entries(storeStateAfterUpdate.outcome.totals)
+          .map(([name, data]) => ({
+            name,
+            team: data.team,
+            base: data.base,
+            delta: data.delta,
+            total: data.total,
+          }))
+          .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
+      } else {
+        // No events or no outcome yet, use direct calculation
+        rows = computeTotals(asg);
+      }
+      
+      renderPoints(rows);
+      renderLeader(rows);
       }
 
       // Function to get selected driver for a position (checks both mobile and desktop)
@@ -993,8 +1016,10 @@ export default function F1SimulatorPage() {
     };
   }, []);
 
-  // Save prediction and store it when user reaches final outcome page (step 3)
+  // Save prediction and store it when user reaches final outcome page (step 3) or on desktop when prediction is valid
   useEffect(() => {
+    // On mobile, only save when reaching step 3
+    // On desktop, we'll save when prediction is valid (handled separately)
     if (mobileStep !== 3 || predictionSavedRef.current) return;
 
     // Function to extract current prediction data
@@ -1139,6 +1164,206 @@ export default function F1SimulatorPage() {
 
     return () => clearTimeout(timer);
   }, [mobileStep, simOutcome]);
+
+  // Also save prediction on desktop when there's a valid outcome
+  // This runs independently of mobile step 3 save, so desktop users can save their prediction too
+  useEffect(() => {
+    // Skip if already saved in this session
+    if (predictionSavedRef.current) return;
+    
+    // Only save when we have a valid outcome with a real leader (not placeholder)
+    if (!simOutcome || !simOutcome.leader || simOutcome.leader.name === '—') return;
+
+    const extractPredictionData = () => {
+      try {
+        const storeState = useSimStore.getState();
+        const { state } = storeState;
+        
+        let finishOrder: Array<{ position: number; driver: string }> = [];
+        let dnfs: string[] = [];
+        let fastestLap: string | null = null;
+        let finalLeader = '';
+        let finalLeaderPoints = 0;
+        let isTie = false;
+
+        if (state) {
+          Object.entries(state.grid).forEach(([posStr, driver]) => {
+            if (driver && !state.dnfs.has(driver)) {
+              finishOrder.push({ position: parseInt(posStr), driver });
+            }
+          });
+          finishOrder.sort((a, b) => a.position - b.position);
+          dnfs = Array.from(state.dnfs);
+          fastestLap = state.fastestLap;
+          
+          if (simOutcome) {
+            finalLeader = simOutcome.leader.name;
+            finalLeaderPoints = simOutcome.leader.total;
+            isTie = simOutcome.leader.tie;
+          }
+        }
+
+        if (finishOrder.length === 0 && dnfs.length === 0) return null;
+        if (!finalLeader) return null;
+
+        return { finishOrder, dnfs, fastestLap, finalLeader, finalLeaderPoints, isTie };
+      } catch (error) {
+        console.error('Error extracting prediction data:', error);
+        return null;
+      }
+    };
+
+    const timer = setTimeout(() => {
+      const predictionData = extractPredictionData();
+      
+      if (predictionData && predictionData.finalLeader) {
+        setUserPrediction(predictionData);
+        
+        fetch('/api/f1-predictions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(predictionData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              predictionSavedRef.current = true;
+            }
+          })
+          .catch((error) => {
+            console.error('Error saving prediction:', error);
+          });
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [simOutcome, mobileStep]);
+
+  // Update UI when outcome changes from events (for event simulator)
+  useEffect(() => {
+    if (!simOutcome) return;
+    
+    const storeState = useSimStore.getState();
+    const hasEvents = storeState.events && storeState.events.length > 0;
+    
+    // Only update if events exist (otherwise updateAll handles it)
+    if (hasEvents) {
+      const rows = Object.entries(simOutcome.totals)
+        .map(([name, data]) => ({
+          name,
+          team: data.team,
+          base: data.base,
+          delta: data.delta,
+          total: data.total,
+        }))
+        .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
+      
+      // Update the DOM directly (since we're in vanilla JS context)
+      const pointsBody = document.querySelector('#pointsTable tbody');
+      const pointsBodyDesktop = document.querySelector('#pointsTableDesktop tbody');
+      const leaderName = document.querySelector('#leaderName');
+      const leaderNameDesktop = document.querySelector('#leaderNameDesktop');
+      const leaderImageContainer = document.querySelector('#leaderImageContainer');
+      const leaderImageContainerDesktop = document.querySelector('#leaderImageContainerDesktop');
+      
+      // Render points
+      if (pointsBody) {
+        pointsBody.innerHTML = '';
+        rows.forEach((r) => {
+          const tr = document.createElement('tr');
+          const name = document.createElement('td'); name.textContent = r.name; tr.appendChild(name);
+          const team = document.createElement('td'); team.textContent = r.team; tr.appendChild(team);
+          const base = document.createElement('td');
+          const baseSpan = document.createElement('span');
+          baseSpan.className = 'number-font';
+          baseSpan.textContent = r.base.toString();
+          base.appendChild(baseSpan);
+          tr.appendChild(base);
+          const delta = document.createElement('td');
+          const deltaSpan = document.createElement('span');
+          deltaSpan.className = 'number-font';
+          deltaSpan.textContent = (r.delta > 0 ? '+' : '') + r.delta;
+          delta.appendChild(deltaSpan);
+          tr.appendChild(delta);
+          const total = document.createElement('td');
+          const totalSpan = document.createElement('span');
+          totalSpan.className = 'number-font';
+          totalSpan.textContent = r.total.toString();
+          total.appendChild(totalSpan);
+          tr.appendChild(total);
+          pointsBody.appendChild(tr);
+        });
+      }
+      
+      if (pointsBodyDesktop) {
+        pointsBodyDesktop.innerHTML = '';
+        rows.forEach((r) => {
+          const tr = document.createElement('tr');
+          const name = document.createElement('td'); name.textContent = r.name; tr.appendChild(name);
+          const team = document.createElement('td'); team.textContent = r.team; tr.appendChild(team);
+          const base = document.createElement('td');
+          const baseSpan = document.createElement('span');
+          baseSpan.className = 'number-font';
+          baseSpan.textContent = r.base.toString();
+          base.appendChild(baseSpan);
+          tr.appendChild(base);
+          const delta = document.createElement('td');
+          const deltaSpan = document.createElement('span');
+          deltaSpan.className = 'number-font';
+          deltaSpan.textContent = (r.delta > 0 ? '+' : '') + r.delta;
+          delta.appendChild(deltaSpan);
+          tr.appendChild(delta);
+          const total = document.createElement('td');
+          const totalSpan = document.createElement('span');
+          totalSpan.className = 'number-font';
+          totalSpan.textContent = r.total.toString();
+          total.appendChild(totalSpan);
+          tr.appendChild(total);
+          pointsBodyDesktop.appendChild(tr);
+        });
+      }
+      
+      // Render leader
+      const topTotal = rows[0]?.total || 0;
+      const tied = rows.filter(r => r.total === topTotal);
+      
+      if (tied.length > 1) {
+        if (leaderName) leaderName.textContent = `TIE on ${topTotal} pts — countback required`;
+        if (leaderNameDesktop) leaderNameDesktop.textContent = `TIE on ${topTotal} pts — countback required`;
+        const badges = document.querySelectorAll('#leaderBox .badge, #leaderBoxDesktop .badge');
+        badges.forEach(badge => badge.classList.remove('champ'));
+        if (leaderImageContainer) leaderImageContainer.innerHTML = '';
+        if (leaderImageContainerDesktop) leaderImageContainerDesktop.innerHTML = '';
+      } else if (rows.length > 0) {
+        const leader = rows[0];
+        if (leaderName) {
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = leader.name;
+          const pointsSpan = document.createElement('span');
+          pointsSpan.className = 'number-font';
+          pointsSpan.textContent = ` (${leader.total} pts)`;
+          leaderName.innerHTML = '';
+          leaderName.appendChild(nameSpan);
+          leaderName.appendChild(pointsSpan);
+        }
+        if (leaderNameDesktop) {
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = leader.name;
+          const pointsSpan = document.createElement('span');
+          pointsSpan.className = 'number-font';
+          pointsSpan.textContent = ` (${leader.total} pts)`;
+          leaderNameDesktop.innerHTML = '';
+          leaderNameDesktop.appendChild(nameSpan);
+          leaderNameDesktop.appendChild(pointsSpan);
+        }
+        const badges = document.querySelectorAll('#leaderBox .badge, #leaderBoxDesktop .badge');
+        badges.forEach(badge => badge.classList.add('champ'));
+        
+        // Update leader images (simplified - you may want to add full image logic)
+        // This is a placeholder - the full image logic is in renderLeaderForElements
+      }
+    }
+  }, [simOutcome]);
 
   return (
     <>
@@ -1870,6 +2095,36 @@ export default function F1SimulatorPage() {
                 <span className="badge">Final Leader</span>
                 <span className="name" id="leaderNameDesktop">—</span>
               </div>
+              {userPrediction && (
+                <button
+                  onClick={() => setShowComparison(!showComparison)}
+                  style={{
+                    marginTop: '14px',
+                    width: '100%',
+                    padding: '10px',
+                    background: showComparison ? '#1a1f35' : 'var(--accent, #ff6a00)',
+                    color: 'white',
+                    border: '1px solid var(--border, #1f2742)',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseOver={(e) => {
+                    if (!showComparison) {
+                      e.currentTarget.style.background = '#ff8a33';
+                    }
+                  }}
+                  onMouseOut={(e) => {
+                    if (!showComparison) {
+                      e.currentTarget.style.background = 'var(--accent, #ff6a00)';
+                    }
+                  }}
+                >
+                  {showComparison ? 'Hide My Comparison' : 'Compare My Prediction'}
+                </button>
+              )}
             </div>
           </section>
 
@@ -1879,14 +2134,14 @@ export default function F1SimulatorPage() {
             <div className="content" id="dnfListDesktop" aria-label="DNF list"></div>
           </section>
 
-          {/* Event Simulator */}
-          <EventSimulator driverNames={driverNames} />
+          {/* Event Simulator - Hidden for now */}
+          {/* <EventSimulator driverNames={driverNames} /> */}
 
           {/* Community Predictions Stats */}
           <F1PredictionStats />
 
-          {/* User Prediction Comparison */}
-          {userPrediction && (
+          {/* User Prediction Comparison - Desktop */}
+          {userPrediction && showComparison && (
             <F1PredictionComparison userPrediction={userPrediction} />
           )}
         </div>

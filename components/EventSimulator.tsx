@@ -13,7 +13,7 @@ type TabType = 'text' | 'json' | 'presets';
 
 const PRESETS: Array<{ name: string; events: SimEvent[] }> = [
   {
-    name: 'Early SC (laps 10–13, allow unlapping, cheap pits)',
+    name: 'Early Safety Car (laps 10–13, allow unlapping, cheap pits)',
     events: [
       {
         type: 'SAFETY_CAR',
@@ -26,7 +26,7 @@ const PRESETS: Array<{ name: string; events: SimEvent[] }> = [
     ],
   },
   {
-    name: 'Late SC (laps 50–54, no unlapping)',
+    name: 'Late Safety Car (laps 50–54, no unlapping)',
     events: [
       {
         type: 'SAFETY_CAR',
@@ -39,7 +39,7 @@ const PRESETS: Array<{ name: string; events: SimEvent[] }> = [
     ],
   },
   {
-    name: 'Red flag mid-race (lap 30, restart current order, tyre reset)',
+    name: 'Red Flag Mid-Race (lap 30, restart current order, tyre reset)',
     events: [
       {
         type: 'RED_FLAG',
@@ -50,13 +50,107 @@ const PRESETS: Array<{ name: string; events: SimEvent[] }> = [
     ],
   },
   {
-    name: 'VSC for debris (3 laps)',
+    name: 'VSC for Debris (3 laps)',
     events: [
       {
         type: 'VIRTUAL_SAFETY_CAR',
         startLap: 20,
         endLap: 23,
         deltaFactor: 0.5,
+      },
+    ],
+  },
+  {
+    name: 'Multiple Safety Cars (Early + Late)',
+    events: [
+      {
+        type: 'SAFETY_CAR',
+        startLap: 15,
+        endLap: 18,
+        allowLappedCarsPass: true,
+        pitAdvantage: 'cheap',
+        invalidateFL: false,
+      },
+      {
+        type: 'SAFETY_CAR',
+        startLap: 45,
+        endLap: 48,
+        allowLappedCarsPass: false,
+        pitAdvantage: 'none',
+        invalidateFL: true,
+      },
+    ],
+  },
+  {
+    name: 'Red Flag + Safety Car Combo',
+    events: [
+      {
+        type: 'RED_FLAG',
+        lap: 25,
+        restartOrder: 'current',
+        tyreReset: true,
+      },
+      {
+        type: 'SAFETY_CAR',
+        startLap: 40,
+        endLap: 43,
+        allowLappedCarsPass: true,
+        pitAdvantage: 'cheap',
+        invalidateFL: false,
+      },
+    ],
+  },
+  {
+    name: 'Extended VSC Period',
+    events: [
+      {
+        type: 'VIRTUAL_SAFETY_CAR',
+        startLap: 10,
+        endLap: 18,
+        deltaFactor: 0.5,
+      },
+    ],
+  },
+  {
+    name: 'Safety Car with FL Invalidation',
+    events: [
+      {
+        type: 'SAFETY_CAR',
+        startLap: 35,
+        endLap: 40,
+        allowLappedCarsPass: false,
+        pitAdvantage: 'none',
+        invalidateFL: true,
+      },
+    ],
+  },
+  {
+    name: 'Early Red Flag (lap 15)',
+    events: [
+      {
+        type: 'RED_FLAG',
+        lap: 15,
+        restartOrder: 'previous',
+        tyreReset: false,
+      },
+    ],
+  },
+  {
+    name: 'Late Race Drama (VSC + SC)',
+    events: [
+      {
+        type: 'VIRTUAL_SAFETY_CAR',
+        startLap: 45,
+        endLap: 48,
+        deltaFactor: 0.5,
+      },
+      {
+        type: 'SAFETY_CAR',
+        startLap: 50,
+        endLap: 53,
+        allowLappedCarsPass: true,
+        pitAdvantage: 'cheap',
+        invalidateFL: false,
       },
     ],
   },
@@ -395,4 +489,5 @@ export default function EventSimulator({ driverNames }: EventSimulatorProps) {
     </div>
   );
 }
+
 
