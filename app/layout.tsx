@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo_Narrow } from "next/font/google";
+import { Merriweather, Space_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -13,11 +13,25 @@ export const metadata: Metadata = {
   description: "Product Designer with over 5 years of experience in UX research and interaction design",
 };
 
-const archivoNarrow = Archivo_Narrow({
-  variable: "--font-archivo-narrow",
+const merriweather = Merriweather({
+  variable: "--font-merriweather",
   display: "swap",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "700", "900"],
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  display: "swap",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  display: "swap",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export default function RootLayout({
@@ -27,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${archivoNarrow.variable} font-sans antialiased`}>
+      <body className={`${merriweather.variable} ${spaceMono.variable} ${inter.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

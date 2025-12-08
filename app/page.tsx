@@ -12,7 +12,7 @@ export default async function Home() {
         {/* Header with Resume */}
         <div className="flex items-start justify-between mb-16">
           <div>
-            <h1 className="text-4xl font-light mb-2">Sai Anjan</h1>
+            <h1 className="name-heading text-4xl font-light mb-2">Sai Anjan</h1>
             <p className="text-lg font-light text-gray-600 mt-1 md:mt-2">
               UX Designer
             </p>
