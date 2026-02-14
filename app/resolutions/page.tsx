@@ -112,6 +112,7 @@ export default function ResolutionsPage() {
   const [mounted, setMounted] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "done" | "error">("idle");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const [useApi, setUseApi] = useState(true);
 
@@ -131,12 +132,14 @@ export default function ResolutionsPage() {
           );
           if (fromApi.length > 0) {
             setItems(fromApi);
+            setHasUnsavedChanges(false);
             setMounted(true);
             return;
           }
           const fromStorage = loadFromStorage();
           if (fromStorage.length > 0) {
             setItems(fromStorage);
+            setHasUnsavedChanges(true);
             setMounted(true);
             for (const item of fromStorage) {
               await fetch(API, {
@@ -170,6 +173,7 @@ export default function ResolutionsPage() {
         if (!cancelled) {
           setItems(fromStorage);
           setUseApi(false);
+          setHasUnsavedChanges(fromStorage.length > 0);
         }
       }
       if (!cancelled) setMounted(true);
@@ -228,6 +232,7 @@ export default function ResolutionsPage() {
       return next;
     });
     setInput("");
+    setHasUnsavedChanges(true);
   }, [input, useApi]);
 
   const toggleExpand = useCallback((id: string) => {
@@ -246,20 +251,24 @@ export default function ResolutionsPage() {
 
       if (useApi) {
         try {
-          await fetch(`${API}?id=${encodeURIComponent(id)}`, {
+          const res = await fetch(`${API}?id=${encodeURIComponent(id)}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ notes }),
           });
+          if (res.ok) return;
         } catch {
-          setUseApi(false);
-          setItems((prev) => {
-            const next = prev.map((item) => (item.id === id ? { ...item, notes } : item));
-            saveToStorage(next);
-            return next;
-          });
+          // fall through to local
         }
+        setHasUnsavedChanges(true);
+        setUseApi(false);
+        setItems((prev) => {
+          const next = prev.map((item) => (item.id === id ? { ...item, notes } : item));
+          saveToStorage(next);
+          return next;
+        });
       } else {
+        setHasUnsavedChanges(true);
         setItems((prev) => {
           const next = prev.map((item) => (item.id === id ? { ...item, notes } : item));
           saveToStorage(next);
@@ -326,6 +335,7 @@ export default function ResolutionsPage() {
       if (Array.isArray(data)) {
         setItems(data.map((row: { id: string; text: string; notes: string; emoji: string }) => toClientItem(row)));
         setUseApi(true);
+        setHasUnsavedChanges(false);
         try {
           localStorage.removeItem(STORAGE_KEY);
         } catch {
@@ -377,22 +387,6 @@ export default function ResolutionsPage() {
                   : "Copy for iCloud Notes"}
             </span>
           </button>
-          {!useApi && items.length > 0 && (
-            <button
-              type="button"
-              onClick={uploadLocalListToCloud}
-              disabled={syncStatus === "syncing"}
-              className="primary-button inline-flex items-center justify-center text-sm px-4 py-2"
-            >
-              {syncStatus === "syncing"
-                ? "Saving…"
-                : syncStatus === "done"
-                  ? "Saved"
-                  : syncStatus === "error"
-                    ? "Save failed — try again"
-                    : "Save"}
-            </button>
-          )}
         </div>
 
         <div className="flex gap-2 mb-10">
@@ -468,6 +462,25 @@ export default function ResolutionsPage() {
           </p>
         )}
       </div>
+
+      {!useApi && hasUnsavedChanges && items.length > 0 && (
+        <div className="fixed bottom-6 right-6 z-50 flex justify-end max-w-xl mx-auto w-full px-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 sm:max-w-none">
+          <button
+            type="button"
+            onClick={uploadLocalListToCloud}
+            disabled={syncStatus === "syncing"}
+            className="primary-button shadow-lg inline-flex items-center justify-center text-sm font-medium min-w-[120px] py-3 px-5 rounded-full"
+          >
+            {syncStatus === "syncing"
+              ? "Saving…"
+              : syncStatus === "done"
+                ? "Saved"
+                : syncStatus === "error"
+                  ? "Try again"
+                  : "Save"}
+          </button>
+        </div>
+      )}
     </main>
   );
 }
