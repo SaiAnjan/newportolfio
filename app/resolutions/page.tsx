@@ -226,7 +226,7 @@ export default function ResolutionsPage() {
           <button
             type="button"
             onClick={addItem}
-            className="px-4 py-3 rounded-lg bg-[var(--color-basil)] text-white text-sm font-medium hover:bg-[var(--color-coral)] transition-colors whitespace-nowrap"
+            className="primary-button inline-flex items-center justify-center text-sm whitespace-nowrap px-5 py-3"
           >
             Add
           </button>
