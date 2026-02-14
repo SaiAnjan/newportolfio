@@ -111,6 +111,7 @@ export default function ResolutionsPage() {
   const [input, setInput] = useState("");
   const [mounted, setMounted] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
+  const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "done" | "error">("idle");
 
   const [useApi, setUseApi] = useState(true);
 
@@ -303,6 +304,45 @@ export default function ResolutionsPage() {
     }
   }, [items]);
 
+  const uploadLocalListToCloud = useCallback(async () => {
+    if (items.length === 0) return;
+    setSyncStatus("syncing");
+    try {
+      for (const item of items) {
+        const res = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: item.text,
+            notes: item.notes,
+            emoji: item.emoji,
+          }),
+        });
+        if (!res.ok) throw new Error("Upload failed");
+      }
+      const refetch = await fetch(API);
+      if (!refetch.ok) throw new Error("Refetch failed");
+      const data = await refetch.json();
+      if (Array.isArray(data)) {
+        setItems(data.map((row: { id: string; text: string; notes: string; emoji: string }) => toClientItem(row)));
+        setUseApi(true);
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch {
+          // ignore
+        }
+        setSyncStatus("done");
+        setTimeout(() => setSyncStatus("idle"), 3000);
+      } else {
+        setSyncStatus("error");
+        setTimeout(() => setSyncStatus("idle"), 3000);
+      }
+    } catch {
+      setSyncStatus("error");
+      setTimeout(() => setSyncStatus("idle"), 3000);
+    }
+  }, [items]);
+
   return (
     <main className="min-h-screen bg-[var(--color-linen)]">
       <div className="max-w-xl mx-auto px-4 py-12">
@@ -321,7 +361,7 @@ export default function ResolutionsPage() {
           Add a resolution and expand to add notes.
         </p>
 
-        <div className="flex flex-wrap items-center gap-2 mb-10">
+        <div className="flex flex-wrap items-center gap-3 mb-10">
           <button
             type="button"
             onClick={copyForICloudNotes}
@@ -337,6 +377,22 @@ export default function ResolutionsPage() {
                   : "Copy for iCloud Notes"}
             </span>
           </button>
+          {!useApi && items.length > 0 && (
+            <button
+              type="button"
+              onClick={uploadLocalListToCloud}
+              disabled={syncStatus === "syncing"}
+              className="primary-button inline-flex items-center justify-center text-sm px-4 py-2"
+            >
+              {syncStatus === "syncing"
+                ? "Uploading…"
+                : syncStatus === "done"
+                  ? "Done — list is on all devices"
+                  : syncStatus === "error"
+                    ? "Upload failed — try again"
+                    : "Upload my list to the cloud"}
+            </button>
+          )}
         </div>
 
         <div className="flex gap-2 mb-10">
