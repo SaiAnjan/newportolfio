@@ -12,6 +12,7 @@ type ResolutionItem = {
 };
 
 const STORAGE_KEY = "resolutions-2026";
+const API = "/api/resolutions";
 
 // Keyword → emoji (order matters: more specific first)
 const EMOJI_MAP: [string[], string][] = [
@@ -44,7 +45,17 @@ function getEmojiForText(text: string): string {
   return "✨";
 }
 
-function loadItems(): ResolutionItem[] {
+function toClientItem(row: { id: string; text: string; notes: string; emoji: string }): ResolutionItem {
+  return {
+    id: row.id,
+    text: row.text,
+    notes: row.notes ?? "",
+    emoji: row.emoji ?? "✨",
+    expanded: false,
+  };
+}
+
+function loadFromStorage(): ResolutionItem[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -62,7 +73,7 @@ function loadItems(): ResolutionItem[] {
   }
 }
 
-function saveItems(items: ResolutionItem[]) {
+function saveToStorage(items: ResolutionItem[]) {
   if (typeof window === "undefined") return;
   try {
     const toSave = items.map(({ id, text, notes, emoji }) => ({
@@ -101,44 +112,122 @@ export default function ResolutionsPage() {
   const [mounted, setMounted] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
 
-  // Load from localStorage once on mount (client-only)
+  const [useApi, setUseApi] = useState(true);
+
+  // Load: try API first so everyone sees the same list; fallback to localStorage if API fails
   useEffect(() => {
-    setItems(loadItems());
-    setMounted(true);
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const res = await fetch(API);
+        if (!res.ok) throw new Error("API error");
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error("Invalid response");
+        if (!cancelled) {
+          const fromApi = data.map((row: { id: string; text: string; notes: string; emoji: string }) =>
+            toClientItem(row)
+          );
+          if (fromApi.length > 0) {
+            setItems(fromApi);
+            setMounted(true);
+            return;
+          }
+          const fromStorage = loadFromStorage();
+          if (fromStorage.length > 0) {
+            setItems(fromStorage);
+            setMounted(true);
+            for (const item of fromStorage) {
+              await fetch(API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  text: item.text,
+                  notes: item.notes,
+                  emoji: item.emoji,
+                }),
+              });
+            }
+            const refetch = await fetch(API);
+            if (refetch.ok) {
+              const refetched = await refetch.json();
+              if (Array.isArray(refetched) && refetched.length > 0 && !cancelled) {
+                setItems(refetched.map((row: { id: string; text: string; notes: string; emoji: string }) => toClientItem(row)));
+              }
+            }
+            try {
+              localStorage.removeItem(STORAGE_KEY);
+            } catch {
+              // ignore
+            }
+            return;
+          }
+          setItems([]);
+        }
+      } catch {
+        const fromStorage = loadFromStorage();
+        if (!cancelled) {
+          setItems(fromStorage);
+          setUseApi(false);
+        }
+      }
+      if (!cancelled) setMounted(true);
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Persist to localStorage whenever items change (only after mount so we don't overwrite with [])
   useEffect(() => {
-    if (!mounted) return;
-    saveItems(items);
-  }, [mounted, items]);
+    if (!mounted || !useApi) return;
+    saveToStorage(items);
+  }, [mounted, useApi, items]);
 
-  // Also save when leaving the page (e.g. close tab, navigate away)
   useEffect(() => {
-    const onBeforeUnload = () => saveItems(items);
+    const onBeforeUnload = () => saveToStorage(items);
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [items]);
 
-  const addItem = useCallback(() => {
+  const addItem = useCallback(async () => {
     const trimmed = input.trim();
     if (!trimmed) return;
+    const emoji = getEmojiForText(trimmed);
+    const newItem: ResolutionItem = {
+      id: crypto.randomUUID(),
+      text: trimmed,
+      notes: "",
+      emoji,
+      expanded: false,
+    };
+
+    if (useApi) {
+      try {
+        const res = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: trimmed, notes: "", emoji }),
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setItems((prev) => [...prev, toClientItem(created)]);
+          setInput("");
+          return;
+        }
+      } catch {
+        setUseApi(false);
+      }
+    }
+
     setItems((prev) => {
-      const next = [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          text: trimmed,
-          notes: "",
-          emoji: getEmojiForText(trimmed),
-          expanded: false,
-        },
-      ];
-      saveItems(next);
+      const next = [...prev, newItem];
+      saveToStorage(next);
       return next;
     });
     setInput("");
-  }, [input]);
+  }, [input, useApi]);
 
   const toggleExpand = useCallback((id: string) => {
     setItems((prev) =>
@@ -148,23 +237,59 @@ export default function ResolutionsPage() {
     );
   }, []);
 
-  const updateNotes = useCallback((id: string, notes: string) => {
-    setItems((prev) => {
-      const next = prev.map((item) =>
-        item.id === id ? { ...item, notes } : item
+  const updateNotes = useCallback(
+    async (id: string, notes: string) => {
+      setItems((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, notes } : item))
       );
-      saveItems(next);
-      return next;
-    });
-  }, []);
 
-  const removeItem = useCallback((id: string) => {
-    setItems((prev) => {
-      const next = prev.filter((item) => item.id !== id);
-      saveItems(next);
-      return next;
-    });
-  }, []);
+      if (useApi) {
+        try {
+          await fetch(`${API}?id=${encodeURIComponent(id)}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ notes }),
+          });
+        } catch {
+          setUseApi(false);
+          setItems((prev) => {
+            const next = prev.map((item) => (item.id === id ? { ...item, notes } : item));
+            saveToStorage(next);
+            return next;
+          });
+        }
+      } else {
+        setItems((prev) => {
+          const next = prev.map((item) => (item.id === id ? { ...item, notes } : item));
+          saveToStorage(next);
+          return next;
+        });
+      }
+    },
+    [useApi]
+  );
+
+  const removeItem = useCallback(
+    async (id: string) => {
+      if (useApi) {
+        try {
+          const res = await fetch(`${API}?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+          if (res.ok) {
+            setItems((prev) => prev.filter((item) => item.id !== id));
+            return;
+          }
+        } catch {
+          setUseApi(false);
+        }
+      }
+      setItems((prev) => {
+        const next = prev.filter((item) => item.id !== id);
+        saveToStorage(next);
+        return next;
+      });
+    },
+    [useApi]
+  );
 
   const copyForICloudNotes = useCallback(async () => {
     const text = formatForNotes(items);
