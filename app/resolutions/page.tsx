@@ -385,12 +385,12 @@ export default function ResolutionsPage() {
               className="primary-button inline-flex items-center justify-center text-sm px-4 py-2"
             >
               {syncStatus === "syncing"
-                ? "Uploading…"
+                ? "Saving…"
                 : syncStatus === "done"
-                  ? "Done — list is on all devices"
+                  ? "Saved"
                   : syncStatus === "error"
-                    ? "Upload failed — try again"
-                    : "Upload my list to the cloud"}
+                    ? "Save failed — try again"
+                    : "Save"}
             </button>
           )}
         </div>
