@@ -172,9 +172,9 @@ export default function GPTModePage() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto mt-6 mb-6 w-full max-w-3xl px-4 sm:mt-10">
-        <section className="flex min-h-[calc(100vh-4rem)] min-w-0 flex-col sm:min-h-[calc(100vh-5rem)]">
+    <main className="min-h-dvh bg-background text-foreground">
+      <div className="mx-auto w-full max-w-3xl px-4 sm:mt-10 sm:mb-6">
+        <section className="flex min-h-dvh min-w-0 flex-col sm:min-h-[calc(100vh-5rem)]">
           <header className="border-b">
             <div className="flex h-14 items-center justify-between px-1 sm:px-2">
               <Button asChild variant="ghost" size="sm">
@@ -228,7 +228,7 @@ export default function GPTModePage() {
             </div>
           </div>
 
-          <div className="mt-auto border-t bg-background py-3 md:py-4">
+          <div className="sticky bottom-0 mt-auto border-t bg-background/95 py-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] backdrop-blur md:py-4">
             <div className="space-y-3 px-1 sm:px-2">
               <form
                 onSubmit={(event) => {
