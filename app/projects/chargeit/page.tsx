@@ -1,8 +1,40 @@
-import Image from "next/image";
-
 import { CaseStudyShell } from "@/components/case-study-shell";
+import { ProjectMockupShowcase } from "@/components/project-mockup-showcase";
 
 export default function ChargeitPage() {
+  const chargeitHeaderMockups = [
+    {
+      type: "image" as const,
+      src: "/images/ChargeIT/header-placeholders/placeholder.png",
+      alt: "Chargeit mockup 1",
+      context: "Header mockup 1",
+    },
+    {
+      type: "image" as const,
+      src: "/images/ChargeIT/header-placeholders/placeholder-1.png",
+      alt: "Chargeit mockup 2",
+      context: "Header mockup 2",
+    },
+    {
+      type: "image" as const,
+      src: "/images/ChargeIT/header-placeholders/placeholder-2.png",
+      alt: "Chargeit mockup 3",
+      context: "Header mockup 3",
+    },
+    {
+      type: "image" as const,
+      src: "/images/ChargeIT/header-placeholders/placeholder-3.png",
+      alt: "Chargeit mockup 4",
+      context: "Header mockup 4",
+    },
+    {
+      type: "image" as const,
+      src: "/images/ChargeIT/header-placeholders/placeholder-4.png",
+      alt: "Chargeit mockup 5",
+      context: "Header mockup 5",
+    },
+  ];
+
   return (
     <CaseStudyShell
       title="Chargeit"
@@ -10,6 +42,7 @@ export default function ChargeitPage() {
       meta="Mar 04, 2025"
       readTime="2 minutes"
       shareUrl="/projects/chargeit"
+      headerMedia={<ProjectMockupShowcase items={chargeitHeaderMockups} />}
     >
       <section className="space-y-4">
         <h2 className="text-base font-semibold tracking-tight text-primary">Overview</h2>
@@ -17,9 +50,6 @@ export default function ChargeitPage() {
           Chargeit is a payment operating layer for enterprise teams managing approvals, reconciliation, and
           high-value transaction workflows.
         </p>
-        <div className="relative aspect-video w-full overflow-hidden rounded-md bg-muted/50">
-          <Image src="/images/ChargeIT/Thumbnail.png" alt="Chargeit project preview" fill className="object-cover" />
-        </div>
       </section>
 
       <section className="space-y-3">

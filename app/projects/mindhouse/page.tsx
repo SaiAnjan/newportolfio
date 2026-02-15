@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/preview-image";
 
 import { CaseStudyShell } from "@/components/case-study-shell";
 

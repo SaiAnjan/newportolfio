@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/preview-image";
 import Link from "next/link";
 
 export default function EvaahanPage() {

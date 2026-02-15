@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/preview-image";
 import { useState } from "react";
 
 interface ProjectImageProps {
@@ -46,5 +46,4 @@ export function ProjectImage({ src, alt, fallbackSrc = "/images/tulasi.png", pla
     </div>
   );
 }
-
 

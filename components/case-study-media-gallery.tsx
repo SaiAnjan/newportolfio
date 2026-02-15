@@ -177,15 +177,12 @@ export function CaseStudyMediaGallery({
       )}
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8">
-          <button
-            type="button"
-            aria-label="Close image viewer"
-            onClick={closeDrawer}
-            className="absolute inset-0 bg-black/50"
-          />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 sm:p-8"
+          onClick={closeDrawer}
+        >
 
-          <div className="relative z-10 w-full max-w-5xl">
+          <div className="relative z-10 w-full max-w-5xl" onClick={(event) => event.stopPropagation()}>
             <div className="relative overflow-hidden rounded-xl">
               <Button
                 type="button"
@@ -198,7 +195,7 @@ export function CaseStudyMediaGallery({
                 <X className="h-4 w-4" />
               </Button>
 
-              <div className="relative mx-auto aspect-[16/10] w-full overflow-hidden rounded-xl">
+              <div className="relative mx-auto aspect-video w-full overflow-hidden rounded-xl">
                 <Image
                   src={images[activeIndex].src}
                   alt={images[activeIndex].alt}

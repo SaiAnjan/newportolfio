@@ -1,7 +1,34 @@
-import { CaseStudyMediaGallery } from "@/components/case-study-media-gallery";
 import { CaseStudyShell } from "@/components/case-study-shell";
+import { ProjectMockupShowcase } from "@/components/project-mockup-showcase";
 
 export default function GpayPage() {
+  const gpayCarouselMockups = [
+    {
+      type: "image" as const,
+      src: "/images/gpay.png",
+      alt: "GPay overview",
+      context: "Primary wallet landing with key actions surfaced.",
+    },
+    {
+      type: "image" as const,
+      src: "/images/mindhouse/filters-new.png",
+      alt: "Filter behavior reference",
+      context: "Exploration of filtering complexity in high-choice flows.",
+    },
+    {
+      type: "image" as const,
+      src: "/images/mindhouse/date-new.png",
+      alt: "Date selection reference",
+      context: "Date-picker interaction patterns for fast task completion.",
+    },
+    {
+      type: "image" as const,
+      src: "/images/mindhouse/time-new.png",
+      alt: "Time slot reference",
+      context: "Time-slot information hierarchy for reduced decision effort.",
+    },
+  ];
+
   return (
     <CaseStudyShell
       title="Google Pay + Wallet"
@@ -9,6 +36,7 @@ export default function GpayPage() {
       meta="Feb 11, 2025"
       readTime="4 minutes"
       shareUrl="/projects/gpay"
+      headerMedia={<ProjectMockupShowcase items={gpayCarouselMockups} />}
     >
       <section className="space-y-3">
         <h2 className="text-base font-semibold tracking-tight text-primary">Context</h2>
@@ -44,43 +72,6 @@ export default function GpayPage() {
           <li>Wallet + UPI workflow continuity, not separate task paths.</li>
           <li>Strong security affordances with clear user feedback.</li>
         </ul>
-        <CaseStudyMediaGallery
-          title="GPay Single Image"
-          images={[
-            {
-              src: "/images/gpay.png",
-              alt: "Google Pay + Wallet overview",
-            },
-          ]}
-        />
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-base font-semibold tracking-tight text-primary">Media Carousel Test</h2>
-        <p className="text-[15px] leading-relaxed text-foreground/80">
-          Temporary test setup for inline carousel + bottom drawer behavior using available images in the repository.
-        </p>
-        <CaseStudyMediaGallery
-          title="GPay Multi Image"
-          images={[
-            {
-              src: "/images/gpay.png",
-              alt: "GPay cover",
-            },
-            {
-              src: "/images/mindhouse/filters-new.png",
-              alt: "Filter UI reference image",
-            },
-            {
-              src: "/images/mindhouse/date-new.png",
-              alt: "Date selector UI reference image",
-            },
-            {
-              src: "/images/mindhouse/time-new.png",
-              alt: "Time slot UI reference image",
-            },
-          ]}
-        />
       </section>
     </CaseStudyShell>
   );
