@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { WritingSourceLogo } from "@/components/writing-source-logo";
 import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
@@ -43,7 +42,6 @@ export default async function Home() {
                 <p className="text-base font-semibold tracking-tight">Sai Anjan</p>
                 <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
               </div>
-              <ThemeSwitcher />
             </div>
 
             <div className="inline-flex items-center gap-1 rounded-none border border-primary/20 bg-background/80 px-1 py-1 backdrop-blur">
