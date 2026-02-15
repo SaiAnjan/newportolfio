@@ -2,16 +2,9 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 
 type GalleryImage = {
@@ -33,6 +26,31 @@ export function CaseStudyMediaGallery({
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [inlineIndex, setInlineIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsOpen(false);
+        return;
+      }
+
+      if (images.length > 1 && event.key === "ArrowLeft") {
+        event.preventDefault();
+        setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+      }
+
+      if (images.length > 1 && event.key === "ArrowRight") {
+        event.preventDefault();
+        setActiveIndex((prev) => (prev + 1) % images.length);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [images.length, isOpen]);
 
   if (images.length === 0) return null;
 
@@ -61,6 +79,20 @@ export function CaseStudyMediaGallery({
     setInlineIndex((prev) => (prev + 1) % images.length);
   };
 
+  const handleInlineKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (images.length <= 1) return;
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showInlinePrev();
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showInlineNext();
+    }
+  };
+
   return (
     <>
       {images.length === 1 ? (
@@ -81,26 +113,51 @@ export function CaseStudyMediaGallery({
           </span>
         </button>
       ) : (
-        <div className={cn("relative", className)}>
-          <div className="relative overflow-hidden rounded-lg border border-border/60 bg-muted/35">
-            <div
-              className="flex transition-transform duration-300 ease-out"
-              style={{ transform: `translateX(-${inlineIndex * 100}%)` }}
+        <div
+          className={cn("space-y-3", className)}
+          role="region"
+          aria-label={`${title} carousel`}
+          tabIndex={0}
+          onKeyDown={handleInlineKeyDown}
+        >
+          <button
+            type="button"
+            onClick={() => openDrawer(inlineIndex)}
+            className="group relative block w-full overflow-hidden rounded-lg border border-border/60 bg-muted/35"
+          >
+            <div className="relative aspect-video w-full">
+              <Image src={images[inlineIndex].src} alt={images[inlineIndex].alt} fill className="object-cover" />
+            </div>
+            <span className="absolute right-3 bottom-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-xs text-foreground/75">
+              <Expand className="h-3.5 w-3.5" />
+              Open
+            </span>
+          </button>
+
+          <div className="flex items-center justify-center gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              size="icon"
+              onClick={showInlinePrev}
+              className="h-8 w-8 rounded-full"
+              aria-label="Previous image"
             >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            <div className="flex max-w-full items-center justify-center gap-2 overflow-x-auto px-1 py-1">
               {images.map((image, index) => (
                 <button
-                  key={`${image.src}-${index}`}
+                  key={`${image.src}-inline-thumb-${index}`}
                   type="button"
-                  onClick={() => openDrawer(index)}
-                  className="group relative w-full shrink-0 overflow-hidden"
+                  onClick={() => setInlineIndex(index)}
+                  className={cn(
+                    "relative h-12 w-20 shrink-0 overflow-hidden rounded-md border",
+                    index === inlineIndex ? "border-primary" : "border-border/60",
+                  )}
                 >
-                  <div className="relative aspect-video w-full">
-                    <Image src={image.src} alt={image.alt} fill className="object-cover" />
-                  </div>
-                  <span className="absolute right-3 bottom-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-xs text-foreground/75">
-                    <Expand className="h-3.5 w-3.5" />
-                    Open
-                  </span>
+                  <Image src={image.src} alt={image.alt} fill className="object-cover" />
                 </button>
               ))}
             </div>
@@ -109,56 +166,39 @@ export function CaseStudyMediaGallery({
               type="button"
               variant="secondary"
               size="icon"
-              onClick={showInlinePrev}
-              className="absolute top-1/2 left-3 h-8 w-8 -translate-y-1/2 rounded-full"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              size="icon"
               onClick={showInlineNext}
-              className="absolute top-1/2 right-3 h-8 w-8 -translate-y-1/2 rounded-full"
+              className="h-8 w-8 rounded-full"
               aria-label="Next image"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
-
-            <div className="absolute right-3 bottom-3 flex items-center gap-1.5 rounded-full bg-background/90 px-2 py-1">
-              {images.map((_, index) => (
-                <span
-                  key={`dot-${index}`}
-                  className={cn(
-                    "h-1.5 w-1.5 rounded-full",
-                    inlineIndex === index ? "bg-foreground" : "bg-foreground/35",
-                  )}
-                />
-              ))}
-            </div>
           </div>
         </div>
       )}
 
-      <Drawer open={isOpen} onOpenChange={setIsOpen}>
-        <DrawerContent className="pb-4">
-          <DrawerHeader className="px-4 pb-2 sm:px-6">
-            <div className="flex items-center justify-between">
-              <DrawerTitle className="text-sm font-medium text-foreground/80">
-                {title} {images.length > 1 ? `(${activeIndex + 1}/${images.length})` : ""}
-              </DrawerTitle>
-              <DrawerClose asChild>
-                <Button type="button" variant="ghost" size="icon" onClick={closeDrawer} aria-label="Close">
-                  <X className="h-4 w-4" />
-                </Button>
-              </DrawerClose>
-            </div>
-          </DrawerHeader>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8">
+          <button
+            type="button"
+            aria-label="Close image viewer"
+            onClick={closeDrawer}
+            className="absolute inset-0 bg-black/50"
+          />
 
-          <div className="px-4 sm:px-6">
-            <div className="relative overflow-hidden rounded-lg border border-border/60 bg-muted/40">
-              <div className="relative mx-auto aspect-[16/10] w-full max-w-5xl">
+          <div className="relative z-10 w-full max-w-5xl">
+            <div className="relative overflow-hidden rounded-xl">
+              <Button
+                type="button"
+                variant="secondary"
+                size="icon"
+                onClick={closeDrawer}
+                className="absolute top-3 left-3 z-20 h-8 w-8 rounded-full"
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+
+              <div className="relative mx-auto aspect-[16/10] w-full overflow-hidden rounded-xl">
                 <Image
                   src={images[activeIndex].src}
                   alt={images[activeIndex].alt}
@@ -194,10 +234,10 @@ export function CaseStudyMediaGallery({
             </div>
 
             {images.length > 1 && (
-              <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+              <div className="mt-3 flex justify-center gap-2 overflow-x-auto pb-1">
                 {images.map((image, index) => (
                   <button
-                    key={`${image.src}-thumb-${index}`}
+                    key={`${image.src}-modal-thumb-${index}`}
                     type="button"
                     onClick={() => setActiveIndex(index)}
                     className={cn(
@@ -211,8 +251,8 @@ export function CaseStudyMediaGallery({
               </div>
             )}
           </div>
-        </DrawerContent>
-      </Drawer>
+        </div>
+      )}
     </>
   );
 }
