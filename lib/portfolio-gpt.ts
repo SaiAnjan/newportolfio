@@ -5,57 +5,6 @@ export type PortfolioChatMessage = {
   suggestions?: string[];
 };
 
-export type SourceReference = {
-  label: string;
-  href: string;
-  type: "project" | "book" | "article" | "other";
-};
-
-// Map source paths to readable labels and links
-export function formatSource(source: string): SourceReference {
-  // Project sources
-  if (source.includes("projects/")) {
-    const projectMatch = source.match(/projects\/([^/]+)/);
-    if (projectMatch) {
-      const projectId = projectMatch[1];
-      const projectMap: Record<string, { label: string; href: string }> = {
-        "gpay": { label: "Google Pay + Wallet", href: "/projects/gpay" },
-        "mindhouse": { label: "Mindhouse Live Class Filtering", href: "/projects/mindhouse" },
-        "chargeit": { label: "Chargeit — Enterprise Payment", href: "/projects/chargeit" },
-        "ai-saas-dashboard": { label: "AI-Powered Enterprise Dashboard", href: "/projects/ai-saas-dashboard" },
-        "tulasi": { label: "Tulasi — Conversational Railway Agent", href: "/projects/tulasi" },
-        "note-m": { label: "Note-M — Currency Reader", href: "/projects/note-m" },
-        "teaching-strategies": { label: "Teaching Strategies", href: "/projects/teaching-strategies" },
-        "pepper": { label: "Pepper — Interaction Exploration", href: "/projects/pepper" },
-        "anjani-font": { label: "Anjani Font — Typography", href: "/projects/anjani-font" },
-        "summer-internship": { label: "Summer Internship Reflection", href: "/projects/summer-internship" },
-        "evaahan": { label: "e-Vaahan — Campus Ride Sharing", href: "/projects/evaahan" },
-      };
-      const project = projectMap[projectId];
-      if (project) {
-        return { label: project.label, href: project.href, type: "project" };
-      }
-    }
-  }
-  
-  // Resume
-  if (source.includes("resume")) {
-    return { label: "Resume", href: "/resume", type: "other" };
-  }
-  
-  // Blog/Thought Leadership
-  if (source.includes("blog") || source.includes("substack")) {
-    return { label: "Thought Leadership", href: "/blog", type: "article" };
-  }
-  
-  // Default: return formatted version
-  return {
-    label: source.replace(/^app\//, "").replace(/\.tsx$/, "").replace(/\//g, " "),
-    href: "#",
-    type: "other"
-  };
-}
-
 type KnowledgeEntry = {
   id: string;
   title: string;
@@ -504,59 +453,4 @@ export function generatePortfolioAnswer(
       "I'm an AI-driven UX designer focused on conversational and data-heavy products. Ask about a project name (e.g., AI dashboard, Mindhouse, GPay wallet), my process, or request my resume.",
     suggestions: defaultSuggestions,
   };
-}
-
-// Get all existing knowledge sources
-export function getAllKnowledgeSources() {
-  const allSources = new Set<string>();
-  
-  knowledgeBase.forEach((entry) => {
-    entry.sources.forEach((source) => allSources.add(source));
-  });
-  
-  return Array.from(allSources).map((source) => {
-    const ref = formatSource(source);
-    const entry = knowledgeBase.find((e) => e.sources.includes(source));
-    return {
-      source,
-      label: ref.label,
-      href: ref.href,
-      type: ref.type,
-      category: entry?.type || "other",
-      title: entry?.title || ref.label,
-    };
-  });
-}
-
-// Get all PDFs and books in the knowledge base
-export function getPDFsAndBooks() {
-  const pdfs: Array<{ name: string; path: string; type: "pdf" | "book" }> = [];
-  const books: Array<{ name: string; author?: string; link?: string }> = [];
-  
-  // Resume PDF
-  pdfs.push({
-    name: "Resume",
-    path: "/resume.pdf",
-    type: "pdf"
-  });
-  
-  // Master's Project Thesis PDF
-  // TODO: Add your master's project PDF to public/ folder and update the path below
-  // Example: If you add it as public/masters-thesis.pdf, change path to "/masters-thesis.pdf"
-  // pdfs.push({
-  //   name: "Master's Project Thesis — AI-Powered Enterprise Dashboard",
-  //   path: "/masters-thesis.pdf",
-  //   type: "pdf"
-  // });
-  
-  // Book References
-  // Add books you've read that inform your design work
-  // Example:
-  // books.push({
-  //   name: "The Design of Everyday Things",
-  //   author: "Don Norman",
-  //   link: "https://..."
-  // });
-  
-  return { pdfs, books };
 }

@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
 type ResolutionItem = {
   id: string;
   text: string;
@@ -14,7 +20,6 @@ type ResolutionItem = {
 const STORAGE_KEY = "resolutions-2026";
 const API = "/api/resolutions";
 
-// Keyword → emoji (order matters: more specific first)
 const EMOJI_MAP: [string[], string][] = [
   [["run", "running", "marathon", "5k"], "🏃"],
   [["gym", "workout", "exercise", "fitness", "lift", "strength"], "💪"],
@@ -40,7 +45,7 @@ const EMOJI_MAP: [string[], string][] = [
 function getEmojiForText(text: string): string {
   const lower = text.toLowerCase();
   for (const [keywords, emoji] of EMOJI_MAP) {
-    if (keywords.some((k) => lower.includes(k))) return emoji;
+    if (keywords.some((keyword) => lower.includes(keyword))) return emoji;
   }
   return "✨";
 }
@@ -76,15 +81,10 @@ function loadFromStorage(): ResolutionItem[] {
 function saveToStorage(items: ResolutionItem[]) {
   if (typeof window === "undefined") return;
   try {
-    const toSave = items.map(({ id, text, notes, emoji }) => ({
-      id,
-      text,
-      notes,
-      emoji,
-    }));
+    const toSave = items.map(({ id, text, notes, emoji }) => ({ id, text, notes, emoji }));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-  } catch (e) {
-    console.warn("Could not save resolutions to localStorage", e);
+  } catch (error) {
+    console.warn("Could not save resolutions to localStorage", error);
   }
 }
 
@@ -112,11 +112,10 @@ export default function ResolutionsPage() {
   const [mounted, setMounted] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "done" | "error">("idle");
+  const [syncErrorMessage, setSyncErrorMessage] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
   const [useApi, setUseApi] = useState(true);
 
-  // Load: try API first so everyone sees the same list; fallback to localStorage if API fails
   useEffect(() => {
     let cancelled = false;
 
@@ -126,32 +125,30 @@ export default function ResolutionsPage() {
         if (!res.ok) throw new Error("API error");
         const data = await res.json();
         if (!Array.isArray(data)) throw new Error("Invalid response");
+
         if (!cancelled) {
-          const fromApi = data.map((row: { id: string; text: string; notes: string; emoji: string }) =>
-            toClientItem(row)
-          );
+          const fromApi = data.map((row: { id: string; text: string; notes: string; emoji: string }) => toClientItem(row));
           if (fromApi.length > 0) {
             setItems(fromApi);
             setHasUnsavedChanges(false);
             setMounted(true);
             return;
           }
+
           const fromStorage = loadFromStorage();
           if (fromStorage.length > 0) {
             setItems(fromStorage);
             setHasUnsavedChanges(true);
             setMounted(true);
+
             for (const item of fromStorage) {
               await fetch(API, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  text: item.text,
-                  notes: item.notes,
-                  emoji: item.emoji,
-                }),
+                body: JSON.stringify({ text: item.text, notes: item.notes, emoji: item.emoji }),
               });
             }
+
             const refetch = await fetch(API);
             if (refetch.ok) {
               const refetched = await refetch.json();
@@ -159,6 +156,7 @@ export default function ResolutionsPage() {
                 setItems(refetched.map((row: { id: string; text: string; notes: string; emoji: string }) => toClientItem(row)));
               }
             }
+
             try {
               localStorage.removeItem(STORAGE_KEY);
             } catch {
@@ -166,6 +164,7 @@ export default function ResolutionsPage() {
             }
             return;
           }
+
           setItems([]);
         }
       } catch {
@@ -176,6 +175,7 @@ export default function ResolutionsPage() {
           setHasUnsavedChanges(fromStorage.length > 0);
         }
       }
+
       if (!cancelled) setMounted(true);
     }
 
@@ -199,6 +199,7 @@ export default function ResolutionsPage() {
   const addItem = useCallback(async () => {
     const trimmed = input.trim();
     if (!trimmed) return;
+
     const emoji = getEmojiForText(trimmed);
     const newItem: ResolutionItem = {
       id: crypto.randomUUID(),
@@ -236,18 +237,12 @@ export default function ResolutionsPage() {
   }, [input, useApi]);
 
   const toggleExpand = useCallback((id: string) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, expanded: !item.expanded } : item
-      )
-    );
+    setItems((prev) => prev.map((item) => (item.id === id ? { ...item, expanded: !item.expanded } : item)));
   }, []);
 
   const updateNotes = useCallback(
     async (id: string, notes: string) => {
-      setItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, notes } : item))
-      );
+      setItems((prev) => prev.map((item) => (item.id === id ? { ...item, notes } : item)));
 
       if (useApi) {
         try {
@@ -260,6 +255,7 @@ export default function ResolutionsPage() {
         } catch {
           // fall through to local
         }
+
         setHasUnsavedChanges(true);
         setUseApi(false);
         setItems((prev) => {
@@ -276,7 +272,7 @@ export default function ResolutionsPage() {
         });
       }
     },
-    [useApi]
+    [useApi],
   );
 
   const removeItem = useCallback(
@@ -292,13 +288,14 @@ export default function ResolutionsPage() {
           setUseApi(false);
         }
       }
+
       setItems((prev) => {
         const next = prev.filter((item) => item.id !== id);
         saveToStorage(next);
         return next;
       });
     },
-    [useApi]
+    [useApi],
   );
 
   const copyForICloudNotes = useCallback(async () => {
@@ -315,27 +312,49 @@ export default function ResolutionsPage() {
 
   const uploadLocalListToCloud = useCallback(async () => {
     if (items.length === 0) return;
+
     setSyncStatus("syncing");
+    setSyncErrorMessage(null);
+
     try {
       for (const item of items) {
         const res = await fetch(API, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            text: item.text,
-            notes: item.notes,
-            emoji: item.emoji,
-          }),
+          body: JSON.stringify({ text: item.text, notes: item.notes, emoji: item.emoji }),
         });
-        if (!res.ok) throw new Error("Upload failed");
+
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => ({}));
+          const message = typeof errBody?.error === "string" ? errBody.error : "Upload failed";
+          const isTableMissing =
+            message.includes("does not exist") || message.includes("relation") || errBody?.code === "42P01";
+          setSyncErrorMessage(
+            isTableMissing
+              ? "Database table missing. Run supabase/migrations/create_resolutions_2026_table.sql, then try again."
+              : message,
+          );
+          setSyncStatus("error");
+          setTimeout(() => setSyncStatus("idle"), 5000);
+          return;
+        }
       }
+
       const refetch = await fetch(API);
-      if (!refetch.ok) throw new Error("Refetch failed");
+      if (!refetch.ok) {
+        const errBody = await refetch.json().catch(() => ({}));
+        setSyncErrorMessage(typeof errBody?.error === "string" ? errBody.error : "Could not load saved list.");
+        setSyncStatus("error");
+        setTimeout(() => setSyncStatus("idle"), 5000);
+        return;
+      }
+
       const data = await refetch.json();
       if (Array.isArray(data)) {
         setItems(data.map((row: { id: string; text: string; notes: string; emoji: string }) => toClientItem(row)));
         setUseApi(true);
         setHasUnsavedChanges(false);
+        setSyncErrorMessage(null);
         try {
           localStorage.removeItem(STORAGE_KEY);
         } catch {
@@ -344,141 +363,117 @@ export default function ResolutionsPage() {
         setSyncStatus("done");
         setTimeout(() => setSyncStatus("idle"), 3000);
       } else {
+        setSyncErrorMessage("Invalid response from server.");
         setSyncStatus("error");
-        setTimeout(() => setSyncStatus("idle"), 3000);
+        setTimeout(() => setSyncStatus("idle"), 5000);
       }
-    } catch {
+    } catch (error) {
+      setSyncErrorMessage(error instanceof Error ? error.message : "Network or server error. Check connection and try again.");
       setSyncStatus("error");
-      setTimeout(() => setSyncStatus("idle"), 3000);
+      setTimeout(() => setSyncStatus("idle"), 5000);
     }
   }, [items]);
 
   return (
-    <main className="min-h-screen bg-[var(--color-linen)]">
-      <div className="max-w-xl mx-auto px-4 py-12">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm text-[var(--color-basil)] hover:text-[var(--color-coral)] transition-colors mb-10"
-        >
-          <span>←</span>
-          <span>Back</span>
-        </Link>
-
-        <h1 className="text-2xl font-light text-[var(--color-charcoal)] mb-2 tracking-tight">
-          2026 Resolutions
-        </h1>
-        <p className="text-sm text-gray-500 mb-4">
-          Add a resolution and expand to add notes.
-        </p>
-
-        <div className="flex flex-wrap items-center gap-3 mb-10">
-          <button
-            type="button"
-            onClick={copyForICloudNotes}
-            disabled={items.length === 0}
-            className="text-sm text-[var(--color-basil)] hover:text-[var(--color-coral)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
-          >
-            <span className="shrink-0">📋</span>
-            <span>
-              {copyStatus === "copied"
-                ? "Copied! Paste into Notes (⌘V)"
-                : copyStatus === "error"
-                  ? "Copy failed"
-                  : "Copy for iCloud Notes"}
-            </span>
-          </button>
+    <main className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30">
+      <div className="mx-auto w-full max-w-2xl px-4 py-10 md:py-14">
+        <div className="mb-6 flex items-center justify-between">
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/">← Back</Link>
+          </Button>
+          <Badge variant="outline">2026</Badge>
         </div>
 
-        <div className="flex gap-2 mb-10">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addItem()}
-            placeholder="Add a resolution..."
-            className="flex-1 px-4 py-3 rounded-lg border border-[rgba(15,91,70,0.2)] bg-[var(--color-ivory)] text-[var(--color-charcoal)] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-basil)] focus:border-transparent text-sm"
-          />
-          <button
-            type="button"
-            onClick={addItem}
-            className="primary-button inline-flex items-center justify-center text-sm whitespace-nowrap px-5 py-3"
-          >
-            Add
-          </button>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>2026 Resolutions</CardTitle>
+            <p className="text-sm text-muted-foreground">Add a resolution and expand each item for notes.</p>
+            <div>
+              <Button
+                type="button"
+                onClick={copyForICloudNotes}
+                disabled={items.length === 0}
+                variant="outline"
+                size="sm"
+              >
+                {copyStatus === "copied"
+                  ? "Copied! Paste into Notes"
+                  : copyStatus === "error"
+                    ? "Copy failed"
+                    : "Copy for iCloud Notes"}
+              </Button>
+            </div>
+          </CardHeader>
 
-        <ul className="space-y-2">
-          {items.map((item) => (
-            <li
-              key={item.id}
-              className="rounded-lg border border-[rgba(15,91,70,0.12)] bg-[var(--color-ivory)] overflow-hidden transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => toggleExpand(item.id)}
-                  className="flex-1 flex items-center gap-3 px-4 py-3 text-left min-w-0 hover:bg-black/[0.03] transition-colors"
-                >
-                  <span
-                    className="text-[var(--color-charcoal)] shrink-0 transition-transform"
-                    aria-hidden
-                  >
-                    {item.expanded ? "−" : "+"}
-                  </span>
-                  <span className="shrink-0 text-base leading-none" aria-hidden>
-                    {item.emoji}
-                  </span>
-                  <span className="text-[var(--color-charcoal)] text-sm truncate">
-                    {item.text}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => removeItem(item.id)}
-                  className="shrink-0 px-3 py-3 text-gray-400 hover:text-[var(--color-coral)] transition-colors text-sm"
-                  aria-label="Remove"
-                >
-                  ×
-                </button>
-              </div>
-              {item.expanded && (
-                <div className="px-4 pb-4 pt-0 border-t border-[rgba(15,91,70,0.08)]">
-                  <textarea
-                    value={item.notes}
-                    onChange={(e) => updateNotes(item.id, e.target.value)}
-                    placeholder="Notes..."
-                    rows={3}
-                    className="w-full mt-3 px-3 py-2 rounded-md border border-[rgba(15,91,70,0.15)] bg-white/80 text-[var(--color-charcoal)] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-basil)] focus:border-transparent text-sm resize-y min-h-[80px]"
-                  />
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+          <CardContent className="space-y-4">
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                onKeyDown={(event) => event.key === "Enter" && addItem()}
+                placeholder="Add a resolution..."
+              />
+              <Button type="button" onClick={addItem}>
+                Add
+              </Button>
+            </div>
 
-        {items.length === 0 && mounted && (
-          <p className="text-sm text-gray-400 text-center py-8">
-            No resolutions yet. Add one above.
-          </p>
-        )}
+            <ul className="space-y-2">
+              {items.map((item) => (
+                <li key={item.id} className="rounded-lg border bg-card">
+                  <div className="flex items-center gap-2 px-3 py-2">
+                    <Button
+                      type="button"
+                      onClick={() => toggleExpand(item.id)}
+                      variant="ghost"
+                      className="h-auto flex-1 justify-start gap-3 p-1 text-left"
+                    >
+                      <span className="text-base">{item.emoji}</span>
+                      <span className="truncate">{item.text}</span>
+                    </Button>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => removeItem(item.id)}>
+                      ×
+                    </Button>
+                  </div>
+
+                  {item.expanded && (
+                    <div className="border-t px-3 pb-3 pt-2">
+                      <Textarea
+                        value={item.notes}
+                        onChange={(event) => updateNotes(item.id, event.target.value)}
+                        placeholder="Notes..."
+                        rows={3}
+                      />
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            {items.length === 0 && mounted && (
+              <p className="py-6 text-center text-sm text-muted-foreground">No resolutions yet. Add one above.</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       {!useApi && hasUnsavedChanges && items.length > 0 && (
-        <div className="fixed bottom-6 right-6 z-50 flex justify-end max-w-xl mx-auto w-full px-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 sm:max-w-none">
-          <button
-            type="button"
-            onClick={uploadLocalListToCloud}
-            disabled={syncStatus === "syncing"}
-            className="primary-button shadow-lg inline-flex items-center justify-center text-sm font-medium min-w-[120px] py-3 px-5 rounded-full"
-          >
+        <div className="fixed bottom-5 right-5 z-50 flex max-w-sm flex-col items-end gap-2">
+          {syncStatus === "error" && syncErrorMessage && (
+            <Card className="border-destructive/30 bg-background/95">
+              <CardContent className="p-3 text-xs text-destructive">{syncErrorMessage}</CardContent>
+            </Card>
+          )}
+          <Button type="button" onClick={uploadLocalListToCloud} disabled={syncStatus === "syncing"}>
             {syncStatus === "syncing"
-              ? "Saving…"
+              ? "Saving..."
               : syncStatus === "done"
                 ? "Saved"
                 : syncStatus === "error"
                   ? "Try again"
                   : "Save"}
-          </button>
+          </Button>
         </div>
       )}
     </main>

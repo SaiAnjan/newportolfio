@@ -118,3 +118,8 @@ Fetches aggregated prediction statistics.
 - The system tracks user agent and IP address (optional metadata)
 - RLS policies ensure anyone can read/write predictions
 
+
+
+
+
+

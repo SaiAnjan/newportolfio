@@ -1,10 +1,24 @@
-import { createClient } from "@/lib/supabase/server";
+import { createApiClient } from "@/lib/supabase/api";
 import { NextRequest, NextResponse } from "next/server";
 
 const TABLE = "resolutions_2026";
 
+function getSupabase() {
+  try {
+    return createApiClient();
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function GET() {
-  const supabase = await createClient();
+  const supabase = getSupabase();
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your environment." },
+      { status: 503 }
+    );
+  }
   const { data, error } = await supabase
     .from(TABLE)
     .select("id, text, notes, emoji")
@@ -12,7 +26,7 @@ export async function GET() {
 
   if (error) {
     return NextResponse.json(
-      { error: error.message },
+      { error: error.message, code: error.code },
       { status: 500 }
     );
   }
@@ -20,6 +34,13 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY." },
+      { status: 503 }
+    );
+  }
   const body = await request.json();
   const { text, notes = "", emoji = "✨" } = body;
   if (!text || typeof text !== "string") {
@@ -29,7 +50,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLE)
     .insert({ text: text.trim(), notes: String(notes).trim(), emoji: String(emoji) })
@@ -38,7 +58,7 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     return NextResponse.json(
-      { error: error.message },
+      { error: error.message, code: error.code },
       { status: 500 }
     );
   }
@@ -46,6 +66,13 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase not configured." },
+      { status: 503 }
+    );
+  }
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
@@ -61,7 +88,6 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "no updates" }, { status: 400 });
   }
 
-  const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLE)
     .update(updates)
@@ -71,7 +97,7 @@ export async function PATCH(request: NextRequest) {
 
   if (error) {
     return NextResponse.json(
-      { error: error.message },
+      { error: error.message, code: error.code },
       { status: 500 }
     );
   }
@@ -79,18 +105,24 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase not configured." },
+      { status: 503 }
+    );
+  }
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
     return NextResponse.json({ error: "id required" }, { status: 400 });
   }
 
-  const supabase = await createClient();
   const { error } = await supabase.from(TABLE).delete().eq("id", id);
 
   if (error) {
     return NextResponse.json(
-      { error: error.message },
+      { error: error.message, code: error.code },
       { status: 500 }
     );
   }

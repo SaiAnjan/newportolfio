@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import EventSimulator from '@/components/EventSimulator';
 import EventPresetDropdown from '@/components/EventPresetDropdown';
 import PositionPresetDropdown from '@/components/PositionPresetDropdown';
 import F1PredictionStats from '@/components/F1PredictionStats';
@@ -2323,4 +2322,3 @@ export default function F1SimulatorPage() {
     </>
   );
 }
-

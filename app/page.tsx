@@ -1,381 +1,169 @@
-import Link from "next/link";
 import Image from "next/image";
-import { getSubstackPosts, formatDate } from "@/lib/substack";
-import { Newsletter } from "@/components/newsletter";
+import Link from "next/link";
+import { Mail } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { WritingSourceLogo } from "@/components/writing-source-logo";
+import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
+
+const featuredProjects = [
+  {
+    title: "Gpay + Wallet",
+    href: "/projects/gpay",
+    summary: "Payment UX strategy and interaction systems for high-scale usage.",
+    thumbnail: "/images/gpay.png",
+  },
+  {
+    title: "Mindhouse",
+    href: "/projects/mindhouse",
+    summary: "Simplified class discovery for live meditation sessions.",
+    thumbnail: "/images/mindhouse.png",
+  },
+  {
+    title: "Chargeit",
+    href: "/projects/chargeit",
+    summary: "Enterprise billing and workflow architecture for modern SaaS teams.",
+    thumbnail: "/images/ChargeIT/Thumbnail.png",
+  },
+] as const;
 
 export default async function Home() {
-  const blogPosts = await getSubstackPosts();
+  const writingPosts = await getAllWritingPosts();
+  const featuredWritingPosts = getFeaturedWritingPosts(writingPosts, 6);
 
+  // Inspired by the overall layout direction of onurhan.dev, rewritten using project-specific content/components.
   return (
-    <main className="min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        {/* Header with Resume */}
-        <div className="flex items-start justify-between mb-16">
-          <div>
-            <h1 className="name-heading text-4xl font-light mb-2">Sai Anjan</h1>
-            <p className="text-lg font-light text-gray-600 mt-1 md:mt-2">
-              UX Designer
-            </p>
-          </div>
-          <Link
-            href="/resume"
-            className="primary-button text-sm"
-          >
-            View Resume
-          </Link>
-        </div>
+    <main className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      <div className="mx-auto mt-6 mb-24 w-full max-w-3xl px-4 sm:mt-10">
+        <header className="pb-10">
+          <nav className="flex flex-col items-start gap-7 text-sm" aria-label="Main navigation">
+            <div className="space-y-1">
+              <p className="text-base font-semibold tracking-tight">Sai Anjan</p>
+              <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
+            </div>
 
-        {/* Hero Section */}
-        <section className="mb-20 fade-up">
-          <h2 className="animated-heading text-5xl md:text-6xl font-light mb-6 leading-tight">
-            Experienced AI-Driven UX Designer Specializing in SaaS & Enterprise Dashboards
-          </h2>
-          <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl">
-            Designing intelligent, data-driven user experiences for complex workflows. Transforming enterprise software through thoughtful AI integration and conversational design.
-          </p>
-        </section>
-
-        {/* GPT Mode */}
-        <section className="mb-20 fade-up" style={{ animationDelay: '80ms' }}>
-          <div className="bg-white border border-[rgba(15,91,70,0.12)] rounded-2xl p-6 md:p-8 shadow-sm">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">New</p>
-                <h3 className="text-2xl font-light text-[var(--color-charcoal)]">GPT Mode — talk to my portfolio</h3>
-                <p className="text-base text-gray-700 max-w-2xl">
-                  Ask questions like you would with ChatGPT. This mode answers using only my projects, resume, and writing—no external APIs or costs.
-                </p>
-              </div>
-              <Link
-                href="/gpt-mode"
-                className="primary-button inline-flex items-center justify-center text-sm"
-              >
-                Try GPT Mode
+            <div className="inline-flex items-center gap-1 rounded-none border border-primary/20 bg-background/80 px-1 py-1 backdrop-blur">
+              <Link className="rounded-none px-2 py-1 text-[15px] font-medium text-primary" href="/">
+                about
+              </Link>
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="/blog">
+                blog
+              </Link>
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="#work">
+                work
+              </Link>
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="#contact">
+                contact
               </Link>
             </div>
-          </div>
-        </section>
+          </nav>
+        </header>
 
-        {/* About Me */}
-        <section className="mb-20 fade-up" style={{ animationDelay: '100ms' }}>
-          <h3 className="animated-heading text-2xl font-light mb-6">About</h3>
-          <div className="space-y-4 text-base leading-relaxed text-gray-700 max-w-3xl">
-            <p>
-              I'm a Product Designer with over 5 years of experience specializing in AI-driven SaaS applications and enterprise dashboard design. My expertise lies in creating intelligent user interfaces that seamlessly integrate AI automation tools, conversational design, and data visualization.
-            </p>
-            <p>
-              I work extensively with AI-powered tools including <strong>Copilot Studio</strong> and <strong>vibe coding</strong> to enhance user workflows and automate complex processes. My focus is on solving SaaS UX challenges through thoughtful design that balances powerful functionality with intuitive user experiences.
-            </p>
-            <p>
-              I design for complex enterprise environments where clarity, efficiency, and intelligent automation are essential. My approach combines user research, data-driven insights, and cutting-edge AI technologies to create solutions that transform how teams work.
-            </p>
-          </div>
-        </section>
-
-        {/* Work in Progress */}
-        <section className="mb-20 fade-up" style={{ animationDelay: '150ms' }}>
-          <h3 className="animated-heading text-2xl font-light mb-8">Work in Progress</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* F1 Simulator */}
-            <Link href="/wip/f1-simulator" className="group">
-              <div className="bg-white border border-[rgba(15,91,70,0.12)] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <div className="relative w-full aspect-video">
-                  <Image
-                    src="/images/f1simulationthumb.png"
-                    alt="F1 2025 Abu Dhabi Scenario Simulator"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h4 className="text-lg font-light mb-2 group-hover:opacity-70 transition-opacity">
-                    F1 2025 Abu Dhabi Scenario Simulator
-                  </h4>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Interactive simulator to explore F1 championship scenarios
-                  </p>
-                  <p className="text-xs text-gray-500">2025</p>
-                </div>
-              </div>
-            </Link>
-
-            {/* Home Helper */}
-            <a
-              href="https://medium.com/@saianjan.margani"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-            >
-              <div className="bg-white border border-[rgba(15,91,70,0.12)] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <div className="relative w-full aspect-video">
-                  <Image
-                    src="/images/haas/thumb.png"
-                    alt="Home Helper"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h4 className="text-lg font-light mb-2 group-hover:opacity-70 transition-opacity">
-                    Home Helper
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="inline-block ml-1"
-                    >
-                      <path
-                        d="M3.5 3C3.22386 3 3 3.22386 3 3.5C3 3.77614 3.22386 4 3.5 4V3ZM8.5 3.5H9C9 3.22386 8.77614 3 8.5 3V3.5ZM8 8.5C8 8.77614 8.22386 9 8.5 9C8.77614 9 9 8.77614 9 8.5H8ZM2.64645 8.64645C2.45118 8.84171 2.45118 9.15829 2.64645 9.35355C2.84171 9.54882 3.15829 9.54882 3.35355 9.35355L2.64645 8.64645ZM3.5 4H8.5V3H3.5V4ZM8 3.5V8.5H9V3.5H8ZM8.14645 3.14645L2.64645 8.64645L3.35355 9.35355L8.85355 3.85355L8.14645 3.14645Z"
-                        fill="#111"
-                      />
-                    </svg>
-                  </h4>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Medium blog post about home automation and helper apps
-                  </p>
-                  <p className="text-xs text-gray-500">2025</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </section>
-
-        {/* All Projects */}
-        <section className="mb-20 fade-up" style={{ animationDelay: '200ms' }}>
-          <h3 className="animated-heading text-2xl font-light mb-8">Projects</h3>
-          <div className="space-y-2">
-            <Link href="/projects/gpay" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Gpay + Wallet</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2024</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </Link>
-            <Link href="/projects/mindhouse" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Mindhouse live class filtering</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2022</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </Link>
-            <Link href="/projects/teaching-strategies" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Teaching Strategies</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2020</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </Link>
-            <Link href="/projects/note-m" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Note － M</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2020</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </Link>
-            <Link href="/projects/tulasi" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Tulasi</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2020</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </Link>
-            <Link href="/projects/summer-internship" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Summer Internship</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2019</span>
-              </div>
-              <p className="meta text-sm">6 min read</p>
-            </Link>
-            <Link href="/projects/pepper" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Pepper</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2019</span>
-              </div>
-              <p className="meta text-sm">5 min read</p>
-            </Link>
-            <a
-              href="https://www.behance.net/gallery/82968779/Co-Cards-Interactive-learning-tool-for-high-school-kids"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="project-row block"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Co － Cards</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2018</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </a>
-            <Link href="/projects/evaahan" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">e － Vaahan</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2018</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </Link>
-            <Link href="/projects/anjani-font" className="project-row block">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">Anjani Font</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2018</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </Link>
-            <a
-              href="https://www.behance.net/gallery/89177421/1000-days-of-Transforming-The-Motherland"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="project-row block"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-1">
-                <h4 className="text-lg font-light">
-                  <span className="project-title-link animated-heading">AP Jhanmabhoomi magazine design</span>
-                </h4>
-                <span className="project-year text-sm sm:ml-4">2017</span>
-              </div>
-              <p className="meta text-sm">7 min read</p>
-            </a>
-          </div>
-        </section>
-
-        {/* Thought Leadership */}
-        <section className="mt-16 mb-20 fade-up" style={{ animationDelay: '300ms' }}>
-          <h3 className="animated-heading text-2xl font-light mb-8">Thought Leadership</h3>
-          {blogPosts.length === 0 ? (
-            <p className="text-sm text-gray-500">No posts yet. Check back soon!</p>
-          ) : (
-            <div className="space-y-6">
-              {blogPosts.slice(0, 3).map((post, index) => (
-                <Link
-                  key={post.guid || index}
-                  href={post.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block group"
-                >
-                  <h4 className="text-lg font-light mb-1 group-hover:opacity-70 transition-opacity">
-                    {post.title}
-                  </h4>
-                  {post.pubDate && (
-                    <p className="text-sm text-gray-500">
-                      {formatDate(post.pubDate)}
-                    </p>
-                  )}
-                </Link>
-              ))}
-              <Link
-                href="/blog"
-                className="text-sm text-gray-500 inline-block mt-2"
-              >
-                View all posts →
-              </Link>
-            </div>
-          )}
-          <div className="mt-8">
-            <p className="text-sm text-gray-600 mb-4">
-              I write about AI ethics in design, SaaS UX challenges, conversational AI, and the future of enterprise software.
-              Follow my writing on <a href="https://substack.com/@saianjan" target="_blank" rel="noopener noreferrer">Substack</a>.
-            </p>
-          </div>
-        </section>
-
-        {/* Newsletter */}
-        <div className="mt-16 fade-up" style={{ animationDelay: '400ms' }}>
-          <Newsletter />
-        </div>
-
-        {/* Contact & Social Proof */}
-        <section className="mt-16 mb-16 fade-up" style={{ animationDelay: '500ms' }}>
-          <h3 className="animated-heading text-2xl font-light mb-8">Contact</h3>
-          <div className="space-y-6">
-            <div>
-              <p className="text-base text-gray-700 mb-4">
-                I'm always open to discussing new opportunities in AI-driven SaaS design, enterprise dashboard projects, or collaborative ventures.
-              </p>
-              <p className="text-sm text-gray-600 mb-2">
-                Email:{" "}
-                <a href="mailto:saianjan.margani@gmail.com">
-                  saianjan.margani@gmail.com
-                </a>
-              </p>
-            </div>
-            
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">
-                Connect
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://www.linkedin.com/in/saianjan/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm"
-                >
-                  LinkedIn
-                </a>
-                <a
-                  href="https://substack.com/@saianjan"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm"
-                >
-                  Substack
-                </a>
-                <a
-                  href="https://x.com/Dhaathre"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm"
-                >
-                  Twitter
-                </a>
-                <a
-                  href="https://medium.com/@saianjan.margani"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm"
-                >
-                  Medium
-                </a>
-                <a
-                  href="https://dribbble.com/saianjan"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm"
-                >
-                  Dribbble
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="pt-8 border-t" style={{ borderColor: 'rgba(15, 91, 70, 0.15)' }}>
-          <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} Sai Anjan. Made with ❤️ in Hyderabad, India.
+        <section className="space-y-6 pb-12">
+          <p className="text-xl font-semibold tracking-tight">Hi, I&apos;m Anjan.</p>
+          <p className="text-[15px] leading-relaxed text-foreground/85">
+            I design AI-driven product experiences for enterprise and SaaS teams. My work spans from
+            product direction to production-ready interaction systems.
           </p>
-        </footer>
+          <p className="text-[15px] leading-relaxed text-foreground/80">
+            I care about practical outcomes: clarity in complex workflows, faster decision-making, and
+            strong collaboration between product, design, and engineering.
+          </p>
+          <div className="space-y-3 border-l-2 border-primary/30 bg-background/70 px-4 py-3">
+            <p className="text-sm text-foreground/75">Currently building a portfolio-native GPT experience.</p>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild size="sm">
+                <Link href="/resume">View Resume</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href="/gpt-mode">Open GPT Mode</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <section id="work" className="space-y-4 pb-12">
+          <h2 className="text-base font-semibold tracking-tight text-primary">Selected Work</h2>
+          <div className="space-y-3">
+            {featuredProjects.map((project) => (
+              <Link
+                key={project.title}
+                href={project.href}
+                className="group flex items-center gap-3 rounded-md bg-background/85 p-2 transition-colors hover:bg-primary/5"
+              >
+                <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-sm">
+                  <Image src={project.thumbnail} alt={`${project.title} thumbnail`} fill className="object-cover" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium group-hover:text-primary">{project.title}</p>
+                  <p className="line-clamp-2 text-xs text-foreground/70">{project.summary}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-4 pb-12">
+          <h2 className="text-base font-semibold tracking-tight text-primary">Latest Writing</h2>
+          <div className="space-y-3">
+            {featuredWritingPosts.map((post, index) => (
+              <Link
+                key={`${post.source}-${post.guid || index}`}
+                href={post.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-md bg-background/85 p-3 text-sm transition-colors hover:bg-primary/5"
+              >
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium capitalize text-foreground/80">
+                    <WritingSourceLogo source={post.source} />
+                    {post.source}
+                  </span>
+                  {post.pubDate && <p className="text-xs text-foreground/60">{formatDate(post.pubDate)}</p>}
+                </div>
+                <p className="font-medium">{post.title}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="space-y-3 pb-10">
+          <h2 className="text-base font-semibold tracking-tight text-primary">Get in touch</h2>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <a
+              href="mailto:saianjan.margani@gmail.com"
+              className="inline-flex items-center gap-1.5 border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+            >
+              <Mail className="h-3.5 w-3.5" />
+              Email
+            </a>
+            <a
+              href="https://github.com/saianjan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+            >
+              Github
+            </a>
+            <a
+              href="https://x.com/Dhaathre"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+            >
+              X / Twitter
+            </a>
+            <a
+              href="https://www.linkedin.com/in/saianjan/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </section>
+
       </div>
     </main>
   );
