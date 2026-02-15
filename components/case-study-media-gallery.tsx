@@ -2,9 +2,16 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 
 type GalleryImage = {
@@ -26,17 +33,6 @@ export function CaseStudyMediaGallery({
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [inlineIndex, setInlineIndex] = useState(0);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isOpen]);
 
   if (images.length === 0) return null;
 
@@ -129,7 +125,6 @@ export function CaseStudyMediaGallery({
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background/90 to-transparent" />
 
             <div className="absolute right-3 bottom-3 flex items-center gap-1.5 rounded-full bg-background/90 px-2 py-1">
               {images.map((_, index) => (
@@ -146,25 +141,22 @@ export function CaseStudyMediaGallery({
         </div>
       )}
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end">
-          <button
-            type="button"
-            aria-label="Close media viewer"
-            onClick={closeDrawer}
-            className="absolute inset-0 bg-black/45"
-          />
-
-          <div className="relative z-10 w-full rounded-t-2xl border border-border bg-background p-4 shadow-2xl sm:p-6">
-            <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm font-medium text-foreground/80">
+      <Drawer open={isOpen} onOpenChange={setIsOpen}>
+        <DrawerContent className="pb-4">
+          <DrawerHeader className="px-4 pb-2 sm:px-6">
+            <div className="flex items-center justify-between">
+              <DrawerTitle className="text-sm font-medium text-foreground/80">
                 {title} {images.length > 1 ? `(${activeIndex + 1}/${images.length})` : ""}
-              </p>
-              <Button type="button" variant="ghost" size="icon" onClick={closeDrawer} aria-label="Close">
-                <X className="h-4 w-4" />
-              </Button>
+              </DrawerTitle>
+              <DrawerClose asChild>
+                <Button type="button" variant="ghost" size="icon" onClick={closeDrawer} aria-label="Close">
+                  <X className="h-4 w-4" />
+                </Button>
+              </DrawerClose>
             </div>
+          </DrawerHeader>
 
+          <div className="px-4 sm:px-6">
             <div className="relative overflow-hidden rounded-lg border border-border/60 bg-muted/40">
               <div className="relative mx-auto aspect-[16/10] w-full max-w-5xl">
                 <Image
@@ -219,8 +211,8 @@ export function CaseStudyMediaGallery({
               </div>
             )}
           </div>
-        </div>
-      )}
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }

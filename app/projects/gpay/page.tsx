@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { CaseStudyMediaGallery } from "@/components/case-study-media-gallery";
 import { CaseStudyShell } from "@/components/case-study-shell";
 
 export default function GpayPage() {
@@ -45,9 +44,43 @@ export default function GpayPage() {
           <li>Wallet + UPI workflow continuity, not separate task paths.</li>
           <li>Strong security affordances with clear user feedback.</li>
         </ul>
-        <div className="relative aspect-video w-full overflow-hidden rounded-md bg-muted/50">
-          <Image src="/images/gpay.png" alt="Google Pay + Wallet overview" fill className="object-cover" />
-        </div>
+        <CaseStudyMediaGallery
+          title="GPay Single Image"
+          images={[
+            {
+              src: "/images/gpay.png",
+              alt: "Google Pay + Wallet overview",
+            },
+          ]}
+        />
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-base font-semibold tracking-tight text-primary">Media Carousel Test</h2>
+        <p className="text-[15px] leading-relaxed text-foreground/80">
+          Temporary test setup for inline carousel + bottom drawer behavior using available images in the repository.
+        </p>
+        <CaseStudyMediaGallery
+          title="GPay Multi Image"
+          images={[
+            {
+              src: "/images/gpay.png",
+              alt: "GPay cover",
+            },
+            {
+              src: "/images/mindhouse/filters-new.png",
+              alt: "Filter UI reference image",
+            },
+            {
+              src: "/images/mindhouse/date-new.png",
+              alt: "Date selector UI reference image",
+            },
+            {
+              src: "/images/mindhouse/time-new.png",
+              alt: "Time slot UI reference image",
+            },
+          ]}
+        />
       </section>
     </CaseStudyShell>
   );
