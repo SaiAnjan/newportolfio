@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Video } from "@/components/ui/video";
 
 type MockupItem = {
   type: "image" | "video";
@@ -17,7 +18,15 @@ interface ProjectMockupShowcaseProps {
 
 function RenderMockupMedia({ item, eager = false }: { item: MockupItem; eager?: boolean }) {
   if (item.type === "video") {
-    return <video src={item.src} className="h-full w-full object-cover" controls playsInline muted />;
+    return (
+      <Video
+        src={item.src}
+        className="h-full w-full rounded-none border-0 bg-transparent object-cover"
+        controls
+        playsInline
+        muted
+      />
+    );
   }
 
   return (

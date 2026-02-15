@@ -8,6 +8,12 @@ import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/w
 
 const featuredProjects = [
   {
+    title: "EdgeNexus IAM",
+    href: "/projects/edgesecure-iam",
+    summary: "Visual-first IAM redesign for enterprise edge cloud security workflows.",
+    thumbnail: "/images/ChargeIT/Thumbnail.png",
+  },
+  {
     title: "Gpay + Wallet",
     href: "/projects/gpay",
     summary: "Payment UX strategy and interaction systems for high-scale usage.",
