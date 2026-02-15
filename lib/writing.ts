@@ -134,7 +134,7 @@ export function getFeaturedWritingPosts(posts: WritingPost[], limit = 6): Writin
     (sourceBuckets.substack.length > 0 || sourceBuckets.medium.length > 0)
   ) {
     const primary = sourceBuckets[currentSource];
-    const secondarySource = currentSource === "substack" ? "medium" : "substack";
+    const secondarySource: WritingSource = currentSource === "substack" ? "medium" : "substack";
     const secondary = sourceBuckets[secondarySource];
 
     if (primary.length > 0) {
