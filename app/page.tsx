@@ -34,7 +34,7 @@ export default async function Home() {
 
   // Inspired by the overall layout direction of onurhan.dev, rewritten using project-specific content/components.
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <main className="min-h-screen bg-background">
       <div className="mx-auto mt-6 mb-24 w-full max-w-3xl px-4 sm:mt-10">
         <header className="pb-10">
           <nav className="flex flex-col items-start gap-7 text-sm" aria-label="Main navigation">
