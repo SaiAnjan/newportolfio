@@ -44,12 +44,16 @@ const starterMessage: PortfolioChatMessage = {
 };
 
 function LinkifiedText({ text }: { text: string }) {
-  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  const parts = text.split(/(https?:\/\/[^\s]+|\/(?:projects|resume|blog|gpt-mode)(?:\/[\w-]+)?)/g);
+
+  const isLinkPart = (part: string) =>
+    /^https?:\/\/[^\s]+$/.test(part) ||
+    /^\/(?:projects|resume|blog|gpt-mode)(?:\/[\w-]+)?$/.test(part);
 
   return (
     <p className="whitespace-pre-wrap">
       {parts.map((part, index) =>
-        /^https?:\/\/[^\s]+$/.test(part) ? (
+        isLinkPart(part) ? (
           <a
             key={`${part}-${index}`}
             href={part}

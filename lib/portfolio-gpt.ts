@@ -13,6 +13,7 @@ type KnowledgeEntry = {
   detail: string;
   keywords: string[];
   sources: string[];
+  href?: string;
 };
 
 const stopWords = new Set([
@@ -134,6 +135,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "conversational",
     ],
     sources: ["app/projects/ai-saas-dashboard/page.tsx"],
+    href: "/projects/ai-saas-dashboard",
   },
   {
     id: "chargeit",
@@ -152,6 +154,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "2024",
     ],
     sources: ["app/projects/chargeit/page.tsx"],
+    href: "/projects/chargeit",
   },
   {
     id: "gpay-wallet",
@@ -171,6 +174,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "spending",
     ],
     sources: ["app/projects/gpay/page.tsx"],
+    href: "/projects/gpay",
   },
   {
     id: "mindhouse",
@@ -189,6 +193,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "discovery",
     ],
     sources: ["app/projects/mindhouse/page.tsx"],
+    href: "/projects/mindhouse",
   },
   {
     id: "tulasi",
@@ -206,6 +211,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "chatbot",
     ],
     sources: ["app/projects/tulasi/page.tsx"],
+    href: "/projects/tulasi",
   },
   {
     id: "e-vaahan",
@@ -224,6 +230,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "transport",
     ],
     sources: ["app/projects/evaahan/page.tsx"],
+    href: "/projects/evaahan",
   },
   {
     id: "note-m",
@@ -240,6 +247,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "accessibility",
     ],
     sources: ["app/projects/note-m/page.tsx"],
+    href: "/projects/note-m",
   },
   {
     id: "teaching-strategies",
@@ -257,6 +265,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "scheduling",
     ],
     sources: ["app/projects/teaching-strategies/page.tsx"],
+    href: "/projects/teaching-strategies",
   },
   {
     id: "pepper",
@@ -268,6 +277,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "Pepper investigates playful interaction patterns and how small UI details can create memorable product moments.",
     keywords: ["pepper", "interaction", "ui", "design exploration"],
     sources: ["app/projects/pepper/page.tsx"],
+    href: "/projects/pepper",
   },
   {
     id: "anjani-font",
@@ -279,6 +289,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "Designed the Anjani font as part of an advanced typography module, experimenting with Telugu letterforms and calligraphic strokes.",
     keywords: ["anjani", "font", "typography", "telugu", "calligraphy"],
     sources: ["app/projects/anjani-font/page.tsx"],
+    href: "/projects/anjani-font",
   },
   {
     id: "summer-internship",
@@ -297,6 +308,7 @@ const knowledgeBase: KnowledgeEntry[] = [
       "process",
     ],
     sources: ["app/projects/summer-internship/page.tsx"],
+    href: "/projects/summer-internship",
   },
 ];
 
@@ -358,6 +370,22 @@ function buildSuggestions(entry?: KnowledgeEntry): string[] {
   return defaultSuggestions;
 }
 
+function buildProjectLinks(entries: Array<KnowledgeEntry | undefined>): string {
+  const links = Array.from(
+    new Set(
+      entries
+        .filter((entry): entry is KnowledgeEntry => Boolean(entry))
+        .filter((entry) => entry.type === "project" && entry.href)
+        .map((entry) => entry.href as string),
+    ),
+  );
+
+  if (links.length === 0) return "";
+  if (links.length === 1) return `\n\nProject link: ${links[0]}`;
+
+  return `\n\nProject links:\n${links.map((link) => `- ${link}`).join("\n")}`;
+}
+
 export function generatePortfolioAnswer(
   question: string
 ): PortfolioChatMessage {
@@ -417,11 +445,13 @@ export function generatePortfolioAnswer(
 
   if (/(ai|copilot|conversational|automation|nlp|llm)/.test(lower)) {
     const entry = knowledgeBase.find((item) => item.id === "ai-approach");
+    const aiProject = knowledgeBase.find((item) => item.id === "ai-saas-dashboard");
     return {
       role: "assistant",
       content:
-        entry?.detail ||
-        "I design AI-assisted, conversational experiences with a focus on clarity, guardrails, and measurable outcomes.",
+        (entry?.detail ||
+          "I design AI-assisted, conversational experiences with a focus on clarity, guardrails, and measurable outcomes.") +
+        buildProjectLinks([aiProject]),
       sources: entry?.sources,
       suggestions: buildSuggestions(entry),
     };
@@ -438,10 +468,11 @@ export function generatePortfolioAnswer(
     const secondaryLine = secondary
       ? ` You might also like: ${secondary.title}.`
       : "";
+    const projectLinks = buildProjectLinks([best, secondary]);
 
     return {
       role: "assistant",
-      content: `${best.detail}${secondaryLine}`,
+      content: `${best.detail}${secondaryLine}${projectLinks}`,
       sources: best.sources,
       suggestions: buildSuggestions(best),
     };
