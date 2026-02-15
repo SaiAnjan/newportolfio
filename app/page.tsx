@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { WritingSourceLogo } from "@/components/writing-source-logo";
 import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
@@ -37,9 +38,12 @@ export default async function Home() {
       <div className="mx-auto mt-6 mb-24 w-full max-w-3xl px-4 sm:mt-10">
         <header className="pb-10">
           <nav className="flex flex-col items-start gap-7 text-sm" aria-label="Main navigation">
-            <div className="space-y-1">
-              <p className="text-base font-semibold tracking-tight">Sai Anjan</p>
-              <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
+            <div className="flex w-full items-start justify-between gap-3">
+              <div className="space-y-1">
+                <p className="text-base font-semibold tracking-tight">Sai Anjan</p>
+                <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
+              </div>
+              <ThemeSwitcher />
             </div>
 
             <div className="inline-flex items-center gap-1 rounded-none border border-primary/20 bg-background/80 px-1 py-1 backdrop-blur">

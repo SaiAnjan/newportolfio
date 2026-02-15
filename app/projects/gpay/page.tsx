@@ -7,7 +7,9 @@ export default function GpayPage() {
     <CaseStudyShell
       title="Google Pay + Wallet"
       subtitle="Driving wallet adoption in India by reducing trust friction and making spending behavior more visible."
-      meta="2024 · Fintech UX · Consumer Payments"
+      meta="Feb 11, 2025"
+      readTime="4 minutes"
+      shareUrl="/projects/gpay"
     >
       <section className="space-y-3">
         <h2 className="text-base font-semibold tracking-tight text-primary">Context</h2>

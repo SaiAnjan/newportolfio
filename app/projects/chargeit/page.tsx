@@ -7,7 +7,9 @@ export default function ChargeitPage() {
     <CaseStudyShell
       title="Chargeit"
       subtitle="Enterprise billing and payment workflows designed for scale, compliance, and operational clarity."
-      meta="2024 · Enterprise SaaS · Payments"
+      meta="Mar 04, 2025"
+      readTime="2 minutes"
+      shareUrl="/projects/chargeit"
     >
       <section className="space-y-4">
         <h2 className="text-base font-semibold tracking-tight text-primary">Overview</h2>

@@ -7,7 +7,9 @@ export default function MindhousePage() {
     <CaseStudyShell
       title="Mindhouse Live Class Discovery"
       subtitle="Reworking class filtering so users can find and book relevant sessions faster."
-      meta="2023 · Wellness Product · Interaction Design"
+      meta="Jan 28, 2025"
+      readTime="3 minutes"
+      shareUrl="/projects/mindhouse"
     >
       <section className="space-y-3">
         <h2 className="text-base font-semibold tracking-tight text-primary">Context</h2>

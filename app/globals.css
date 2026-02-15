@@ -65,4 +65,42 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  @keyframes kinetic-text-in {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+      filter: blur(6px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  main :is(h1, h2, h3, h4, h5, h6, p, li, a, blockquote, small, figcaption, label, button) {
+    animation: kinetic-text-in 540ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  main :is(h1, h2) {
+    animation-delay: 40ms;
+  }
+
+  main :is(h3, h4, h5, h6) {
+    animation-delay: 80ms;
+  }
+
+  main :is(p, li, blockquote, figcaption) {
+    animation-delay: 120ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    main :is(h1, h2, h3, h4, h5, h6, p, li, a, blockquote, small, figcaption, label, button) {
+      animation: none;
+      filter: none;
+      transform: none;
+      opacity: 1;
+    }
+  }
 }
