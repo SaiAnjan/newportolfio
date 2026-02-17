@@ -54,13 +54,13 @@ export default async function Home() {
               <Link className="rounded-none px-2 py-1 text-[15px] font-medium text-primary" href="/">
                 about
               </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="/blog">
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/blog">
                 blog
               </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="#work">
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#work">
                 work
               </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="#contact">
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#contact">
                 contact
               </Link>
             </div>
@@ -97,7 +97,7 @@ export default async function Home() {
               <Link
                 key={project.title}
                 href={project.href}
-                className="group flex items-center gap-3 rounded-md bg-background/85 p-2 transition-colors hover:bg-primary/5"
+                className="group flex items-center gap-3 rounded-md bg-background/85 p-2 transition-colors hover:bg-white"
               >
                 <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-sm">
                   <Image src={project.thumbnail} alt={`${project.title} thumbnail`} fill className="object-cover" />
@@ -120,7 +120,7 @@ export default async function Home() {
                 href={post.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-md bg-background/85 p-3 text-sm transition-colors hover:bg-primary/5"
+                className="block rounded-md bg-background/85 p-3 text-sm transition-colors hover:bg-white"
               >
                 <div className="mb-1 flex items-center gap-2">
                   <span className="inline-flex items-center gap-1.5 text-xs font-medium capitalize text-foreground/80">
@@ -140,7 +140,7 @@ export default async function Home() {
           <div className="flex flex-wrap gap-2 text-sm">
             <a
               href="mailto:saianjan.margani@gmail.com"
-              className="inline-flex items-center gap-1.5 border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+              className="inline-flex items-center gap-1.5 border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-white"
             >
               <Mail className="h-3.5 w-3.5" />
               Email
@@ -149,7 +149,7 @@ export default async function Home() {
               href="https://github.com/saianjan"
               target="_blank"
               rel="noopener noreferrer"
-              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-white"
             >
               Github
             </a>
@@ -157,7 +157,7 @@ export default async function Home() {
               href="https://x.com/Dhaathre"
               target="_blank"
               rel="noopener noreferrer"
-              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-white"
             >
               X / Twitter
             </a>
@@ -165,7 +165,7 @@ export default async function Home() {
               href="https://www.linkedin.com/in/saianjan/"
               target="_blank"
               rel="noopener noreferrer"
-              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-primary/5"
+              className="border border-primary/20 bg-background/85 px-2.5 py-1 hover:bg-white"
             >
               LinkedIn
             </a>

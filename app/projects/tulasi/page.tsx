@@ -4,7 +4,7 @@ import { ProjectImage } from "@/components/project-image";
 export default function TulasiPage() {
   return (
     <main className="min-h-screen">
-      <nav className="w-full bg-white fixed z-50 shadow-sm">
+      <nav className="w-full bg-background fixed z-50 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <Link href="/" className="text-sm text-gray-600 hover:text-black inline-flex items-center gap-2">
             <span>←</span>
@@ -247,7 +247,7 @@ export default function TulasiPage() {
           </section>
         </main>
 
-        <footer className="bg-white py-12 mt-12">
+        <footer className="bg-background py-12 mt-12">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <p className="text-sm text-gray-500 mb-4">Made with ❤️ in Hyderabad, India</p>
           </div>

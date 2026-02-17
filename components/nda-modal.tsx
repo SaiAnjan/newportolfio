@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 
 interface NDAModalProps {
   isOpen: boolean;
@@ -72,7 +71,7 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
             access the case study, please enter the password provided to you.
           </p>
           <p className="text-xs text-gray-500 italic">
-            If you don't have the password, please contact me directly.
+            If you don&apos;t have the password, please contact me directly.
           </p>
         </div>
 
@@ -108,13 +107,13 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-white transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+              className="flex-1 px-4 py-2 bg-black text-white rounded-lg hover:bg-white hover:text-black transition-colors"
             >
               Access Project
             </button>
@@ -124,5 +123,3 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
     </div>
   );
 }
-
-

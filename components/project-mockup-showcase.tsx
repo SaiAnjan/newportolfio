@@ -132,7 +132,7 @@ export function ProjectMockupShowcase({ items }: ProjectMockupShowcaseProps) {
             <button
               type="button"
               onClick={showPrev}
-              className="absolute top-1/2 left-3 -translate-y-1/2 rounded-full border border-border/70 bg-background/90 p-1.5 text-foreground transition-colors hover:bg-background"
+              className="absolute top-1/2 left-3 -translate-y-1/2 rounded-full border border-border/70 bg-background/90 p-1.5 text-foreground transition-colors hover:bg-white"
               aria-label="Previous image"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -140,7 +140,7 @@ export function ProjectMockupShowcase({ items }: ProjectMockupShowcaseProps) {
             <button
               type="button"
               onClick={showNext}
-              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full border border-border/70 bg-background/90 p-1.5 text-foreground transition-colors hover:bg-background"
+              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full border border-border/70 bg-background/90 p-1.5 text-foreground transition-colors hover:bg-white"
               aria-label="Next image"
             >
               <ChevronRight className="h-4 w-4" />

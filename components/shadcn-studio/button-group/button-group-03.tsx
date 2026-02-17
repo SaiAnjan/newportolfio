@@ -106,7 +106,7 @@ const ButtonGroupTooltipDemo = ({ shareUrl, shareTitle, className }: ButtonGroup
         >
           <div className="inline-flex items-center overflow-hidden rounded-full bg-zinc-900 text-white shadow-lg ring-1 ring-white/10">
             <Button
-              className="h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white/10 hover:text-white"
+              className="h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white hover:text-zinc-900"
               variant="ghost"
               size="icon-sm"
               onClick={onLinkedInShare}
@@ -118,7 +118,7 @@ const ButtonGroupTooltipDemo = ({ shareUrl, shareTitle, className }: ButtonGroup
             <span className="h-5 w-px bg-white/20" aria-hidden />
 
             <Button
-              className="h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white/10 hover:text-white"
+              className="h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white hover:text-zinc-900"
               variant="ghost"
               size="icon-sm"
               onClick={onXShare}
@@ -131,7 +131,7 @@ const ButtonGroupTooltipDemo = ({ shareUrl, shareTitle, className }: ButtonGroup
 
             <Button
               className={cn(
-                "h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white/10 hover:text-white",
+                "h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white hover:text-zinc-900",
                 copied ? "text-emerald-300" : "",
               )}
               variant="ghost"
@@ -145,7 +145,7 @@ const ButtonGroupTooltipDemo = ({ shareUrl, shareTitle, className }: ButtonGroup
             <span className="h-5 w-px bg-white/20" aria-hidden />
 
             <Button
-              className="h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white/10 hover:text-white"
+              className="h-9 w-10 rounded-none border-0 bg-transparent p-0 text-white/90 shadow-none hover:bg-white hover:text-zinc-900"
               variant="ghost"
               size="icon-sm"
               onClick={onNativeShare}

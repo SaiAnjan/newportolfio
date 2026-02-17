@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 94.9%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
@@ -66,6 +66,12 @@
     @apply bg-background text-foreground;
   }
 
+  :where(a, button, [role="button"], [data-slot="button"]) {
+    transition-property: background-color, border-color, color, box-shadow, opacity, transform;
+    transition-duration: 220ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   @keyframes kinetic-text-in {
     0% {
       opacity: 0;
@@ -101,6 +107,10 @@
       filter: none;
       transform: none;
       opacity: 1;
+    }
+
+    :where(a, button, [role="button"], [data-slot="button"]) {
+      transition: none !important;
     }
   }
 }

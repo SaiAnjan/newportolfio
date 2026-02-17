@@ -17,16 +17,16 @@ export default async function BlogPage() {
               <p className="text-sm text-primary/80">Writing</p>
             </div>
             <div className="inline-flex items-center gap-1 rounded-none border border-primary/20 bg-background/80 px-1 py-1">
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="/">
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/">
                 about
               </Link>
               <Link className="rounded-none px-2 py-1 text-[15px] font-medium text-primary" href="/blog">
                 blog
               </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="/#work">
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/#work">
                 work
               </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-primary/10 hover:opacity-100" href="/#contact">
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/#contact">
                 contact
               </Link>
             </div>
@@ -47,7 +47,7 @@ export default async function BlogPage() {
                     href={post.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-md bg-background/85 p-4 transition-colors hover:bg-primary/5"
+                    className="block rounded-md bg-background/85 p-4 transition-colors hover:bg-white"
                   >
                     <div className="mb-2 flex items-center gap-2">
                       <span className="inline-flex items-center gap-1.5 text-xs font-medium capitalize text-foreground/80">

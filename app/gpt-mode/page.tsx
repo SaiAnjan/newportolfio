@@ -208,7 +208,7 @@ export default function GPTModePage() {
                         key={prompt}
                         type="button"
                         onClick={() => sendQuestion(prompt)}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-zinc-600 bg-white px-3 py-1.5 text-xs text-zinc-900 transition-colors hover:bg-zinc-100"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-zinc-600 bg-white px-3 py-1.5 text-xs text-zinc-900 transition-colors hover:bg-white"
                       >
                         <Sparkles className="h-3 w-3" />
                         {prompt}
@@ -254,7 +254,7 @@ export default function GPTModePage() {
                       <DropdownMenuTrigger asChild>
                         <button
                           type="button"
-                          className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-background/80"
+                          className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-white"
                         >
                           Sample prompts
                           <ChevronDown className="h-3.5 w-3.5" />
@@ -275,7 +275,7 @@ export default function GPTModePage() {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <Link href="/#work" className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-blue-600 hover:bg-background/80">
+                    <Link href="/#work" className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-blue-600 hover:bg-white">
                       <BriefcaseBusiness className="h-3.5 w-3.5" />
                       Works
                     </Link>
@@ -286,7 +286,7 @@ export default function GPTModePage() {
                       type="button"
                       onClick={handleMicToggle}
                       disabled={!isSpeechSupported}
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-full text-foreground/60 hover:bg-background/80 disabled:opacity-40"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-full text-foreground/60 hover:bg-white disabled:opacity-40"
                       aria-label="Voice input"
                       title={isSpeechSupported ? (isListening ? "Stop listening" : "Start speech-to-text") : "Speech-to-text not supported in this browser"}
                     >

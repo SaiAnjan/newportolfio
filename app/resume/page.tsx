@@ -20,7 +20,7 @@ export default function ResumePage() {
   return (
     <main className="min-h-screen">
       {/* Navigation Bar */}
-      <nav className="w-full bg-white fixed z-50 shadow-sm">
+      <nav className="w-full bg-background fixed z-50 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/" className="text-sm text-gray-600 hover:text-black inline-flex items-center gap-2">
             <span>←</span>
