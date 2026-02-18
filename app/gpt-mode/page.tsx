@@ -209,7 +209,7 @@ export default function GPTModePage() {
 
   return (
     <main className="min-h-dvh bg-background text-foreground">
-      <div className="mx-auto w-full max-w-3xl px-4 sm:mt-10 sm:mb-6">
+      <div className="mx-auto w-full max-w-3xl px-4 pt-14 sm:mt-10 sm:mb-6 sm:pt-0">
         <section className="flex min-h-dvh min-w-0 flex-col sm:min-h-[calc(100vh-5rem)]">
           <header className="border-b">
             <div className="flex h-14 items-center justify-between px-1 sm:px-2">
@@ -273,7 +273,7 @@ export default function GPTModePage() {
                   event.preventDefault();
                   handleSend();
                 }}
-                className="rounded-3xl border border-border/70 bg-muted/30 p-3 shadow-sm backdrop-blur"
+                className="rounded-3xl border border-border/70 bg-white p-3 shadow-sm backdrop-blur"
               >
                 <textarea
                   value={input}

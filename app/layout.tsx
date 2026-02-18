@@ -28,7 +28,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="fixed top-4 right-4 z-50">
+          <div className="fixed right-3 top-[max(env(safe-area-inset-top),0.75rem)] z-[90] sm:top-4 sm:right-4">
             <ThemeSwitcher />
           </div>
           {children}
