@@ -43,6 +43,10 @@ const starterMessage: PortfolioChatMessage = {
   ],
 };
 
+const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+const SPINNER_INTERVAL_MS = 80;
+const SPINNER_DURATION_MS = 4000;
+
 function LinkifiedText({ text }: { text: string }) {
   const parts = text.split(/(https?:\/\/[^\s]+|\/(?:projects|resume|blog|gpt-mode)(?:\/[\w-]+)?)/g);
 
@@ -93,9 +97,11 @@ export default function GPTModePage() {
   const [messages, setMessages] = useState<PortfolioChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
+  const [spinnerFrameIndex, setSpinnerFrameIndex] = useState(0);
   const [isListening, setIsListening] = useState(false);
   const [isSpeechSupported, setIsSpeechSupported] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const thinkingTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -137,20 +143,46 @@ export default function GPTModePage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isThinking) return;
+
+    const intervalId = window.setInterval(() => {
+      setSpinnerFrameIndex((prev) => (prev + 1) % SPINNER_FRAMES.length);
+    }, SPINNER_INTERVAL_MS);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [isThinking]);
+
+  useEffect(() => {
+    return () => {
+      if (thinkingTimeoutRef.current) {
+        window.clearTimeout(thinkingTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const sendQuestion = (question: string) => {
-    if (!question) return;
+    if (!question || isThinking) return;
 
     const userMessage: PortfolioChatMessage = { role: "user", content: question };
     const answer = generatePortfolioAnswer(question);
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    setSpinnerFrameIndex(0);
     setIsThinking(true);
 
-    setTimeout(() => {
+    if (thinkingTimeoutRef.current) {
+      window.clearTimeout(thinkingTimeoutRef.current);
+    }
+
+    thinkingTimeoutRef.current = window.setTimeout(() => {
       setMessages((prev) => [...prev, answer]);
       setIsThinking(false);
-    }, 180);
+      thinkingTimeoutRef.current = null;
+    }, SPINNER_DURATION_MS);
   };
 
   const handleSend = () => {
@@ -222,9 +254,11 @@ export default function GPTModePage() {
                     <MessageBubble key={`${message.role}-${index}`} message={message} />
                   ))}
                   {isThinking && (
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Sparkles className="h-4 w-4 animate-pulse" />
-                      Thinking...
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className="w-4 text-center font-mono" aria-hidden>
+                        {SPINNER_FRAMES[spinnerFrameIndex]}
+                      </span>
+                      <span>Thinking...</span>
                     </div>
                   )}
                 </>

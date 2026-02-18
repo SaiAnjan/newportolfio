@@ -26,7 +26,7 @@ const ThemeSwitcher = () => {
     const y = Math.round(rect.top + rect.height / 2);
     const maxX = Math.max(x, window.innerWidth - x);
     const maxY = Math.max(y, window.innerHeight - y);
-    const radius = Math.ceil(Math.hypot(maxX, maxY));
+    const radius = Math.ceil(Math.hypot(maxX, maxY)) + 12;
     const nextTheme = isDark ? "light" : "dark";
 
     document.documentElement.style.setProperty("--theme-transition-x", `${x}px`);
