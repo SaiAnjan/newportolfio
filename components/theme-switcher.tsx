@@ -22,12 +22,16 @@ const ThemeSwitcher = () => {
 
   const toggleTheme = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    const x = Math.round(rect.left + rect.width / 2);
+    const y = Math.round(rect.top + rect.height / 2);
+    const maxX = Math.max(x, window.innerWidth - x);
+    const maxY = Math.max(y, window.innerHeight - y);
+    const radius = Math.ceil(Math.hypot(maxX, maxY));
     const nextTheme = isDark ? "light" : "dark";
 
     document.documentElement.style.setProperty("--theme-transition-x", `${x}px`);
     document.documentElement.style.setProperty("--theme-transition-y", `${y}px`);
+    document.documentElement.style.setProperty("--theme-transition-radius", `${radius}px`);
 
     if ("startViewTransition" in document) {
       const transitionStarter = document as Document & {

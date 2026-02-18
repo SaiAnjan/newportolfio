@@ -12,6 +12,8 @@ Use this as the source of truth for future updates to this website.
 - Global page background: `#f2f2f2` across pages.
 - Hover actions: use white hover background across interactive UI.
 - Hover motion: soft easing (roughly 220ms with a gentle cubic-bezier) instead of sudden state changes.
+- Dark mode hover actions: use `hsl(0 0% 9%)`.
+- Text selection highlight: `#E5E5E5`.
 - Typography: normal web typography (no inline hard-coded custom font stacks).
 - Corners: subtle/minimal border radius on cards and surfaces.
 - Avoid heavy decoration; keep spacing intentional and readable.
