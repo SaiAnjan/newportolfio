@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Mail } from "lucide-react";
-import { readdir } from "node:fs/promises";
+import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
 import { Button } from "@/components/ui/button";
@@ -64,13 +64,20 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
   const readEntries = async (directory: string, baseUrl: string) => {
     try {
       const entries = await readdir(directory, { withFileTypes: true });
-      return entries
+      const files = entries
         .filter((entry) => entry.isFile())
         .filter((entry) => !/\.poster\.(webp|png|jpe?g)$/i.test(entry.name))
-        .filter((entry) => allowedShowcaseExtensions.has(path.extname(entry.name).toLowerCase()))
-        .map((entry) => ({ entry, baseUrl }));
+        .filter((entry) => allowedShowcaseExtensions.has(path.extname(entry.name).toLowerCase()));
+
+      return Promise.all(
+        files.map(async (entry) => {
+          const filePath = path.join(directory, entry.name);
+          const stats = await stat(filePath);
+          return { entry, baseUrl, mtimeMs: stats.mtimeMs };
+        }),
+      );
     } catch {
-      return [] as { entry: { name: string }; baseUrl: string }[];
+      return [] as { entry: { name: string }; baseUrl: string; mtimeMs: number }[];
     }
   };
 
@@ -80,7 +87,13 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
       ...(await readEntries(showcaseVideoDir, "/videos/showcase")),
     ];
 
-    const fileLookup = new Set(mediaEntries.map(({ entry, baseUrl }) => `${baseUrl}/${entry.name}`));
+    const mtimeByPath = new Map(mediaEntries.map(({ entry, baseUrl, mtimeMs }) => [`${baseUrl}/${entry.name}`, mtimeMs]));
+    const fileLookup = new Set(mtimeByPath.keys());
+    const withVersion = (filePath: string) => {
+      const mtimeMs = mtimeByPath.get(filePath);
+      if (!mtimeMs) return filePath;
+      return `${filePath}?v=${Math.trunc(mtimeMs)}`;
+    };
 
     // If the same basename has multiple formats, prefer JSON/Lottie or video first.
     const preferredByBasename = new Map<string, (typeof mediaEntries)[number]>();
@@ -125,10 +138,11 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
           `${baseUrl}/${basename}.poster.jpeg`,
           `${baseUrl}/${basename}.poster.png`,
         ];
-        const poster = mediaType === "video" ? posterCandidates.find((candidate) => fileLookup.has(candidate)) : undefined;
+        const posterPath = mediaType === "video" ? posterCandidates.find((candidate) => fileLookup.has(candidate)) : undefined;
+        const poster = posterPath ? withVersion(posterPath) : undefined;
 
         return {
-          src: `${baseUrl}/${entry.name}`,
+          src: withVersion(`${baseUrl}/${entry.name}`),
           alt: readableName || "Showcase work",
           mediaType,
           poster,
