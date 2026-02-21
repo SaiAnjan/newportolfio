@@ -131,6 +131,8 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
         if (extension === ".gif") mediaType = "gif";
         if (extension === ".json") mediaType = "lottie";
         if (extension === ".webm" || extension === ".mp4") mediaType = "video";
+        const shouldVersionSource = mediaType === "video" || mediaType === "lottie";
+        const sourcePath = `${baseUrl}/${entry.name}`;
 
         const posterCandidates = [
           `${baseUrl}/${basename}.poster.webp`,
@@ -142,7 +144,7 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
         const poster = posterPath ? withVersion(posterPath) : undefined;
 
         return {
-          src: withVersion(`${baseUrl}/${entry.name}`),
+          src: shouldVersionSource ? withVersion(sourcePath) : sourcePath,
           alt: readableName || "Showcase work",
           mediaType,
           poster,
