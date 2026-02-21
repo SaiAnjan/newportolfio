@@ -19,6 +19,7 @@ interface WorkShowcaseGalleryProps {
 
 const isGifSource = (src: string) => /\.gif($|\?)/i.test(src);
 const isJsonSource = (src: string) => /\.json($|\?)/i.test(src);
+const isExploreModelsLottieSource = (src: string) => /(?:^|\/)ExploreModels\.json($|\?)/i.test(src);
 const lottieCache = new Map<string, Record<string, unknown>>();
 
 const getMediaType = (item: ShowcaseItem): ShowcaseMediaType => {
@@ -81,7 +82,7 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
   const hasItems = count > 0;
   const hasMultiple = count > 1;
   const cardWidthClass = hasMultiple
-    ? "w-full sm:w-[calc(50%-0.375rem)] xl:w-[calc(33.333%-0.5rem)]"
+    ? "w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)] xl:w-[calc(25%-0.5625rem)]"
     : "w-full max-w-3xl";
 
   const activeItem = useMemo(() => {
@@ -142,6 +143,7 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
             const mediaType = getMediaType(item);
             const isGif = mediaType === "gif";
             const isLottie = mediaType === "lottie";
+            const forceWhiteCanvas = isLottie && isExploreModelsLottieSource(item.src);
             return (
               <button
                 key={`${item.src}-${index}`}
@@ -150,7 +152,11 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
                 className={`group relative block ${cardWidthClass} cursor-zoom-in overflow-hidden rounded-2xl bg-background/60 text-left`}
                 aria-label={`Open work image ${index + 1}`}
               >
-                <div className="relative w-full overflow-hidden rounded-2xl bg-muted/15 [aspect-ratio:2240/1610]">
+                <div
+                  className={`relative w-full overflow-hidden rounded-2xl [aspect-ratio:2240/1610] ${
+                    forceWhiteCanvas ? "bg-white" : "bg-muted/15"
+                  }`}
+                >
                   {isLottie ? (
                     <LottieFromUrl
                       src={item.src}
@@ -194,7 +200,11 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
 
             <div className="relative flex h-[88vh] w-full items-center justify-center">
               {activeIsLottie ? (
-                <div className="h-full w-full overflow-hidden rounded-[32px] bg-black/20 shadow-2xl">
+                <div
+                  className={`h-full w-full overflow-hidden rounded-[32px] shadow-2xl ${
+                    isExploreModelsLottieSource(activeItem.src) ? "bg-white" : "bg-black/20"
+                  }`}
+                >
                   <LottieFromUrl
                     src={activeItem.src}
                     className="h-full w-full [&_svg]:h-full [&_svg]:w-full"
