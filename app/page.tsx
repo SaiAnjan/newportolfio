@@ -38,6 +38,7 @@ const featuredProjects = [
 
 const showcaseImageDir = path.join(process.cwd(), "public", "images", "Showcase");
 const showcaseVideoDir = path.join(process.cwd(), "public", "videos", "showcase");
+const posterFilePattern = /\.poster\.(webp|png|jpe?g)$/i;
 const allowedShowcaseExtensions = new Set([
   ".png",
   ".jpg",
@@ -49,7 +50,7 @@ const allowedShowcaseExtensions = new Set([
   ".webm",
   ".mp4",
 ]);
-const showcaseExtensionPriority = [".json", ".webm", ".mp4", ".avif", ".webp", ".jpg", ".jpeg", ".png", ".gif"] as const;
+const showcaseExtensionPriority = [".json", ".mp4", ".webm", ".avif", ".webp", ".jpg", ".jpeg", ".png", ".gif"] as const;
 
 export type ShowcaseMediaType = "image" | "gif" | "lottie" | "video";
 
@@ -66,7 +67,6 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
       const entries = await readdir(directory, { withFileTypes: true });
       const files = entries
         .filter((entry) => entry.isFile())
-        .filter((entry) => !/\.poster\.(webp|png|jpe?g)$/i.test(entry.name))
         .filter((entry) => allowedShowcaseExtensions.has(path.extname(entry.name).toLowerCase()));
 
       return Promise.all(
@@ -98,6 +98,7 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
     // If the same basename has multiple formats, prefer JSON/Lottie or video first.
     const preferredByBasename = new Map<string, (typeof mediaEntries)[number]>();
     for (const item of mediaEntries) {
+      if (posterFilePattern.test(item.entry.name)) continue;
       const extension = path.extname(item.entry.name).toLowerCase();
       const basename = item.entry.name.slice(0, -extension.length);
       const existing = preferredByBasename.get(basename);
