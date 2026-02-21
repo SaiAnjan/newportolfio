@@ -1,8 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Mail } from "lucide-react";
+import { readdir } from "node:fs/promises";
+import path from "node:path";
 
 import { Button } from "@/components/ui/button";
+import { WorkShowcaseGallery } from "@/components/work-showcase-gallery";
 import { WritingSourceLogo } from "@/components/writing-source-logo";
 import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
 
@@ -33,9 +36,75 @@ const featuredProjects = [
   },
 ] as const;
 
+const showcaseDir = path.join(process.cwd(), "public", "images", "Showcase");
+const allowedShowcaseExtensions = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif", ".json"]);
+const showcaseExtensionPriority = [".json", ".avif", ".webp", ".jpg", ".jpeg", ".png", ".gif"] as const;
+
+export type ShowcaseMediaType = "image" | "gif" | "lottie";
+
+type ShowcaseImage = {
+  src: string;
+  alt: string;
+  mediaType: ShowcaseMediaType;
+};
+
+async function getShowcaseImages(): Promise<ShowcaseImage[]> {
+  try {
+    const entries = await readdir(showcaseDir, { withFileTypes: true });
+    const mediaEntries = entries
+      .filter((entry) => entry.isFile())
+      .filter((entry) => allowedShowcaseExtensions.has(path.extname(entry.name).toLowerCase()));
+
+    // If the same basename has multiple formats, prefer JSON (Lottie), then modern image formats.
+    const preferredByBasename = new Map<string, (typeof mediaEntries)[number]>();
+    for (const entry of mediaEntries) {
+      const extension = path.extname(entry.name).toLowerCase();
+      const basename = entry.name.slice(0, -extension.length);
+      const existing = preferredByBasename.get(basename);
+
+      if (!existing) {
+        preferredByBasename.set(basename, entry);
+        continue;
+      }
+
+      const existingExt = path.extname(existing.name).toLowerCase();
+      const existingPriority = showcaseExtensionPriority.indexOf(
+        existingExt as (typeof showcaseExtensionPriority)[number],
+      );
+      const nextPriority = showcaseExtensionPriority.indexOf(
+        extension as (typeof showcaseExtensionPriority)[number],
+      );
+
+      if (nextPriority !== -1 && (existingPriority === -1 || nextPriority < existingPriority)) {
+        preferredByBasename.set(basename, entry);
+      }
+    }
+
+    return Array.from(preferredByBasename.values())
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }))
+      .map((entry) => {
+        const extension = path.extname(entry.name).toLowerCase();
+        const decodedName = entry.name.replace(/\.[^/.]+$/, "");
+        const readableName = decodedName.replace(/[_-]+/g, " ").trim();
+        let mediaType: ShowcaseMediaType = "image";
+        if (extension === ".gif") mediaType = "gif";
+        if (extension === ".json") mediaType = "lottie";
+
+        return {
+          src: `/images/Showcase/${entry.name}`,
+          alt: readableName || "Showcase work",
+          mediaType,
+        };
+      });
+  } catch {
+    return [];
+  }
+}
+
 export default async function Home() {
   const writingPosts = await getAllWritingPosts();
   const featuredWritingPosts = getFeaturedWritingPosts(writingPosts, 6);
+  const showcaseImages = await getShowcaseImages();
 
   // Inspired by the overall layout direction of onurhan.dev, rewritten using project-specific content/components.
   return (
@@ -59,6 +128,9 @@ export default async function Home() {
               </Link>
               <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#work">
                 work
+              </Link>
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#projects">
+                projects
               </Link>
               <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#contact">
                 contact
@@ -90,8 +162,15 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="work" className="space-y-4 pb-12">
-          <h2 className="text-base font-semibold tracking-tight text-primary">Selected Work</h2>
+        <section
+          id="work"
+          className="relative mb-12 w-screen max-w-none [margin-left:calc(50%-50vw)] [margin-right:calc(50%-50vw)]"
+        >
+          <WorkShowcaseGallery items={showcaseImages} />
+        </section>
+
+        <section id="projects" className="space-y-4 pb-12">
+          <h2 className="text-base font-semibold tracking-tight text-primary">Projects</h2>
           <div className="space-y-3">
             {featuredProjects.map((project) => (
               <Link

@@ -1,0 +1,30 @@
+<svg width="360" height="360" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="outerGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(178 140) rotate(90) scale(190)">
+      <stop offset="0" stop-color="#7CCFF0"/>
+      <stop offset="0.48" stop-color="#3F7EB7"/>
+      <stop offset="1" stop-color="#14477D"/>
+    </radialGradient>
+    <linearGradient id="innerDisk" x1="96" y1="71" x2="247" y2="247" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08174D"/>
+      <stop offset="1" stop-color="#123C7B"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="127" y1="114" x2="235" y2="237" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9DE8F7"/>
+      <stop offset="1" stop-color="#4A9FCD"/>
+    </linearGradient>
+    <linearGradient id="proBg" x1="95" y1="283" x2="267" y2="345" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3A75A7"/>
+      <stop offset="1" stop-color="#5AA8D4"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="180" cy="170" r="124" fill="url(#outerGlow)"/>
+  <circle cx="180" cy="170" r="96" fill="url(#innerDisk)" stroke="#8ED0EE" stroke-opacity="0.75" stroke-width="2"/>
+
+  <path d="M102 228L245 184C245 184 248 205 234 223C218 244 194 253 162 253C131 253 112 246 102 228Z" fill="#7FC4E4"/>
+  <path d="M119 119H148L162 196L177 119H202L214 188L230 119H258L236 223H207L191 160L176 223H146L119 119Z" fill="url(#mark)"/>
+
+  <rect x="95" y="273" width="170" height="52" rx="18" fill="url(#proBg)"/>
+  <text x="180" y="308" text-anchor="middle" fill="#F4F8FC" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="1.3">PRO</text>
+</svg>

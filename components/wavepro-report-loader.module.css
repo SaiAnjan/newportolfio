@@ -1,0 +1,40 @@
+.wrapper {
+  width: min(96vw, 940px);
+  aspect-ratio: 753 / 561;
+  display: grid;
+  place-items: center;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.bgDot {
+  animation-name: dotTwinkle;
+  animation-timing-function: steps(2, end);
+  animation-iteration-count: infinite;
+}
+
+.ditherPixel {
+  shape-rendering: crispEdges;
+}
+
+@keyframes dotTwinkle {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bgDot {
+    animation: none !important;
+    opacity: 0.65;
+  }
+}
