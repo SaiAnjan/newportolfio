@@ -4,7 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "video:convert": "bash scripts/convert-screen-recording.sh"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.1",

@@ -5,12 +5,13 @@ import Lottie from "lottie-react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-type ShowcaseMediaType = "image" | "gif" | "lottie";
+type ShowcaseMediaType = "image" | "gif" | "lottie" | "video";
 
 type ShowcaseItem = {
   src: string;
   alt: string;
   mediaType?: ShowcaseMediaType;
+  poster?: string;
 };
 
 interface WorkShowcaseGalleryProps {
@@ -19,11 +20,13 @@ interface WorkShowcaseGalleryProps {
 
 const isGifSource = (src: string) => /\.gif($|\?)/i.test(src);
 const isJsonSource = (src: string) => /\.json($|\?)/i.test(src);
+const isVideoSource = (src: string) => /\.(webm|mp4)($|\?)/i.test(src);
 const isExploreModelsLottieSource = (src: string) => /(?:^|\/)ExploreModels\.json($|\?)/i.test(src);
 const lottieCache = new Map<string, Record<string, unknown>>();
 
 const getMediaType = (item: ShowcaseItem): ShowcaseMediaType => {
   if (item.mediaType) return item.mediaType;
+  if (isVideoSource(item.src)) return "video";
   if (isJsonSource(item.src)) return "lottie";
   if (isGifSource(item.src)) return "gif";
   return "image";
@@ -91,6 +94,7 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
   }, [activeIndex, count, items]);
   const activeMediaType = activeItem ? getMediaType(activeItem) : null;
   const activeIsLottie = activeMediaType === "lottie";
+  const activeIsVideo = activeMediaType === "video";
 
   const showPrevious = useCallback(() => {
     setActiveIndex((prev) => {
@@ -143,6 +147,7 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
             const mediaType = getMediaType(item);
             const isGif = mediaType === "gif";
             const isLottie = mediaType === "lottie";
+            const isVideo = mediaType === "video";
             const forceWhiteCanvas = isLottie && isExploreModelsLottieSource(item.src);
             const lottieFrameClass = forceWhiteCanvas ? "p-[7%]" : "";
             return (
@@ -167,6 +172,17 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
                         className="h-full w-full [&_svg]:h-full [&_svg]:w-full"
                       />
                     </div>
+                  ) : isVideo ? (
+                    <video
+                      src={item.src}
+                      poster={item.poster}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.015]"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                    />
                   ) : (
                     <Image
                       src={item.src}
@@ -217,6 +233,18 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
                     />
                   </div>
                 </div>
+              ) : activeIsVideo ? (
+                <video
+                  src={activeItem.src}
+                  poster={activeItem.poster}
+                  className="max-h-full max-w-full rounded-[32px] bg-black object-contain shadow-2xl"
+                  controls
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                />
               ) : (
                 <img
                   src={activeItem.src}

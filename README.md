@@ -102,6 +102,29 @@ If you wish to just develop locally and not deploy to Vercel, [follow the steps 
 
 Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
 
+## Screen recording workflow
+
+If you are recording interactions from Figma as `.mov`, use this conversion flow before adding them to case studies:
+
+1. Put raw files in `public/videos/raw/`
+2. Convert with:
+
+```bash
+npm run video:convert -- "public/videos/raw/my-recording.mov" "public/videos/showcase/my-recording"
+```
+
+This generates:
+
+- `public/videos/showcase/my-recording.mp4`
+- `public/videos/showcase/my-recording.webm`
+- `public/videos/showcase/my-recording.poster.webp` (or `.poster.jpg` when WebP encoder is unavailable)
+
+Optional quality controls:
+
+```bash
+npm run video:convert -- "public/videos/raw/my-recording.mov" "public/videos/showcase/my-recording" 1600 30
+```
+
 ## More Supabase examples
 
 - [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)

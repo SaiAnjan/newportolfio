@@ -36,38 +36,65 @@ const featuredProjects = [
   },
 ] as const;
 
-const showcaseDir = path.join(process.cwd(), "public", "images", "Showcase");
-const allowedShowcaseExtensions = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif", ".json"]);
-const showcaseExtensionPriority = [".json", ".avif", ".webp", ".jpg", ".jpeg", ".png", ".gif"] as const;
+const showcaseImageDir = path.join(process.cwd(), "public", "images", "Showcase");
+const showcaseVideoDir = path.join(process.cwd(), "public", "videos", "showcase");
+const allowedShowcaseExtensions = new Set([
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".avif",
+  ".gif",
+  ".json",
+  ".webm",
+  ".mp4",
+]);
+const showcaseExtensionPriority = [".json", ".webm", ".mp4", ".avif", ".webp", ".jpg", ".jpeg", ".png", ".gif"] as const;
 
-export type ShowcaseMediaType = "image" | "gif" | "lottie";
+export type ShowcaseMediaType = "image" | "gif" | "lottie" | "video";
 
 type ShowcaseImage = {
   src: string;
   alt: string;
   mediaType: ShowcaseMediaType;
+  poster?: string;
 };
 
 async function getShowcaseImages(): Promise<ShowcaseImage[]> {
-  try {
-    const entries = await readdir(showcaseDir, { withFileTypes: true });
-    const mediaEntries = entries
-      .filter((entry) => entry.isFile())
-      .filter((entry) => allowedShowcaseExtensions.has(path.extname(entry.name).toLowerCase()));
+  const readEntries = async (directory: string, baseUrl: string) => {
+    try {
+      const entries = await readdir(directory, { withFileTypes: true });
+      return entries
+        .filter((entry) => entry.isFile())
+        .filter((entry) => !/\.poster\.(webp|png|jpe?g)$/i.test(entry.name))
+        .filter((entry) => allowedShowcaseExtensions.has(path.extname(entry.name).toLowerCase()))
+        .map((entry) => ({ entry, baseUrl }));
+    } catch {
+      return [] as { entry: { name: string }; baseUrl: string }[];
+    }
+  };
 
-    // If the same basename has multiple formats, prefer JSON (Lottie), then modern image formats.
+  try {
+    const mediaEntries = [
+      ...(await readEntries(showcaseImageDir, "/images/Showcase")),
+      ...(await readEntries(showcaseVideoDir, "/videos/showcase")),
+    ];
+
+    const fileLookup = new Set(mediaEntries.map(({ entry, baseUrl }) => `${baseUrl}/${entry.name}`));
+
+    // If the same basename has multiple formats, prefer JSON/Lottie or video first.
     const preferredByBasename = new Map<string, (typeof mediaEntries)[number]>();
-    for (const entry of mediaEntries) {
-      const extension = path.extname(entry.name).toLowerCase();
-      const basename = entry.name.slice(0, -extension.length);
+    for (const item of mediaEntries) {
+      const extension = path.extname(item.entry.name).toLowerCase();
+      const basename = item.entry.name.slice(0, -extension.length);
       const existing = preferredByBasename.get(basename);
 
       if (!existing) {
-        preferredByBasename.set(basename, entry);
+        preferredByBasename.set(basename, item);
         continue;
       }
 
-      const existingExt = path.extname(existing.name).toLowerCase();
+      const existingExt = path.extname(existing.entry.name).toLowerCase();
       const existingPriority = showcaseExtensionPriority.indexOf(
         existingExt as (typeof showcaseExtensionPriority)[number],
       );
@@ -76,24 +103,35 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
       );
 
       if (nextPriority !== -1 && (existingPriority === -1 || nextPriority < existingPriority)) {
-        preferredByBasename.set(basename, entry);
+        preferredByBasename.set(basename, item);
       }
     }
 
     return Array.from(preferredByBasename.values())
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }))
-      .map((entry) => {
+      .sort((a, b) => a.entry.name.localeCompare(b.entry.name, undefined, { numeric: true, sensitivity: "base" }))
+      .map(({ entry, baseUrl }) => {
         const extension = path.extname(entry.name).toLowerCase();
+        const basename = entry.name.slice(0, -extension.length);
         const decodedName = entry.name.replace(/\.[^/.]+$/, "");
         const readableName = decodedName.replace(/[_-]+/g, " ").trim();
         let mediaType: ShowcaseMediaType = "image";
         if (extension === ".gif") mediaType = "gif";
         if (extension === ".json") mediaType = "lottie";
+        if (extension === ".webm" || extension === ".mp4") mediaType = "video";
+
+        const posterCandidates = [
+          `${baseUrl}/${basename}.poster.webp`,
+          `${baseUrl}/${basename}.poster.jpg`,
+          `${baseUrl}/${basename}.poster.jpeg`,
+          `${baseUrl}/${basename}.poster.png`,
+        ];
+        const poster = mediaType === "video" ? posterCandidates.find((candidate) => fileLookup.has(candidate)) : undefined;
 
         return {
-          src: `/images/Showcase/${entry.name}`,
+          src: `${baseUrl}/${entry.name}`,
           alt: readableName || "Showcase work",
           mediaType,
+          poster,
         };
       });
   } catch {
