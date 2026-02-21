@@ -144,6 +144,7 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
             const isGif = mediaType === "gif";
             const isLottie = mediaType === "lottie";
             const forceWhiteCanvas = isLottie && isExploreModelsLottieSource(item.src);
+            const lottieFrameClass = forceWhiteCanvas ? "p-[7%]" : "";
             return (
               <button
                 key={`${item.src}-${index}`}
@@ -158,10 +159,14 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
                   }`}
                 >
                   {isLottie ? (
-                    <LottieFromUrl
-                      src={item.src}
-                      className="h-full w-full transition-transform duration-300 group-hover:scale-[1.015] [&_svg]:h-full [&_svg]:w-full"
-                    />
+                    <div
+                      className={`h-full w-full transition-transform duration-300 group-hover:scale-[1.015] ${lottieFrameClass}`}
+                    >
+                      <LottieFromUrl
+                        src={item.src}
+                        className="h-full w-full [&_svg]:h-full [&_svg]:w-full"
+                      />
+                    </div>
                   ) : (
                     <Image
                       src={item.src}
@@ -205,10 +210,12 @@ export function WorkShowcaseGallery({ items }: WorkShowcaseGalleryProps) {
                     isExploreModelsLottieSource(activeItem.src) ? "bg-white" : "bg-black/20"
                   }`}
                 >
-                  <LottieFromUrl
-                    src={activeItem.src}
-                    className="h-full w-full [&_svg]:h-full [&_svg]:w-full"
-                  />
+                  <div className={isExploreModelsLottieSource(activeItem.src) ? "h-full w-full p-[6%]" : "h-full w-full"}>
+                    <LottieFromUrl
+                      src={activeItem.src}
+                      className="h-full w-full [&_svg]:h-full [&_svg]:w-full"
+                    />
+                  </div>
                 </div>
               ) : (
                 <img
