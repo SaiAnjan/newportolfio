@@ -35,7 +35,7 @@ export default async function BlogPage() {
 
         <section className="space-y-4 pb-12">
           <h1 className="text-xl font-semibold tracking-tight">Articles</h1>
-          <p className="text-sm text-foreground/70">Combined feed from Substack and Medium.</p>
+          <p className="text-sm text-foreground/70">Selected writing from this site, Substack, and Medium.</p>
 
           {posts.length === 0 ? (
             <p className="text-sm text-foreground/70">No posts yet. Check back soon.</p>

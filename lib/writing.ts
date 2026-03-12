@@ -8,7 +8,7 @@ const parser = new Parser({
   },
 });
 
-export type WritingSource = "substack" | "medium";
+export type WritingSource = "substack" | "medium" | "portfolio";
 
 export interface WritingPost {
   title: string;
@@ -26,6 +26,18 @@ const manualMediumPosts: WritingPost[] = [
     pubDate: "",
     source: "medium",
     guid: "manual-medium-b6cc4f49749d",
+  },
+];
+
+const localPortfolioPosts: WritingPost[] = [
+  {
+    title: "A Gentle \"Running Late\" Prompt for Microsoft Teams Meetings",
+    link: "/blog/running-late-teams-message",
+    pubDate: "2026-03-12",
+    contentSnippet:
+      "A product idea for Microsoft Teams: a friendly, well-timed prompt that helps people post a quick \"running late\" note right when the meeting starts.",
+    source: "portfolio",
+    guid: "portfolio-running-late-teams-message",
   },
 ];
 
@@ -103,7 +115,7 @@ export async function getAllWritingPosts(): Promise<WritingPost[]> {
   const mediumPosts = mediumFeedPosts.length > 0 ? mediumFeedPosts : manualMediumPosts;
   const byLink = new Map<string, WritingPost>();
 
-  [...substackPosts, ...mediumPosts].forEach((post) => {
+  [...localPortfolioPosts, ...substackPosts, ...mediumPosts].forEach((post) => {
     if (!byLink.has(post.link)) {
       byLink.set(post.link, post);
     }
@@ -118,6 +130,7 @@ export async function getAllWritingPosts(): Promise<WritingPost[]> {
 
 export function getFeaturedWritingPosts(posts: WritingPost[], limit = 6): WritingPost[] {
   const sourceBuckets: Record<WritingSource, WritingPost[]> = {
+    portfolio: [],
     substack: [],
     medium: [],
   };
@@ -127,29 +140,24 @@ export function getFeaturedWritingPosts(posts: WritingPost[], limit = 6): Writin
   });
 
   const featured: WritingPost[] = [];
-  let currentSource: WritingSource = "substack";
+  const sourceOrder: WritingSource[] = ["portfolio", "substack", "medium"];
+  let sourceIndex = 0;
 
   while (
     featured.length < limit &&
-    (sourceBuckets.substack.length > 0 || sourceBuckets.medium.length > 0)
+    sourceOrder.some((source) => sourceBuckets[source].length > 0)
   ) {
-    const primary = sourceBuckets[currentSource];
-    const secondarySource: WritingSource = currentSource === "substack" ? "medium" : "substack";
-    const secondary = sourceBuckets[secondarySource];
+    const source = sourceOrder[sourceIndex % sourceOrder.length];
+    const bucket = sourceBuckets[source];
 
-    if (primary.length > 0) {
-      const nextPost = primary.shift();
-      if (nextPost) {
-        featured.push(nextPost);
-      }
-    } else if (secondary.length > 0) {
-      const nextPost = secondary.shift();
+    if (bucket.length > 0) {
+      const nextPost = bucket.shift();
       if (nextPost) {
         featured.push(nextPost);
       }
     }
 
-    currentSource = secondarySource;
+    sourceIndex += 1;
   }
 
   return featured;

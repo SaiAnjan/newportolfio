@@ -9,6 +9,20 @@ interface WritingSourceLogoProps {
 }
 
 export function WritingSourceLogo({ source, className }: WritingSourceLogoProps) {
+  if (source === "portfolio") {
+    return (
+      <span
+        className={cn(
+          "inline-flex h-4 w-4 items-center justify-center rounded-[2px] bg-primary/15 text-[8px] font-semibold text-primary",
+          className,
+        )}
+        aria-hidden="true"
+      >
+        SA
+      </span>
+    );
+  }
+
   const src =
     source === "substack"
       ? "https://substack.com/favicon.ico"
