@@ -29,6 +29,12 @@ const featuredProjects = [
     thumbnail: "/images/mindhouse.png",
   },
   {
+    title: "Mindhouse Filtering (Review)",
+    href: "/projects/mindhouse-filtering-review",
+    summary: "Before/after walkthrough of the class filtering redesign.",
+    thumbnail: "/images/mindhouse/filters-new.png",
+  },
+  {
     title: "Chargeit",
     href: "/projects/chargeit",
     summary: "Enterprise billing and workflow architecture for modern SaaS teams.",
