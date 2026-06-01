@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { Coffee, Mail } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
 import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
@@ -184,6 +186,9 @@ export default async function Home() {
               <Link className="rounded-none px-2 py-1 text-[15px] font-medium text-primary" href="/">
                 about
               </Link>
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#wip">
+                wip
+              </Link>
               <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#work">
                 work
               </Link>
@@ -221,6 +226,43 @@ export default async function Home() {
               </Button>
             </div>
           </div>
+        </section>
+
+        <section id="wip" className="space-y-4 pb-12">
+          <h2 className="text-base font-semibold tracking-tight text-primary">Work in progress</h2>
+          <article className="space-y-3 rounded-md border border-primary/20 bg-background/85 p-4 transition-colors hover:bg-white">
+            <div className="flex items-start gap-3">
+              <div
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border border-primary/20 bg-primary/5"
+                aria-hidden
+              >
+                <Coffee className="h-5 w-5 text-primary" />
+              </div>
+              <div className="min-w-0 space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-sm font-medium">BrewCircle</p>
+                  <Badge variant="outline">Next.js</Badge>
+                  <Badge variant="secondary">In development</Badge>
+                </div>
+                <p className="text-xs leading-relaxed text-foreground/75">
+                  India&apos;s social network and marketplace for home coffee brewers — share brews, discover gear,
+                  and connect with your local brewing community.
+                </p>
+              </div>
+            </div>
+            <p className="border-t border-primary/10 pt-3 text-xs text-foreground/60">
+              <a
+                href="https://brew-circle.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-primary hover:underline"
+              >
+                View live MVP →
+              </a>
+              {" · "}
+              Coffee DNA, marketplace, sessions &amp; community Q&amp;A
+            </p>
+          </article>
         </section>
 
         <section
