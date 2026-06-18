@@ -9,6 +9,7 @@ import path from "node:path";
 import { Button } from "@/components/ui/button";
 import { WorkShowcaseGallery } from "@/components/work-showcase-gallery";
 import { WritingSourceLogo } from "@/components/writing-source-logo";
+import { PrinciplesPreviewCard } from "@/components/principles-preview-card";
 import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
 
 const featuredProjects = [
@@ -229,6 +230,13 @@ export default async function Home() {
               </Button>
             </div>
           </div>
+        </section>
+
+        <section className="space-y-4 pb-8" aria-labelledby="principles-preview-title">
+          <h2 id="principles-preview-title" className="text-base font-semibold tracking-tight text-primary">
+            Principles
+          </h2>
+          <PrinciplesPreviewCard />
         </section>
 
         <section id="wip" className="space-y-4 pb-12">
