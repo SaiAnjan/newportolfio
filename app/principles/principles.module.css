@@ -1,0 +1,453 @@
+.page {
+  --paper: #eeede8;
+  --ink: #151515;
+  --muted-ink: #6d6c67;
+  --line: rgba(21, 21, 21, 0.18);
+  --accent: #e14b31;
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 84% 18%, rgba(225, 75, 49, 0.09), transparent 24rem),
+    var(--paper);
+  color: var(--ink);
+  isolation: isolate;
+}
+
+.page::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    repeating-linear-gradient(115deg, transparent 0 3px, rgba(21, 21, 21, 0.035) 3px 4px),
+    repeating-linear-gradient(25deg, transparent 0 5px, rgba(255, 255, 255, 0.16) 5px 6px);
+  background-size: 7px 7px, 11px 11px;
+  content: "";
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 2rem clamp(1.25rem, 4vw, 4rem);
+  padding-right: clamp(5rem, 8vw, 7rem);
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.homeLink svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.homeLink:hover svg {
+  transform: translateX(-0.2rem);
+}
+
+.journalTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.journalTitle span {
+  color: var(--muted-ink);
+  font-weight: 500;
+}
+
+.journal {
+  display: grid;
+  min-height: 100svh;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: clamp(6.25rem, 10vh, 7.5rem) clamp(1.25rem, 6vw, 6rem) clamp(4.75rem, 7vh, 6rem);
+}
+
+.dateNavigation {
+  display: grid;
+  width: min(100%, 38rem);
+  margin: 0 auto;
+  grid-template-columns: 3rem 1fr 3rem;
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 2rem);
+}
+
+.dateButton,
+.quoteNavigation button {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.dateButton svg,
+.quoteNavigation svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dateButton:not(:disabled):hover,
+.quoteNavigation button:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  transform: scale(1.04);
+}
+
+.dateButton:focus-visible,
+.quoteNavigation button:focus-visible,
+.progressTrack button:focus-visible,
+.homeLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.dateButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.28;
+}
+
+.dateBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+
+.dateBlock span {
+  color: var(--accent);
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.dateBlock time {
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  font-weight: 550;
+  letter-spacing: -0.015em;
+}
+
+.quoteViewport {
+  display: grid;
+  min-height: 0;
+  align-items: start;
+  justify-items: center;
+  padding: clamp(1.5rem, 3vh, 2.25rem) 0;
+}
+
+.principle {
+  --quote-scale: 1;
+  width: min(100%, 76rem);
+  cursor: default;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+  color: var(--muted-ink);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.category span {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff9f5;
+  font-size: 0.58rem;
+  letter-spacing: 0;
+}
+
+.principle blockquote {
+  margin: 0;
+  animation: none;
+  font-size: clamp(
+    2rem,
+    min(
+      calc(5.3vw * var(--quote-scale)),
+      calc(9vh * var(--quote-scale))
+    ),
+    5.65rem
+  );
+  font-weight: 540;
+  letter-spacing: -0.022em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.kineticQuote::before {
+  color: var(--accent);
+  content: "“";
+  margin-left: -0.48em;
+}
+
+.quotePhrase {
+  font: inherit;
+}
+
+.quoteWord {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
+
+.toneQuiet {
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+  font-weight: 450;
+  letter-spacing: -0.012em;
+}
+
+.toneUrgent {
+  color: var(--accent);
+  font-weight: 720;
+  letter-spacing: -0.032em;
+}
+
+.toneContrast {
+  color: color-mix(in srgb, var(--accent) 82%, var(--ink));
+  font-weight: 610;
+  letter-spacing: -0.025em;
+}
+
+.toneQuestion {
+  color: var(--accent);
+  font-weight: 680;
+  letter-spacing: -0.03em;
+}
+
+.toneResolve {
+  color: var(--accent);
+  font-weight: 740;
+  letter-spacing: -0.03em;
+}
+
+.controls {
+  display: flex;
+  width: min(100%, 76rem);
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+}
+
+.progress {
+  display: flex;
+  width: min(100%, 24rem);
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--muted-ink);
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.progressTrack {
+  display: flex;
+  flex: 1;
+  gap: 0.25rem;
+}
+
+.progressTrack button {
+  position: relative;
+  height: 1.5rem;
+  flex: 1;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.progressTrack button::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: var(--line);
+  content: "";
+  transition: height 220ms ease, background-color 220ms ease;
+}
+
+.progressTrack button:hover::after {
+  background: var(--muted-ink);
+}
+
+.progressTrack .progressActive::after {
+  height: 3px;
+  background: var(--accent);
+}
+
+.quoteNavigation {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.navigationArrow {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1;
+  transform: translateY(-0.04em);
+}
+
+.hint {
+  position: absolute;
+  right: clamp(1.25rem, 4vw, 4rem);
+  bottom: 1.4rem;
+  color: var(--muted-ink);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:global(.dark) .page {
+  --paper: #11110f;
+  --ink: #efeee8;
+  --muted-ink: #96958e;
+  --line: rgba(239, 238, 232, 0.2);
+  --accent: #f06449;
+  background:
+    radial-gradient(circle at 84% 18%, rgba(240, 100, 73, 0.1), transparent 24rem),
+    var(--paper);
+}
+
+@media (max-width: 640px) {
+  .header {
+    padding-top: 1.25rem;
+  }
+
+  .homeLink span {
+    display: none;
+  }
+
+  .journal {
+    padding-top: 5.75rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .dateNavigation {
+    grid-template-columns: 2.65rem 1fr 2.65rem;
+    gap: 0.65rem;
+  }
+
+  .dateButton,
+  .quoteNavigation button {
+    width: 2.65rem;
+    height: 2.65rem;
+  }
+
+  .quoteViewport {
+    padding-block: 1.75rem;
+  }
+
+  .principle blockquote {
+    font-size: clamp(
+      1.85rem,
+      min(
+        calc(9.8vw * var(--quote-scale)),
+        calc(6.25vh * var(--quote-scale))
+      ),
+      3.5rem
+    );
+    line-height: 1.02;
+  }
+
+  .kineticQuote::before {
+    margin-left: 0;
+  }
+
+  .controls {
+    align-items: flex-end;
+  }
+
+  .hint {
+    display: none;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 641px) {
+  .journal {
+    padding-top: 5.75rem;
+    padding-bottom: 3rem;
+  }
+
+  .quoteViewport {
+    padding-block: 1.25rem;
+  }
+
+  .principle blockquote {
+    font-size: clamp(
+      1.85rem,
+      min(
+        calc(4.7vw * var(--quote-scale)),
+        calc(8vh * var(--quote-scale))
+      ),
+      4.5rem
+    );
+  }
+
+  .hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homeLink svg,
+  .dateButton,
+  .quoteNavigation button,
+  .progressTrack button::after {
+    transition: none;
+  }
+
+  .quoteWord {
+    will-change: auto;
+  }
+}

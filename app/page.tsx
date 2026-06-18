@@ -198,6 +198,9 @@ export default async function Home() {
               <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/blog">
                 blog
               </Link>
+              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/principles">
+                principles
+              </Link>
               <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#contact">
                 contact
               </Link>
