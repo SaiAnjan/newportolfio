@@ -2,9 +2,14 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { useState } from "react";
 
-import { latestPrinciples, type Principle } from "@/lib/principles";
+import {
+  getPreviewQuoteSize,
+  previewPrinciples,
+  type Principle,
+} from "@/lib/principles";
 
 import styles from "./principles-preview-card.module.css";
 
@@ -62,7 +67,7 @@ export function PrinciplesPreviewCard() {
   const [principleIndex, setPrincipleIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const prefersReducedMotion = useReducedMotion();
-  const activePrinciple = latestPrinciples[principleIndex];
+  const activePrinciple = previewPrinciples[principleIndex];
 
   if (!activePrinciple) return null;
 
@@ -70,7 +75,7 @@ export function PrinciplesPreviewCard() {
     setDirection(nextDirection);
     setPrincipleIndex(
       (currentIndex) =>
-        (currentIndex + nextDirection + latestPrinciples.length) % latestPrinciples.length,
+        (currentIndex + nextDirection + previewPrinciples.length) % previewPrinciples.length,
     );
   };
 
@@ -96,6 +101,11 @@ export function PrinciplesPreviewCard() {
         <AnimatePresence mode="wait">
           <motion.div
             key={activePrinciple.id}
+            style={
+              {
+                "--preview-quote-size": `${getPreviewQuoteSize(activePrinciple.quote)}rem`,
+              } as CSSProperties
+            }
             initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: direction * 12 }}
             animate={{ opacity: 1, x: 0 }}
             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: direction * -12 }}

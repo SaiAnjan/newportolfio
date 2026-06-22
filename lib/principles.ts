@@ -52,13 +52,51 @@ export const journalDays: JournalDay[] = [
       },
     ],
   },
+  {
+    date: "2026-06-22",
+    principles: [
+      {
+        id: "ux-inductive-reasoning",
+        category: "Training data & perception",
+        quote:
+          "AI’s understanding of UX is largely inductive, shaped by the mass of graphical interfaces and UI media available online.",
+        phrases: [
+          { text: "AI’s understanding of UX", tone: "urgent" },
+          { text: " is largely inductive,", tone: "quiet" },
+          { text: " shaped by the mass of graphical interfaces and UI media available online.", tone: "quiet" },
+        ],
+      },
+      {
+        id: "ux-production-vs-innovation",
+        category: "Practice & leadership",
+        quote:
+          "When UI and screen design are mistaken for UX, managers who learn through AI may reduce UX to production work instead of treating it as innovation work.",
+        phrases: [
+          { text: " When UI and screen design are mistaken for UX,", tone: "contrast" },
+          { text: " managers who learn through AI " },
+          { text: "may reduce UX to production work", tone: "urgent" },
+          { text: " instead of treating it as " },
+          { text: "innovation work.", tone: "resolve" },
+        ],
+      },
+    ],
+  },
 ];
 
-export const latestPrinciples = journalDays.at(-1)?.principles ?? [];
+export const previewPrinciples = [...journalDays]
+  .reverse()
+  .flatMap((day) => day.principles);
 
 export function getQuoteScale(quote: string) {
   const wordCount = quote.trim().split(/\s+/).length;
   const lengthAdjustment = (22 - wordCount) * 0.012;
 
   return Math.min(1.04, Math.max(0.88, 1 + lengthAdjustment));
+}
+
+export function getPreviewQuoteSize(quote: string) {
+  const wordCount = quote.trim().split(/\s+/).length;
+  const lengthAdjustment = Math.max(0, wordCount - 22) * 0.015;
+
+  return Math.min(1.18, Math.max(0.82, 1.18 - lengthAdjustment));
 }

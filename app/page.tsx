@@ -9,7 +9,9 @@ import path from "node:path";
 import { Button } from "@/components/ui/button";
 import { WorkShowcaseGallery } from "@/components/work-showcase-gallery";
 import { WritingSourceLogo } from "@/components/writing-source-logo";
+import { AsciiPortrait } from "@/components/ascii-portrait";
 import { PrinciplesPreviewCard } from "@/components/principles-preview-card";
+import { StickyNavigation } from "@/components/sticky-navigation";
 import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
 
 const featuredProjects = [
@@ -172,42 +174,19 @@ export default async function Home() {
 
   // Inspired by the overall layout direction of onurhan.dev, rewritten using project-specific content/components.
   return (
-    <main className="min-h-screen bg-background">
+    <main id="top" className="min-h-screen scroll-mt-24 overflow-x-clip bg-background pb-20 sm:pb-16">
       <div className="mx-auto mt-6 mb-24 w-full max-w-3xl px-4 sm:mt-10">
-        <header className="pb-10">
-          <nav className="flex flex-col items-start gap-7 text-sm" aria-label="Main navigation">
-            <div className="flex w-full items-start justify-between gap-3">
-              <div className="space-y-1">
-                <p className="text-base font-semibold tracking-tight">Sai Anjan</p>
-                <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
-              </div>
+        <header className="pb-7">
+          <div className="flex w-full items-center gap-4 sm:gap-5">
+            <div className="space-y-1">
+              <p className="text-base font-semibold tracking-tight">Sai Anjan</p>
+              <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
             </div>
-
-            <div className="inline-flex items-center gap-1 rounded-none border border-primary/20 bg-background/80 px-1 py-1 backdrop-blur">
-              <Link className="rounded-none px-2 py-1 text-[15px] font-medium text-primary" href="/">
-                about
-              </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#wip">
-                wip
-              </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#work">
-                work
-              </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#projects">
-                projects
-              </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/blog">
-                blog
-              </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="/principles">
-                principles
-              </Link>
-              <Link className="rounded-none px-2 py-1 text-[15px] opacity-70 hover:bg-white hover:opacity-100" href="#contact">
-                contact
-              </Link>
-            </div>
-          </nav>
+            <AsciiPortrait />
+          </div>
         </header>
+
+        <StickyNavigation />
 
         <section className="space-y-6 pb-12">
           <p className="text-xl font-semibold tracking-tight">Hi, I&apos;m Anjan.</p>
@@ -239,7 +218,7 @@ export default async function Home() {
           <PrinciplesPreviewCard />
         </section>
 
-        <section id="wip" className="space-y-4 pb-12">
+        <section id="wip" className="scroll-mt-24 space-y-4 pb-12">
           <h2 className="text-base font-semibold tracking-tight text-primary">Work in progress</h2>
           <article className="space-y-3 rounded-md border border-primary/20 bg-background/85 p-4 transition-colors hover:bg-white">
             <div className="flex items-start gap-3">
@@ -278,12 +257,12 @@ export default async function Home() {
 
         <section
           id="work"
-          className="relative mb-12 w-screen max-w-none [margin-left:calc(50%-50vw)] [margin-right:calc(50%-50vw)]"
+          className="relative mb-12 w-screen max-w-none scroll-mt-24 [margin-left:calc(50%-50vw)] [margin-right:calc(50%-50vw)]"
         >
           <WorkShowcaseGallery items={showcaseImages} />
         </section>
 
-        <section id="projects" className="space-y-4 pb-12">
+        <section id="projects" className="scroll-mt-24 space-y-4 pb-12">
           <h2 className="text-base font-semibold tracking-tight text-primary">Projects</h2>
           <div className="space-y-3">
             {featuredProjects.map((project) => (
@@ -328,7 +307,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="contact" className="space-y-3 pb-10">
+        <section id="contact" className="scroll-mt-24 space-y-3 pb-10">
           <h2 className="text-base font-semibold tracking-tight text-primary">Get in touch</h2>
           <div className="flex flex-wrap gap-2 text-sm">
             <a
