@@ -81,6 +81,25 @@ export const journalDays: JournalDay[] = [
       },
     ],
   },
+  {
+    date: "2026-06-24",
+    principles: [
+      {
+        id: "ai-scales-bad-ux",
+        category: "Quality debt",
+        quote:
+          "AI doesn’t just fuel bad UX; it scales it. The debt piles up until the next wave of UX designers and design engineers has to clean up the mess.",
+        phrases: [
+          { text: "AI doesn’t just fuel bad UX", tone: "urgent" },
+          { text: "; it scales it.", tone: "contrast" },
+          { text: " The debt piles up", tone: "urgent" },
+          { text: " until the next wave of " },
+          { text: "UX designers and design engineers", tone: "resolve" },
+          { text: " has to clean up the mess.", tone: "quiet" },
+        ],
+      },
+    ],
+  },
 ];
 
 export const previewPrinciples = [...journalDays]

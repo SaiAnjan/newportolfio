@@ -94,19 +94,20 @@ export function PrinciplesJournal() {
   const activeDay = journalDays[dayIndex];
   const activePrinciple = activeDay.principles[principleIndex];
   const hasMultiplePrinciples = activeDay.principles.length > 1;
-  const isFirstDay = dayIndex === 0;
-  const isLastDay = dayIndex === journalDays.length - 1;
+  const hasMultipleDays = journalDays.length > 1;
 
   const changeDay = useCallback(
     (nextDirection: number) => {
-      const nextIndex = dayIndex + nextDirection;
-      if (nextIndex < 0 || nextIndex >= journalDays.length) return;
+      if (!hasMultipleDays) return;
 
       setDirection(nextDirection);
-      setDayIndex(nextIndex);
+      setDayIndex(
+        (currentIndex) =>
+          (currentIndex + nextDirection + journalDays.length) % journalDays.length,
+      );
       setPrincipleIndex(0);
     },
-    [dayIndex],
+    [hasMultipleDays],
   );
 
   const changePrinciple = useCallback(
@@ -168,7 +169,7 @@ export function PrinciplesJournal() {
             className={styles.dateButton}
             type="button"
             onClick={() => changeDay(-1)}
-            disabled={isFirstDay}
+            disabled={!hasMultipleDays}
             aria-label="View previous day"
           >
             <ArrowLeft aria-hidden="true" />
@@ -183,7 +184,7 @@ export function PrinciplesJournal() {
             className={styles.dateButton}
             type="button"
             onClick={() => changeDay(1)}
-            disabled={isLastDay}
+            disabled={!hasMultipleDays}
             aria-label="View next day"
           >
             <ArrowRight aria-hidden="true" />
