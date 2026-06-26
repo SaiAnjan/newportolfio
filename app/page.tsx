@@ -179,7 +179,7 @@ export default async function Home() {
         <header className="pb-7">
           <div className="flex w-full items-center gap-4 sm:gap-5">
             <div className="space-y-1">
-              <p className="text-base font-semibold tracking-tight text-primary">Sai Anjan</p>
+              <p className="text-base font-semibold tracking-tight text-[#e14b31] dark:text-[#f06449]">Sai Anjan</p>
               <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
             </div>
             <AsciiPortrait />
