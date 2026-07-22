@@ -100,6 +100,25 @@ export const journalDays: JournalDay[] = [
       },
     ],
   },
+  {
+    date: "2026-07-22",
+    principles: [
+      {
+        id: "ai-collapses-build-moats",
+        category: "Strategy & purpose",
+        quote:
+          "AI collapses the moat of “Can we build this at all?” Teams hiding behind that question will resist AI first and lose first, because the harder question is now “Why should this exist?”",
+        phrases: [
+          { text: "AI collapses the moat", tone: "urgent" },
+          { text: " of “Can we build this at all?”", tone: "question" },
+          { text: " Teams hiding behind that question", tone: "quiet" },
+          { text: " will resist AI first and lose first,", tone: "urgent" },
+          { text: " because the harder question is now " },
+          { text: "“Why should this exist?”", tone: "resolve" },
+        ],
+      },
+    ],
+  },
 ];
 
 export const previewPrinciples = [...journalDays]
