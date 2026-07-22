@@ -117,6 +117,20 @@ export const journalDays: JournalDay[] = [
           { text: "“Why should this exist?”", tone: "resolve" },
         ],
       },
+      {
+        id: "waterfall-after-ai",
+        category: "Process & delivery",
+        quote:
+          "If AI makes software easier to ship, should waterfall get another look? Agile compressed delivery for a world where building was expensive; when building gets cheaper, planning may need to move upstream again.",
+        phrases: [
+          { text: "If AI makes software easier to ship,", tone: "question" },
+          { text: " should waterfall get another look?", tone: "urgent" },
+          { text: " Agile compressed delivery", tone: "quiet" },
+          { text: " for a world where building was expensive;", tone: "contrast" },
+          { text: " when building gets cheaper," },
+          { text: " planning may need to move upstream again.", tone: "resolve" },
+        ],
+      },
     ],
   },
 ];
