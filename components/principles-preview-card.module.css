@@ -84,10 +84,10 @@
   margin: 0;
   animation: none;
   color: hsl(var(--foreground));
-  font-size: min(var(--preview-quote-size, 1.18rem), 2.25vw);
+  font-size: min(var(--preview-quote-size, 1.12rem), 2.05vw);
   font-weight: 540;
-  letter-spacing: -0.015em;
-  line-height: 1.08;
+  letter-spacing: -0.011em;
+  line-height: 1.16;
   text-wrap: balance;
 }
 
@@ -163,8 +163,8 @@
   }
 
   .quote {
-    font-size: min(var(--preview-quote-size, 1.18rem), 4.45vw);
-    line-height: 1.14;
+    font-size: min(var(--preview-quote-size, 1.12rem), 4.1vw);
+    line-height: 1.2;
   }
 }
 

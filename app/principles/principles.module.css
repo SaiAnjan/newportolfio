@@ -200,16 +200,16 @@
   margin: 0;
   animation: none;
   font-size: clamp(
-    2rem,
+    1.85rem,
     min(
-      calc(5.3vw * var(--quote-scale)),
-      calc(9vh * var(--quote-scale))
+      calc(4.9vw * var(--quote-scale)),
+      calc(8.1vh * var(--quote-scale))
     ),
-    5.65rem
+    5.2rem
   );
   font-weight: 540;
-  letter-spacing: -0.022em;
-  line-height: 0.98;
+  letter-spacing: -0.018em;
+  line-height: 1.08;
   text-wrap: balance;
 }
 
@@ -390,14 +390,14 @@
 
   .principle blockquote {
     font-size: clamp(
-      1.85rem,
+      1.7rem,
       min(
-        calc(9.8vw * var(--quote-scale)),
-        calc(6.25vh * var(--quote-scale))
+        calc(8.8vw * var(--quote-scale)),
+        calc(5.75vh * var(--quote-scale))
       ),
-      3.5rem
+      3.15rem
     );
-    line-height: 1.02;
+    line-height: 1.12;
   }
 
   .kineticQuote::before {
@@ -425,13 +425,14 @@
 
   .principle blockquote {
     font-size: clamp(
-      1.85rem,
+      1.7rem,
       min(
-        calc(4.7vw * var(--quote-scale)),
-        calc(8vh * var(--quote-scale))
+        calc(4.35vw * var(--quote-scale)),
+        calc(7.2vh * var(--quote-scale))
       ),
-      4.5rem
+      4.15rem
     );
+    line-height: 1.08;
   }
 
   .hint {
