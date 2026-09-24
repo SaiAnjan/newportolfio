@@ -1,258 +1,426 @@
-import Link from "next/link";
-import { ProjectImage } from "@/components/project-image";
+import {
+  CaseStudyDeepDive,
+  CaseStudyFigure,
+  CaseStudyQuote,
+  CaseStudySection,
+  FlagshipCaseStudy,
+} from "@/components/flagship-case-study";
+
+const researchThemes = [
+  {
+    title: "Autonomy",
+    description: "Passengers needed self-service access beyond the station entrance and its enquiry queue.",
+  },
+  {
+    title: "Active conversation",
+    description: "Existing chatbots returned answers but rarely helped people refine incomplete questions.",
+  },
+  {
+    title: "Orientation",
+    description: "People did not know which official or third-party service handled each kind of information.",
+  },
+  {
+    title: "Governance",
+    description: "Railway information was distributed across staff systems, displays, official services, and apps.",
+  },
+  {
+    title: "Process",
+    description: "Planning a journey required passengers to interpret options instead of simply stating their goal.",
+  },
+] as const;
+
+const dialogueModel = [
+  "Intent and alternative ways to invoke it",
+  "Context carried between turns",
+  "Implicit confirmation",
+  "Explicit confirmation for low-confidence input",
+  "Conversational markers and progress",
+  "Error handling and recovery",
+] as const;
+
+const evaluationFindings = [
+  "Participants generally saw value in the concept, especially for parents and people who benefit from voice.",
+  "Voice reduced typing, but visual feedback remained important for reviewing railway details.",
+  "The conversation felt natural to some participants and choppy to others.",
+  "Repeated confirmations needed different phrasing instead of repeating the same prompt.",
+  "Advice was meaningful inside the prototype's narrow scope, but users understood that it could not answer every query.",
+  "The transition from Google Assistant to a specialised railway agent was confusing.",
+  "Four of seven participants raised issues with Hindi speech and English or alphanumeric display content.",
+] as const;
+
+const navigation = [
+  { href: "#context", label: "Context" },
+  { href: "#research", label: "Research" },
+  { href: "#synthesis", label: "Synthesis" },
+  { href: "#architecture", label: "Architecture" },
+  { href: "#dialogue", label: "Dialogue design" },
+  { href: "#prototype", label: "Prototype" },
+  { href: "#evaluation", label: "Evaluation" },
+  { href: "#iteration", label: "Iteration" },
+  { href: "#reflection", label: "Looking back" },
+];
 
 export default function TulasiPage() {
   return (
-    <main className="min-h-screen">
-      <nav className="w-full bg-background fixed z-50 shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-3">
-          <Link href="/" className="text-sm text-gray-600 hover:text-black inline-flex items-center gap-2">
-            <span>←</span>
-            <span>Back to Projects</span>
-          </Link>
-        </div>
-      </nav>
+    <FlagshipCaseStudy
+      eyebrow="Tulasi · Conversation design"
+      title="Designing a Conversational Railway Enquiry"
+      subtitle="How I translated real passenger-staff conversations at Mumbai CSMT into a multilingual, multimodal self-service agent for railway information."
+      summary="Railway information was split across enquiry staff, station displays, official services, and dozens of mobile applications. I mapped this service ecosystem, studied real enquiry conversations, designed Tulasi's dialogue system, and evaluated a Hindi conversational prototype with seven participants."
+      readTime="9 minutes"
+      shareUrl="/projects/tulasi"
+      navigation={navigation}
+      facts={[
+        { label: "Context", value: "M.Des Interaction Design, IIT Bombay" },
+        { label: "Project", value: "Individual academic thesis, Project III" },
+        { label: "Year", value: "2020" },
+        { label: "Guide", value: "Prof. Ravi Poovaiah" },
+        { label: "Research", value: "Station observation, staff interviews, 3 passenger interviews, 5-person card sort" },
+        { label: "Evaluation", value: "7 Android users" },
+        { label: "Original title", value: "A conversational design approach to railway enquiry for Mumbai CSMT" },
+      ]}
+      hero={
+        <CaseStudyFigure
+          src="/images/P3/cover.png"
+          alt="Tulasi conversational railway enquiry shown across five mobile screens"
+          caption="Tulasi combined spoken dialogue with visual train, ticket, payment, and reminder cards."
+          aspect="aspect-[947/351]"
+          fit="cover"
+          priority
+        />
+      }
+    >
+      <CaseStudySection id="context" eyebrow="01 · Context" title="Railway enquiry was a service ecosystem, not a screen">
+        <p>
+          In 2020, passengers pieced railway information together from enquiry staff, station displays, official
+          services, and third-party applications. Each source covered only part of the journey. Enquiry counters remained
+          trusted because they combined live information with a staff member&apos;s judgment, but queues made that help
+          difficult to access when passengers were in a hurry.
+        </p>
+        <p>
+          Displays could show arrivals, departures, platform numbers, or coach positions, but passengers still had to
+          find the right display and interpret it. Mobile services helped with advance planning, yet the information was
+          fragmented and people often returned to staff for an immediate answer on the station.
+        </p>
 
-      <article className="pt-16">
-        <header className="pb-16 pt-20">
-          <div className="max-w-4xl mx-auto px-4">
-            <h1 className="text-5xl md:text-6xl font-light mb-6 leading-tight">
-              Tulasi: Conversational Agent for Railway Enquiry
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl">
-              A conversational AI agent designed to help users get railway information quickly and easily through natural language interaction.
+        <CaseStudyFigure
+          src="/images/projects/tulasi/app-ecosystem.webp"
+          alt="A large set of railway-related mobile applications found during the 2020 competitive review"
+          caption="A 2020 Play Store review revealed a crowded ecosystem of partially overlapping railway services rather than one clear source for enquiry."
+          aspect="aspect-[76/43]"
+          wide
+        />
+
+        <CaseStudyQuote attribution="Project framing">
+          The opportunity was not another chatbot. It was a clearer way to coordinate railway information around a
+          passenger&apos;s question.
+        </CaseStudyQuote>
+      </CaseStudySection>
+
+      <CaseStudySection id="research" eyebrow="02 · Field research" title="Following the enquiry from counter to passenger">
+        <p>
+          I observed how the enquiry counter worked at Vijayawada Junction and interviewed enquiry staff at Mumbai CSMT.
+          The staff used a railway enquiry system with approximately 30 categories, moving between live train
+          information, reservation status, fares, platform information, and other station services according to the
+          passenger&apos;s question.
+        </p>
+        <p>
+          I also documented station displays, coach-position systems, navigation maps, and ticketing machines, then
+          interviewed three passengers about planning, station enquiry, mobile applications, payment, and assistance
+          from family members.
+        </p>
+
+        <CaseStudyFigure
+          src="/images/projects/tulasi/station-research.webp"
+          alt="Railway arrival displays and self-ticketing machines documented during station research"
+          caption="The station already contained many information surfaces. The gap was helping a passenger locate, combine, and act on the right information."
+          aspect="aspect-[92/33]"
+          wide
+        />
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <article className="rounded-lg bg-card p-4">
+            <p className="text-xs font-medium tracking-[0.12em] text-foreground/45 uppercase">Staff pattern</p>
+            <p className="mt-3 text-sm leading-6 text-foreground/72">
+              Frequently asked questions repeated, but passengers phrased the same intent in many different ways.
             </p>
-            <p className="text-sm text-gray-500 mt-4">2020 • Conversational AI • UX Design</p>
+          </article>
+          <article className="rounded-lg bg-card p-4">
+            <p className="text-xs font-medium tracking-[0.12em] text-foreground/45 uppercase">Passenger pattern</p>
+            <p className="mt-3 text-sm leading-6 text-foreground/72">
+              Queue pressure, digital-payment barriers, and unfamiliar apps often made family members or staff part of
+              the interaction.
+            </p>
+          </article>
+        </div>
+
+        <CaseStudyDeepDive title="Station ecosystem and 2020 competitor review">
+          <div className="space-y-4">
+            <p>
+              The review covered IRCTC Rail Connect, Ask DISHA, NTES, Where Is My Train, Ixigo, station displays,
+              coach-position boards, station maps, and self-ticketing machines.
+            </p>
+            <p>
+              Applications supported planning and booking, while the counter remained the most legible source for live,
+              contextual questions. The project therefore focused on supporting the enquiry service rather than replacing
+              every railway interface.
+            </p>
           </div>
-        </header>
+        </CaseStudyDeepDive>
+      </CaseStudySection>
 
-        <main className="max-w-4xl mx-auto px-4 py-12 space-y-20">
-          {/* Context & Challenge */}
-          <section>
-            <h2 className="text-3xl font-light mb-8">Context & Challenge</h2>
-            
-            <div className="space-y-6 text-base leading-relaxed text-gray-700">
-              <div>
-                <h3 className="text-xl font-light mb-4">The Problem</h3>
-                <p>
-                  Railway enquiry systems are notoriously complex and difficult to navigate. Users struggle with:
-                </p>
-                <ul className="list-disc list-inside space-y-2 mt-4 ml-4">
-                  <li>Complex menu structures requiring multiple steps to find information</li>
-                  <li>Technical terminology that confuses non-technical users</li>
-                  <li>Limited availability of customer service representatives</li>
-                  <li>Fragmented information across different platforms</li>
-                  <li>Language barriers for users who prefer regional languages</li>
-                </ul>
-              </div>
+      <CaseStudySection id="synthesis" eyebrow="03 · Synthesis" title="Five themes defined the opportunity">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {researchThemes.map((theme, index) => (
+            <article key={theme.title} className="rounded-lg bg-card p-4 last:sm:col-span-2">
+              <p className="text-xs font-medium text-foreground/45">0{index + 1}</p>
+              <h3 className="mt-4 text-base font-medium text-foreground">{theme.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-foreground/68">{theme.description}</p>
+            </article>
+          ))}
+        </div>
 
-              <div>
-                <h3 className="text-xl font-light mb-4">Design Challenge</h3>
-                <p>
-                  Create a conversational interface that understands user queries in natural language and provides accurate, timely information about train schedules, availability, and other railway services. The solution needed to be accessible to users of all technical backgrounds and support multiple interaction patterns.
-                </p>
-              </div>
+        <div className="rounded-lg border-l-2 border-foreground/20 bg-card px-5 py-4">
+          <p className="text-xs font-medium tracking-[0.12em] text-foreground/45 uppercase">Design objective</p>
+          <p className="mt-3 text-base leading-relaxed text-foreground/82">
+            Create a self-service railway enquiry that uses authoritative station information, supports the enquiry staff
+            rather than replacing them, and works through voice, touch, and text.
+          </p>
+        </div>
+
+        <CaseStudyFigure
+          src="/images/projects/tulasi/service-concept.webp"
+          alt="Diagram combining a self-service kiosk, cloud service, and conversational agent"
+          caption="Tulasi was conceived as one conversation model that could serve a station kiosk and personal mobile devices."
+          aspect="aspect-[29/13]"
+        />
+      </CaseStudySection>
+
+      <CaseStudySection id="architecture" eyebrow="04 · Service definition" title="Turning railway information into an architecture">
+        <p>
+          A remote card sort with five users grouped the enquiry system into reservation, booking and cancellation,
+          station amenities, destination and fare, train arrivals, and booking status. The first prototype narrowed this
+          system to trains to destination, platform number, arrivals and departures, delays, reservation, and fare.
+        </p>
+        <p>
+          Those categories became more than navigation. They provided the foundation for intents, alternative
+          utterances, conversation states, error handling, and the visual cards shown during the exchange.
+        </p>
+
+        <CaseStudyFigure
+          src="/images/P3/process.png"
+          alt="Process diagram connecting recorded enquiries to intents, conversation flow, Dialogflow, Google Assistant, and evaluation"
+          caption="The working loop moved from real enquiry conversations to intents and flows, then into a deployed prototype and back through unhandled utterances discovered in evaluation."
+          aspect="aspect-[1381/783]"
+          wide
+        />
+
+        <CaseStudyDeepDive title="Full information architecture">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <h3 className="font-medium text-foreground">Reservation and booking</h3>
+              <p className="mt-1">Availability, waiting lists, berth types, cancellations, duplicate allotments, and current booking.</p>
             </div>
-          </section>
-
-          {/* Role & Tools */}
-          <section>
-            <h2 className="text-3xl font-light mb-8">Role & Tools</h2>
-            
-            <div className="space-y-6 text-base leading-relaxed text-gray-700">
-              <div>
-                <h3 className="text-xl font-light mb-4">My Role</h3>
-                <p>
-                  As the <strong>UX Designer</strong>, I was responsible for:
-                </p>
-                <ul className="list-disc list-inside space-y-2 mt-4 ml-4">
-                  <li>User research and persona development</li>
-                  <li>Conversational flow design and dialogue mapping</li>
-                  <li>Natural language interface design</li>
-                  <li>Prototyping and user testing</li>
-                  <li>Collaboration with NLP engineers</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-light mb-4">Tools & Methods</h3>
-                <ul className="list-disc list-inside space-y-2 ml-4">
-                  <li><strong>Figma</strong> - Interface design and prototyping</li>
-                  <li><strong>Miro</strong> - Conversation flow mapping</li>
-                  <li><strong>UserTesting</strong> - Usability testing</li>
-                  <li><strong>Natural Language Processing</strong> - Intent recognition and entity extraction</li>
-                </ul>
-              </div>
+            <div>
+              <h3 className="font-medium text-foreground">Station and journey</h3>
+              <p className="mt-1">Amenities, platform and coach position, destinations, fares, timetables, arrivals, and train status.</p>
             </div>
-          </section>
-
-          {/* Approach & Solution */}
-          <section>
-            <h2 className="text-3xl font-light mb-8">Approach & Solution</h2>
-            
-            <div className="space-y-8 text-base leading-relaxed text-gray-700">
-              <div>
-                <h3 className="text-xl font-light mb-4">Conversational Workflow Design</h3>
-                <p className="mb-4">
-                  We designed a natural language interface that allows users to ask questions in plain language, similar to how they would ask a railway employee:
-                </p>
-                <div className="bg-gray-50 p-6 rounded-lg space-y-3 mb-6">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm flex-shrink-0">U</div>
-                    <div>
-                      <p className="text-sm font-medium mb-1">User asks:</p>
-                      <p className="text-sm">"What trains go from Mumbai to Delhi tomorrow?"</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gray-300 text-black flex items-center justify-center text-sm flex-shrink-0">T</div>
-                    <div>
-                      <p className="text-sm font-medium mb-1">Tulasi responds:</p>
-                      <p className="text-sm">Lists available trains with times, duration, and availability, with options to book or get more details</p>
-                    </div>
-                  </div>
-                </div>
-                <ProjectImage
-                  src="/images/tulasi/1.png"
-                  alt="Tulasi image 1"
-                  placeholder="Image will appear here once 1.png is added to public/images/tulasi/ (Full conversational workflow diagram from Page 10)"
-                />
-              </div>
-
-              <div>
-                <h3 className="text-xl font-light mb-4">Key Design Features</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2">Natural Language Understanding</h4>
-                    <p className="text-sm text-gray-600">
-                      The system understands various phrasings of the same question and can handle follow-up queries with context awareness.
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2">Multi-turn Conversations</h4>
-                    <p className="text-sm text-gray-600">
-                      Users can refine queries through conversation, asking follow-up questions without repeating context.
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2">Visual + Text Responses</h4>
-                    <p className="text-sm text-gray-600">
-                      Information is presented both conversationally and visually, with train schedules, maps, and booking options.
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2">Error Handling</h4>
-                    <p className="text-sm text-gray-600">
-                      When the system doesn't understand, it asks clarifying questions rather than showing errors.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-light mb-4">Dashboard Wireframe</h3>
-                <p className="mb-4">
-                  The interface combines conversational elements with traditional dashboard components for users who prefer visual navigation:
-                </p>
-                <ProjectImage
-                  src="/images/tulasi/2.png"
-                  alt="Tulasi image 2"
-                  placeholder="Image will appear here once 2.png is added to public/images/tulasi/ (SaaS dashboard wireframe from Page 15)"
-                />
-              </div>
-
-              <div>
-                <h3 className="text-xl font-light mb-4">AI Automation Flow</h3>
-                <p className="mb-4">
-                  The system uses AI to automate common queries and provide intelligent responses:
-                </p>
-                <ProjectImage
-                  src="/images/tulasi/3.png"
-                  alt="Tulasi image 3"
-                  placeholder="Image will appear here once 3.png is added to public/images/tulasi/ (AI automation flow diagram from Page 18)"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Impact & Results */}
-          <section>
-            <h2 className="text-3xl font-light mb-8">Impact & Results</h2>
-            
-            <div className="space-y-6 text-base leading-relaxed text-gray-700">
-              <div>
-                <h3 className="text-xl font-light mb-4">User Experience Improvements</h3>
-                <ul className="list-disc list-inside space-y-2 ml-4">
-                  <li>Reduced query time from 3-5 minutes to under 30 seconds</li>
-                  <li>90% of users successfully completed queries on first attempt</li>
-                  <li>High satisfaction with natural language interaction</li>
-                  <li>Reduced need for customer service support</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-light mb-4">UX Research Insights</h3>
-                <p className="mb-4">
-                  User testing revealed key insights about conversational design for railway services:
-                </p>
-                <ProjectImage
-                  src="/images/tulasi/4.png"
-                  alt="Tulasi image 4"
-                  placeholder="Image will appear here once 4.png is added to public/images/tulasi/ (UX research insights infographic from Page 22)"
-                />
-              </div>
-
-              <div>
-                <h3 className="text-xl font-light mb-4">Conversational Design Principles</h3>
-                <p className="mb-4">
-                  This project established key principles for designing conversational interfaces:
-                </p>
-                <ProjectImage
-                  src="/images/tulasi/5.png"
-                  alt="Tulasi image 5"
-                  placeholder="Image will appear here once 5.png is added to public/images/tulasi/ (Conversational design principles diagram from Page 25)"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Conclusion */}
-          <section className="pt-8 border-t border-gray-200">
-            <div className="bg-gray-50 p-8 rounded-lg">
-              <h3 className="text-xl font-light mb-4">Reflection</h3>
-              <p className="text-base leading-relaxed text-gray-700">
-                Tulasi demonstrated how conversational design can make complex information systems accessible to all users. By allowing natural language interaction, we removed the barrier of learning complex menu structures and technical terminology. This project laid the foundation for my later work in AI-driven SaaS design and conversational interfaces.
-              </p>
-            </div>
-          </section>
-
-          {/* Image Update Instructions */}
-          <section className="pt-8 border-t border-gray-200">
-            <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
-              <h3 className="text-lg font-light mb-3">📸 Image Assets</h3>
-              <p className="text-sm text-gray-700 mb-3">
-                To complete this case study, please add the following images to <code className="bg-blue-100 px-2 py-1 rounded text-xs">public/images/tulasi/</code>:
-              </p>
-              <ul className="text-sm text-gray-700 space-y-2 ml-4 list-disc">
-                <li><strong>1.png</strong> - Full conversational workflow diagram (Page 10 from PDF)</li>
-                <li><strong>2.png</strong> - SaaS dashboard wireframe section (Page 15 from PDF)</li>
-                <li><strong>3.png</strong> - AI automation flow diagram (Page 18 from PDF)</li>
-                <li><strong>4.png</strong> - UX research insights infographic (Page 22 from PDF)</li>
-                <li><strong>5.png</strong> - Conversational design principles diagram (Page 25 from PDF)</li>
-              </ul>
-              <p className="text-xs text-gray-600 mt-4 italic">
-                Images will automatically appear once placed in the directory. Use high-resolution PNG or JPEG format optimized for web.
-              </p>
-            </div>
-          </section>
-        </main>
-
-        <footer className="bg-background py-12 mt-12">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <p className="text-sm text-gray-500 mb-4">Made with ❤️ in Hyderabad, India</p>
           </div>
-        </footer>
-      </article>
-    </main>
+        </CaseStudyDeepDive>
+      </CaseStudySection>
+
+      <CaseStudySection id="dialogue" eyebrow="05 · Conversation design" title="Designing from real conversations">
+        <p>
+          With permission from Central Railway, I used recorded enquiry-counter exchanges to study how passengers
+          actually asked for information. The dialogue model documented the intent, the many ways it could be invoked,
+          what context needed to survive between turns, and how Tulasi should confirm or repair an uncertain exchange.
+        </p>
+
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {dialogueModel.map((item) => (
+            <li key={item} className="rounded-lg bg-card px-4 py-3 text-sm leading-6 text-foreground/72">
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className="space-y-3 rounded-lg bg-card p-5">
+          <p className="text-xs font-medium tracking-[0.12em] text-foreground/45 uppercase">Representative exchange</p>
+          <div className="space-y-4 text-sm leading-6">
+            <div>
+              <p className="font-medium text-foreground">Passenger</p>
+              <p className="text-foreground/70">Solapur jana hai. <span className="text-foreground/45">(I want to go to Solapur.)</span></p>
+            </div>
+            <div>
+              <p className="font-medium text-foreground">Tulasi</p>
+              <p className="text-foreground/70">
+                The Sahyadri Express to Solapur leaves at 10:30 from platform 6.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          When a passenger named a city instead of a station, the agent needed to disambiguate without sounding as if it
+          had failed to hear. When several trains were available, they had to remain addressable as the first, second, or
+          third option, or by departure time. The conversation also had to carry a selected train into ticketing rather
+          than force the passenger to start again.
+        </p>
+
+        <CaseStudyFigure
+          src="/images/projects/tulasi/conversation-flow.webp"
+          alt="Detailed Tulasi conversation flow covering train discovery, clarification, ticketing, and recovery"
+          caption="The flow mapped cooperative questions, explicit and implicit confirmation, ticketing branches, and recovery paths."
+          aspect="aspect-[3205/1210]"
+          wide
+        />
+
+        <CaseStudyDeepDive title="Dialogue grammar and scenario library">
+          <ul className="list-disc space-y-2 pl-5">
+            <li>One train available today, with optional ticket purchase and reminder.</li>
+            <li>Multiple trains, retaining references such as first, second, or the 4:25 train.</li>
+            <li>City and station disambiguation, including alternate or cluster stations.</li>
+            <li>Platform number, arrival and departure, and delayed-train enquiries.</li>
+            <li>Reservation details, passenger information, berth preference, and payment.</li>
+          </ul>
+        </CaseStudyDeepDive>
+      </CaseStudySection>
+
+      <CaseStudySection id="prototype" eyebrow="06 · Prototyping" title="Voice and visuals had to work together">
+        <p>
+          Voiceflow and Twine supported scenario and conversation prototyping. Dialogflow handled the natural-language
+          layer, while Google Assistant supplied automatic speech recognition and text-to-speech. Whimsical supported the
+          larger flow model.
+        </p>
+        <p>
+          Voice was useful when typing was difficult, but a station is noisy and railway details are easy to forget. I
+          therefore designed a multimodal interface with conversation starters, train-result cards, expanded journey
+          details, tickets, payment choices, and onboarding for a preferred station, IRCTC account, and payment method.
+        </p>
+
+        <CaseStudyFigure
+          src="/images/projects/tulasi/visual-system.webp"
+          alt="Tulasi visual system with conversation starters, cards, chat bubbles, avatar, and ticket explorations"
+          caption="The visual system translated spoken results into scan-friendly cards and touch targets for noisy or public environments."
+          aspect="aspect-[70/47]"
+          wide
+        />
+
+        <CaseStudyFigure
+          src="/images/projects/tulasi/mobile-vui.webp"
+          alt="Tulasi mobile voice interface screens showing onboarding, train results, ticketing, and payment"
+          caption="The mobile VUI kept voice, text, and touch available throughout the same conversation."
+          aspect="aspect-[322/253]"
+        />
+
+        <p>
+          The station concept added a presence sensor, a directional or noise-cancelling microphone arrangement, and a
+          visual display. A printed token acted as a cash fallback. These hardware details remained conceptual: COVID-19
+          prevented deployment and evaluation on the station.
+        </p>
+
+        <CaseStudyFigure
+          src="/images/projects/tulasi/kiosk-concept.webp"
+          alt="Tulasi kiosk shown idle, active with a passenger, and positioned inside a railway concourse"
+          caption="The kiosk concept made the shared conversation model available to passengers who could not or did not want to use a smartphone."
+          aspect="aspect-[403/210]"
+          wide
+        />
+      </CaseStudySection>
+
+      <CaseStudySection id="evaluation" eyebrow="07 · Evaluation" title="Testing the Hindi conversational prototype">
+        <p>
+          Seven Android users completed a scenario on a device configured with Hindi Google Assistant. They had to find
+          trains from Mumbai CSMT to Solapur and book a general ticket. Afterward, they answered fifteen seven-point
+          Likert questions, each with a mandatory written reason.
+        </p>
+        <p>
+          The questionnaire covered likeability, conversation flow, ease of use, advice, accuracy, concept, and the
+          authenticity of the conversation. The study was qualitative and exploratory; it did not establish a commercial
+          success rate or a production performance benchmark.
+        </p>
+
+        <div className="grid gap-2 sm:grid-cols-2">
+          {evaluationFindings.map((finding, index) => (
+            <div key={finding} className="flex gap-3 rounded-lg bg-card px-4 py-3 text-sm leading-6 text-foreground/72">
+              <span className="font-medium text-foreground/40">{String(index + 1).padStart(2, "0")}</span>
+              <p>{finding}</p>
+            </div>
+          ))}
+        </div>
+
+        <CaseStudyQuote attribution="Participant feedback">
+          I find that sometimes it becomes tricky just to use the voice assistant; visual feedback makes it a bit easy.
+        </CaseStudyQuote>
+        <CaseStudyQuote attribution="Participant feedback">
+          I like the interaction of voice and I think my parents will use this more.
+        </CaseStudyQuote>
+
+        <CaseStudyDeepDive title="Questionnaire and evaluation scope">
+          <p>
+            The thesis reported category-level charts and participant explanations. This portfolio preserves the
+            qualitative findings without converting the small sample into headline percentages or claiming a measured
+            reduction in enquiry time.
+          </p>
+        </CaseStudyDeepDive>
+      </CaseStudySection>
+
+      <CaseStudySection id="iteration" eyebrow="08 · Iteration" title="The failures became design requirements">
+        <p>
+          The next iteration needed to carry context from train discovery into ticketing, vary confirmation language, and
+          make the transition into a specialised railway agent more legible. Speech Synthesis Markup Language offered a
+          way to separate spoken Hindi from English train names and alphanumeric details shown on screen.
+        </p>
+        <p>
+          Discoverability could come from a station-aware prompt, an entry point in Maps, or a phone-call version for
+          passengers without smartphones. Error paths were defined for unheard input, low confidence, unavailable
+          destinations, and requests outside the prototype&apos;s scope.
+        </p>
+
+        <CaseStudyFigure
+          src="/images/projects/tulasi/error-paths.webp"
+          alt="Tulasi error states for unheard input, low confidence, unavailable destinations, and out-of-scope requests"
+          caption="Error handling treated uncertainty as part of the conversation rather than as a generic failure message."
+          aspect="aspect-[35/22]"
+        />
+      </CaseStudySection>
+
+      <CaseStudySection id="reflection" eyebrow="09 · Reflection" title="Looking back">
+        <p>
+          The project&apos;s strongest contribution is the service and dialogue model, not the visual chatbot shell. Real
+          enquiry conversations produced better intents, confirmation strategies, and repair paths than a generic FAQ
+          structure could have.
+        </p>
+        <p>
+          A production version would require a live railway data connection, language specialists, accessibility testing,
+          privacy review, and field deployment. Voice and visual interaction would need to remain complementary because a
+          station is public, noisy, multilingual, and time-sensitive.
+        </p>
+
+        <div className="rounded-lg bg-card p-5">
+          <h3 className="text-sm font-medium text-foreground">Limitations</h3>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-foreground/68">
+            <li>Seven-person remote evaluation and three passenger interviews.</li>
+            <li>One primary station context and a narrow prototype dataset.</li>
+            <li>No production railway feed or real payment integration.</li>
+            <li>No station-based kiosk evaluation because of COVID-19.</li>
+          </ul>
+        </div>
+
+        <CaseStudyDeepDive title="Academic context and references">
+          <div className="space-y-4">
+            <p>
+              Original thesis title: <cite>A conversational design approach to railway enquiry for Mumbai CSMT</cite>,
+              submitted as M.Des Project III at IDC School of Design, IIT Bombay in 2020 under Prof. Ravi Poovaiah.
+            </p>
+            <p>
+              The thesis referenced conversational-agent research, voice-interface guidance, confirmation strategies,
+              conversational search, and the design of natural-language systems. The original enquiry recordings remain
+              private and are not published in this portfolio.
+            </p>
+          </div>
+        </CaseStudyDeepDive>
+      </CaseStudySection>
+    </FlagshipCaseStudy>
   );
 }

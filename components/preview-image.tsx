@@ -12,6 +12,7 @@ export default function PreviewImage({
   preview = true,
   className,
   onClick,
+  onKeyDown,
   src,
   alt,
   ...props
@@ -39,10 +40,21 @@ export default function PreviewImage({
         src={src}
         alt={alt}
         className={canPreview ? `${className ?? ""} cursor-zoom-in` : className}
+        role={canPreview ? "button" : undefined}
+        tabIndex={canPreview ? 0 : undefined}
+        aria-haspopup={canPreview ? "dialog" : undefined}
         onClick={(event) => {
           onClick?.(event);
           if (event.defaultPrevented || !canPreview) return;
           setIsOpen(true);
+        }}
+        onKeyDown={(event) => {
+          onKeyDown?.(event);
+          if (event.defaultPrevented || !canPreview) return;
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setIsOpen(true);
+          }
         }}
         {...props}
       />
@@ -58,6 +70,7 @@ export default function PreviewImage({
           <div className="relative w-full max-w-5xl" onClick={(event) => event.stopPropagation()}>
             <button
               type="button"
+              autoFocus
               onClick={() => setIsOpen(false)}
               className="absolute top-3 left-3 z-10 rounded-full bg-background/95 p-2 text-foreground shadow-sm"
               aria-label="Close preview"

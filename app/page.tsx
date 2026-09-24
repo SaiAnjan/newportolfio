@@ -14,6 +14,21 @@ import { PrinciplesPreviewCard } from "@/components/principles-preview-card";
 import { StickyNavigation } from "@/components/sticky-navigation";
 import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
 
+const flagshipCaseStudies = [
+  {
+    title: "Designing a Conversational Railway Enquiry",
+    href: "/projects/tulasi",
+    summary: "A multilingual, multimodal railway enquiry shaped by real passenger-staff conversations at Mumbai CSMT.",
+    thumbnail: "/images/P3/cover.png",
+  },
+  {
+    title: "Teaching Unfamiliar Touch Interfaces to Blind Users",
+    href: "/projects/teaching-strategies",
+    summary: "Voice-guided strategies for helping blind TalkBack users learn unfamiliar Android date and time pickers.",
+    thumbnail: "/images/p2.png",
+  },
+] as const;
+
 const featuredProjects = [
   {
     title: "EdgeNexus IAM",
@@ -211,6 +226,35 @@ export default async function Home() {
           </div>
         </section>
 
+        <section className="space-y-4 pb-12" aria-labelledby="flagship-case-studies-title">
+          <h2 id="flagship-case-studies-title" className="text-base font-semibold tracking-tight text-primary">
+            Flagship Case Studies
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {flagshipCaseStudies.map((project) => (
+              <Link
+                key={project.title}
+                href={project.href}
+                className="group overflow-hidden rounded-md bg-background/85 transition-colors hover:bg-white"
+              >
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={project.thumbnail}
+                    alt={`${project.title} thumbnail`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 368px"
+                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+                  />
+                </div>
+                <div className="space-y-1.5 p-4">
+                  <p className="text-sm font-medium group-hover:text-primary">{project.title}</p>
+                  <p className="text-xs leading-relaxed text-foreground/70">{project.summary}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         <section className="space-y-4 pb-8" aria-labelledby="principles-preview-title">
           <h2 id="principles-preview-title" className="text-base font-semibold tracking-tight text-primary">
             Principles
@@ -240,18 +284,20 @@ export default async function Home() {
                 </p>
               </div>
             </div>
-            <p className="border-t border-primary/10 pt-3 text-xs text-foreground/60">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-primary/10 pt-3 text-xs text-foreground/60">
+              <Link href="/wip/brewcircle" className="font-medium text-primary hover:underline">
+                Explore interactive prototype →
+              </Link>
               <a
                 href="https://brew-circle.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-primary hover:underline"
               >
-                View live MVP →
+                View live MVP ↗
               </a>
-              {" · "}
-              Coffee DNA, marketplace, sessions &amp; community Q&amp;A
-            </p>
+              <span>Coffee DNA, marketplace, sessions &amp; community Q&amp;A</span>
+            </div>
           </article>
         </section>
 
