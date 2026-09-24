@@ -9,7 +9,6 @@ import path from "node:path";
 import { Button } from "@/components/ui/button";
 import { WorkShowcaseGallery } from "@/components/work-showcase-gallery";
 import { WritingSourceLogo } from "@/components/writing-source-logo";
-import { AsciiPortrait } from "@/components/ascii-portrait";
 import { PrinciplesPreviewCard } from "@/components/principles-preview-card";
 import { StickyNavigation } from "@/components/sticky-navigation";
 import { formatDate, getAllWritingPosts } from "@/lib/writing";
@@ -191,12 +190,21 @@ export default async function Home() {
     <main id="top" className="min-h-screen scroll-mt-24 overflow-x-clip bg-background pb-20 sm:pb-16">
       <div className="mx-auto mt-6 mb-24 w-full max-w-3xl px-4 sm:mt-10">
         <header className="pb-7">
-          <div className="flex w-full items-center gap-4 sm:gap-5">
+          <div className="flex w-full items-center gap-3">
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-border/70 bg-muted">
+              <Image
+                src="/images/sai-anjan-avatar.jpg"
+                alt="Sai Anjan"
+                fill
+                priority
+                sizes="48px"
+                className="object-cover"
+              />
+            </div>
             <div className="space-y-1">
               <p className="text-base font-semibold tracking-tight text-[#e14b31] dark:text-[#f06449]">Sai Anjan</p>
               <p className="text-sm text-primary/80">Product Designer · AI + SaaS</p>
             </div>
-            <AsciiPortrait />
           </div>
         </header>
 
