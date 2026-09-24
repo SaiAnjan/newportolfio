@@ -3,6 +3,7 @@ import { ChevronDown, Clock3 } from "lucide-react";
 import type { ReactNode } from "react";
 
 import PreviewImage from "@/components/preview-image";
+import { CaseStudyTracker } from "@/components/case-study-tracker";
 import ButtonGroupTooltipDemo from "@/components/shadcn-studio/button-group/button-group-03";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,7 @@ export function FlagshipCaseStudy({
 }: FlagshipCaseStudyProps) {
   return (
     <main className="min-h-screen bg-background">
+      <CaseStudyTracker items={navigation} />
       <div className="mx-auto mt-6 mb-24 w-full max-w-3xl px-4 sm:mt-10">
         <header className="space-y-8 pb-10">
           <Link
@@ -79,7 +81,7 @@ export function FlagshipCaseStudy({
             ))}
           </dl>
 
-          <nav aria-label="Case study sections" className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          <nav aria-label="Case study sections" className="flex flex-wrap gap-x-4 gap-y-2 text-sm xl:hidden">
             {navigation.map((item) => (
               <a key={item.href} href={item.href} className="text-foreground/60 hover:text-foreground">
                 {item.label}

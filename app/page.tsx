@@ -14,7 +14,7 @@ import { PrinciplesPreviewCard } from "@/components/principles-preview-card";
 import { StickyNavigation } from "@/components/sticky-navigation";
 import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
 
-const flagshipCaseStudies = [
+const caseStudies = [
   {
     title: "Designing a Conversational Railway Enquiry",
     href: "/projects/tulasi",
@@ -31,15 +31,21 @@ const flagshipCaseStudies = [
 
 const featuredProjects = [
   {
-    title: "EdgeNexus IAM",
+    title: "Jio Edge Cloud Services",
     href: "/projects/edgesecure-iam",
-    summary: "Visual-first IAM redesign for enterprise edge cloud security workflows.",
-    thumbnail: "/images/ChargeIT/Thumbnail.png",
+    summary: "IAM, operations data visualisation, and product identity for an enterprise edge-cloud platform.",
+    thumbnail: "/images/projects/jio-edge-cloud/create-access.jpg",
   },
   {
-    title: "Gpay + Wallet",
+    title: "Jio ChargeIT",
+    href: "/projects/chargeit",
+    summary: "Plan creation and flexible pricing for prepaid and postpaid subscription businesses.",
+    thumbnail: "/images/projects/chargeit/hero.jpg",
+  },
+  {
+    title: "GPay + Wallet",
     href: "/projects/gpay",
-    summary: "Payment UX strategy and interaction systems for high-scale usage.",
+    summary: "An independent concept for savings pockets, round-ups, and lightweight budgeting inside familiar UPI flows.",
     thumbnail: "/images/gpay.png",
   },
   {
@@ -53,12 +59,6 @@ const featuredProjects = [
     href: "/projects/mindhouse-filtering-review",
     summary: "Before/after walkthrough of the class filtering redesign.",
     thumbnail: "/images/mindhouse/filters-new.png",
-  },
-  {
-    title: "Chargeit",
-    href: "/projects/chargeit",
-    summary: "Enterprise billing and workflow architecture for modern SaaS teams.",
-    thumbnail: "/images/ChargeIT/Thumbnail.png",
   },
 ] as const;
 
@@ -226,12 +226,12 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="space-y-4 pb-12" aria-labelledby="flagship-case-studies-title">
-          <h2 id="flagship-case-studies-title" className="text-base font-semibold tracking-tight text-primary">
-            Flagship Case Studies
+        <section className="space-y-4 pb-12" aria-labelledby="case-studies-title">
+          <h2 id="case-studies-title" className="text-base font-semibold tracking-tight text-primary">
+            Case Studies
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
-            {flagshipCaseStudies.map((project) => (
+            {caseStudies.map((project) => (
               <Link
                 key={project.title}
                 href={project.href}
