@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { type MouseEvent, useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 
 import styles from "./sticky-navigation.module.css";
 
@@ -11,7 +11,7 @@ const navigationItems = [
   { href: "#wip", label: "wip" },
   { href: "#work", label: "work" },
   { href: "#projects", label: "projects" },
-  { href: "/blog", label: "blog" },
+  { href: "#blog", label: "blog" },
   { href: "#contact", label: "contact" },
 ] as const;
 
@@ -20,12 +20,20 @@ const sectionItems = navigationItems.filter((item) => item.href.startsWith("#"))
 export function StickyNavigation() {
   const prefersReducedMotion = useReducedMotion();
   const [activeHref, setActiveHref] = useState("#top");
+  const scrollTargetRef = useRef<string | null>(null);
+  const releaseTargetTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     let frame = 0;
 
     const updateNavigation = () => {
       frame = 0;
+
+      if (scrollTargetRef.current) {
+        setActiveHref(scrollTargetRef.current);
+        return;
+      }
+
       const activationLine = window.scrollY + Math.min(180, window.innerHeight * 0.25);
       let nextActive = "#top";
 
@@ -50,12 +58,23 @@ export function StickyNavigation() {
       frame = window.requestAnimationFrame(updateNavigation);
     };
 
-    updateNavigation();
+    const initialItem = sectionItems.find((item) => item.href === window.location.hash);
+    if (initialItem) {
+      scrollTargetRef.current = initialItem.href;
+      setActiveHref(initialItem.href);
+      releaseTargetTimeoutRef.current = window.setTimeout(() => {
+        scrollTargetRef.current = null;
+      }, 700);
+    } else {
+      updateNavigation();
+    }
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
 
     return () => {
       if (frame) window.cancelAnimationFrame(frame);
+      if (releaseTargetTimeoutRef.current) window.clearTimeout(releaseTargetTimeoutRef.current);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
@@ -68,12 +87,21 @@ export function StickyNavigation() {
     if (!target) return;
 
     event.preventDefault();
+    if (releaseTargetTimeoutRef.current) window.clearTimeout(releaseTargetTimeoutRef.current);
+    scrollTargetRef.current = href;
+    setActiveHref(href);
     target.scrollIntoView({
       behavior: prefersReducedMotion ? "auto" : "smooth",
       block: "start",
     });
     window.history.replaceState(null, "", href);
-    setActiveHref(href);
+    releaseTargetTimeoutRef.current = window.setTimeout(
+      () => {
+        scrollTargetRef.current = null;
+        setActiveHref(href);
+      },
+      prefersReducedMotion ? 0 : 700,
+    );
   };
 
   return (

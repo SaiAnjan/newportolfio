@@ -12,7 +12,7 @@ import { WritingSourceLogo } from "@/components/writing-source-logo";
 import { AsciiPortrait } from "@/components/ascii-portrait";
 import { PrinciplesPreviewCard } from "@/components/principles-preview-card";
 import { StickyNavigation } from "@/components/sticky-navigation";
-import { formatDate, getAllWritingPosts, getFeaturedWritingPosts } from "@/lib/writing";
+import { formatDate, getAllWritingPosts } from "@/lib/writing";
 
 const caseStudies = [
   {
@@ -184,7 +184,6 @@ async function getShowcaseImages(): Promise<ShowcaseImage[]> {
 
 export default async function Home() {
   const writingPosts = await getAllWritingPosts();
-  const featuredWritingPosts = getFeaturedWritingPosts(writingPosts, 6);
   const showcaseImages = await getShowcaseImages();
 
   // Inspired by the overall layout direction of onurhan.dev, rewritten using project-specific content/components.
@@ -329,28 +328,36 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="space-y-4 pb-12">
+        <section id="blog" className="scroll-mt-24 space-y-4 pb-12">
           <h2 className="text-base font-semibold tracking-tight text-primary">Latest Writing</h2>
-          <div className="space-y-3">
-            {featuredWritingPosts.map((post, index) => (
-              <Link
-                key={`${post.source}-${post.guid || index}`}
-                href={post.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block rounded-md bg-background/85 p-3 text-sm transition-colors hover:bg-white"
-              >
-                <div className="mb-1 flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium capitalize text-foreground/80">
-                    <WritingSourceLogo source={post.source} />
-                    {post.source}
-                  </span>
-                  {post.pubDate && <p className="text-xs text-foreground/60">{formatDate(post.pubDate)}</p>}
-                </div>
-                <p className="font-medium">{post.title}</p>
-              </Link>
-            ))}
-          </div>
+          {writingPosts.length === 0 ? (
+            <p className="text-sm text-foreground/70">No posts yet. Check back soon.</p>
+          ) : (
+            <div className="space-y-3">
+              {writingPosts.map((post, index) => {
+                const isExternal = post.link.startsWith("http");
+
+                return (
+                  <Link
+                    key={`${post.source}-${post.guid || index}`}
+                    href={post.link}
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noopener noreferrer" : undefined}
+                    className="block rounded-md bg-background/85 p-3 text-sm transition-colors hover:bg-white"
+                  >
+                    <div className="mb-1 flex items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium capitalize text-foreground/80">
+                        <WritingSourceLogo source={post.source} />
+                        {post.source}
+                      </span>
+                      {post.pubDate && <p className="text-xs text-foreground/60">{formatDate(post.pubDate)}</p>}
+                    </div>
+                    <p className="font-medium">{post.title}</p>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         <section id="contact" className="scroll-mt-24 space-y-3 pb-10">
